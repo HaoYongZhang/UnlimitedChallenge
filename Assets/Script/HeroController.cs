@@ -7,7 +7,7 @@ public class HeroController : MonoBehaviour {
 	private Animator _animator;
 	private Rigidbody _rigidbody;
 	public float speed = 20f;
-
+	public float rotationSpeed = 20;
 	// Use this for initialization
 	void Start () {
 		_animator = this.GetComponent<Animator>();
@@ -16,14 +16,14 @@ public class HeroController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyDown(KeyCode.W))
-		{
-			_animator.SetBool("walk", true);
-		}
-		if(Input.GetKeyUp(KeyCode.W))
-		{
-			_animator.SetBool("walk", false);
-		}
+//		if(Input.GetKeyDown(KeyCode.W))
+//		{
+//			_animator.SetBool("walk", true);
+//		}
+//		if(Input.GetKeyUp(KeyCode.W))
+//		{
+//			_animator.SetBool("walk", false);
+//		}
 	}
 
 	void FixedUpdate()
@@ -56,7 +56,7 @@ public class HeroController : MonoBehaviour {
 		Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up); //函数参数解释: LookRotation(目标方向为"前方向", 定义声明"上方向")
 		// 创建新旋转值 并根据转向速度平滑转至目标旋转值
 		//函数参数解释: Lerp(角色刚体当前旋转值, 目标旋转值, 根据旋转速度平滑转向)
-		Quaternion newRotation = Quaternion.Lerp(_rigidbody.rotation, targetRotation, speed * Time.deltaTime);
+		Quaternion newRotation = Quaternion.Lerp(_rigidbody.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 		// 更新刚体旋转值为 新旋转值
 		_rigidbody.MoveRotation(newRotation);
 

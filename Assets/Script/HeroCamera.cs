@@ -17,7 +17,7 @@ public class HeroCamera : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//初始化
-		player=GameObject.FindGameObjectWithTag("Player").transform;
+		player  = GameObject.FindGameObjectWithTag("Player").transform;
 		camera = Camera.main.transform;
 	}
 
@@ -30,9 +30,11 @@ public class HeroCamera : MonoBehaviour {
 
 
 		//与猪脚的正前方为正前方(只取Y轴的旋转度)
-		camera.eulerAngles =new Vector3(player.eulerAngles.x + 45,
-			player.eulerAngles.y - 45,
-			player.eulerAngles.z);
+		camera.eulerAngles =new Vector3(
+			player.eulerAngles.x + 45,
+			-45,
+			player.eulerAngles.z
+		);
 		//获取当前的镜头的Y轴旋转度
 		float angle = camera.eulerAngles.y;
 
@@ -40,12 +42,12 @@ public class HeroCamera : MonoBehaviour {
 		float deltaX = camera_distance * Mathf.Sin(angle * Mathf.PI /180 );
 		float deltaZ = camera_distance * Mathf.Cos (angle * Mathf.PI / 180);
 
-
-
 		//每一帧都改变摄像机的高度
-		camera.position = new Vector3 (player.position.x-deltaX,
-			player.position.y+ camera_height,
-			player.position.z-deltaZ);
+		camera.position = new Vector3 (
+			player.position.x - deltaX,
+			player.position.y + camera_height,
+			player.position.z - deltaZ
+		);
 
 	}
 }

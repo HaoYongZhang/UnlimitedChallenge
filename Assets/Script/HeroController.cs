@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HeroController : MonoBehaviour {
 
@@ -8,6 +9,7 @@ public class HeroController : MonoBehaviour {
 	private Rigidbody _rigidbody;
 	public float speed = 20f;
 	public float rotationSpeed = 20;
+	public Canvas heroUI;
 	// Use this for initialization
 	void Start () {
 		_animator = this.GetComponent<Animator>();
@@ -24,6 +26,12 @@ public class HeroController : MonoBehaviour {
 //		{
 //			_animator.SetBool("walk", false);
 //		}
+
+		if(Input.GetKeyDown(KeyCode.E))
+		{
+//			float hp = (Slider)heroUI.transform.Find("HeroUIHP").value;
+
+		}
 	}
 
 	void FixedUpdate()
@@ -36,10 +44,6 @@ public class HeroController : MonoBehaviour {
 	{
 		float horizontal = Input.GetAxis("Horizontal"); //A D 左右
 		float vertical = Input.GetAxis("Vertical"); //W S 上 下
-
-//		transform.Translate(Vector3.forward * vertical * speed * Time.deltaTime);//W S 上 下
-//		transform.Translate(Vector3.right * horizontal * speed * Time.deltaTime);//A D 左右
-//
 
 		_rigidbody.MovePosition(this.transform.position + new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime);
 		if(horizontal != 0f || vertical != 0f)

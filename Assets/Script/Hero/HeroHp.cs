@@ -19,8 +19,8 @@ public class HeroHp : MonoBehaviour {
 	
 
 	void Update () {
-		if(Input.GetKeyDown(KeyCode.E))
-		{
+        if (Input.GetKeyDown(KeyCode.E))
+        {
 			value -= 10;
 		}
 	}

@@ -27,7 +27,7 @@ public class HeroHp : MonoBehaviour {
 
 	void FixedUpdate()
 	{
-		hpText.text = value + "/" + valueMax;
-		hp.value = value/valueMax;
+//		hpText.text = value + "/" + valueMax;
+//		hp.value = value/valueMax;
 	}
 }

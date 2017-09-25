@@ -9,6 +9,5 @@ public class Launch : MonoBehaviour {
     {
         Debug.Log("初始化");
         HeroModel hero = new HeroModel();
-        Debug.Log(hero.hp);
     }
 }

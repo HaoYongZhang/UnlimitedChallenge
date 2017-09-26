@@ -22,6 +22,7 @@ public class HeroHp : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.E))
         {
 			value -= 10;
+//			Global.GetInstance().setHp(value/valueMax);
 		}
 	}
 

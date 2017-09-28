@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class HeroController : MonoBehaviour {
 
@@ -12,6 +13,7 @@ public class HeroController : MonoBehaviour {
 	public Canvas heroUI;
 	// Use this for initialization
 	void Start () {
+		DontDestroyOnLoad (this);
 		_animator = this.GetComponent<Animator>();
 		_rigidbody = this.GetComponent<Rigidbody>();
 	}
@@ -30,7 +32,10 @@ public class HeroController : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.E))
 		{
 //			float hp = (Slider)heroUI.transform.Find("HeroUIHP").value;
-
+			SceneManager.LoadScene ("scene_1_room_1");
+			this.transform.position = new Vector3 (0, 0, 0);
+//			Scene scene = SceneManager.GetSceneByName("scene_1_room_1");;
+			//		SceneManager.MoveGameObjectToScene (collider.gameObject, scene);
 		}
 	}
 

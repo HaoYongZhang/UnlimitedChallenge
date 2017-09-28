@@ -11,3 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scene/city/scene_1.unity
     guid: e96af219b2b014540ad0bb9f7d65f91c
+  - enabled: 1
+    path: Assets/Scene/city/scene_1_room_1.unity
+    guid: b15d0bc1f93a24d3db8ffd903c3d8c21

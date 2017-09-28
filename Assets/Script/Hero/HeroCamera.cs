@@ -7,7 +7,7 @@ using System.Collections;
 public class HeroCamera : MonoBehaviour {
 
 	//摄像机固定在猪脚上方10米高度
-	public float camera_height=35.0f;
+	public float camera_height=30.0f;
 	//摄像机离猪脚大概10米的水平距离
 	public float camera_distance=35.0f;
 
@@ -31,7 +31,7 @@ public class HeroCamera : MonoBehaviour {
 
 		//与猪脚的正前方为正前方(只取Y轴的旋转度)
 		camera.eulerAngles =new Vector3(
-			player.eulerAngles.x + 45,
+			player.eulerAngles.x + 35,
 			-45,
 			player.eulerAngles.z
 		);

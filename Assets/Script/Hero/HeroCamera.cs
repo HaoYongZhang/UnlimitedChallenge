@@ -18,17 +18,12 @@ public class HeroCamera : MonoBehaviour {
 	void Start () {
 		//初始化
 		player  = GameObject.FindGameObjectWithTag("Player").transform;
+
 		camera = Camera.main.transform;
 	}
 
 	// Update is called once per frame
 	void Update () {
-
-
-		//看向猪脚
-		//camera.LookAt (player);
-
-
 		//与猪脚的正前方为正前方(只取Y轴的旋转度)
 		camera.eulerAngles =new Vector3(
 			player.eulerAngles.x + 35,

@@ -16,13 +16,7 @@ public class Test : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collider)
 	{
-		print(collider.gameObject.name + ":" + Time.time);
-		Object.DontDestroyOnLoad(collider.gameObject); 
-
-		SceneManager.LoadScene ("scene_1_room_1");
-		Scene scene = SceneManager.GetSceneByName("scene_1_room_1");;
-//		SceneManager.MoveGameObjectToScene (collider.gameObject, scene);
-
-
+		Global.enterRoom (collider, "scene_1_room_1", new Vector3 (40.41f, 0.5f, -12.75f));
+		Debug.Log (this.name);
 	}
 }

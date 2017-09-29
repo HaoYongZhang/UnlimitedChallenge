@@ -15,14 +15,12 @@ public class SceneUI : MonoBehaviour {
 					go.name = "SceneUI";
 					scene_ui = go.AddComponent<SceneUI>();  
 					scene_ui = Instantiate(scene_ui);
-				
-					DontDestroyOnLoad(scene_ui);
 				}  
 			}  
 			return scene_ui;  
 		}  
 	}
-
+		
 	// Use this for initialization
 	void Start () {
 		

@@ -32,10 +32,6 @@ public class HeroController : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.E))
 		{
 //			float hp = (Slider)heroUI.transform.Find("HeroUIHP").value;
-			SceneManager.LoadScene ("scene_1_room_1");
-			this.transform.position = new Vector3 (0, 0, 0);
-//			Scene scene = SceneManager.GetSceneByName("scene_1_room_1");;
-			//		SceneManager.MoveGameObjectToScene (collider.gameObject, scene);
 		}
 	}
 

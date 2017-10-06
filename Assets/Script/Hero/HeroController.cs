@@ -16,6 +16,7 @@ public class HeroController : MonoBehaviour {
 		DontDestroyOnLoad (this);
 		_animator = this.GetComponent<Animator>();
 		_rigidbody = this.GetComponent<Rigidbody>();
+        SceneUI.Instance.Set(200, 200, 100, 100);
 	}
 	
 	// Update is called once per frame
@@ -31,8 +32,8 @@ public class HeroController : MonoBehaviour {
 
 		if(Input.GetKeyDown(KeyCode.E))
 		{
-//			float hp = (Slider)heroUI.transform.Find("HeroUIHP").value;
-		}
+            SceneUI.Instance.SetHp(SceneUI.Instance.hp - 10f);
+        }
 	}
 
 	void FixedUpdate()

@@ -10,9 +10,14 @@ public class Global{
 	/// </summary>
 	/// <returns>The scene common.</returns>
 	/// <param name="gameObject">Game object.</param>
-	public static void setSceneCommonComponent(GameObject gameObject){
-		//设置主摄像头
-		Camera _mainCamera = gameObject.AddComponent<Camera> ();
+	public static void setSceneCommonComponent(){
+        
+        GameObject gameObject = new GameObject();
+        gameObject.name = "SceneCommonComponent";
+        Object.DontDestroyOnLoad(gameObject);
+
+        //设置主摄像头
+        Camera _mainCamera = gameObject.AddComponent<Camera> ();
 		_mainCamera.tag = "MainCamera";
 		_mainCamera.gameObject.AddComponent<HeroCamera> ();
 

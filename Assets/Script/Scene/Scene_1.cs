@@ -5,7 +5,7 @@ using UnityEngine;
 public class Scene_1 : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
-		Global.setSceneCommonComponent (this.gameObject);
+		Global.setSceneCommonComponent ();
 	}
 	
 	// Update is called once per frame

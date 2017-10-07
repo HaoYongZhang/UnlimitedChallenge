@@ -21,16 +21,24 @@ public class HeroController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-//		if(Input.GetKeyDown(KeyCode.W))
-//		{
-//			_animator.SetBool("walk", true);
-//		}
-//		if(Input.GetKeyUp(KeyCode.W))
-//		{
-//			_animator.SetBool("walk", false);
-//		}
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            Global.heroDirection = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            Global.heroDirection = 1;
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            Global.heroDirection = 2;
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Global.heroDirection = 3;
+        }
 
-		if(Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
 		{
             SceneUI.Instance.SetHp(SceneUI.Instance.hp - 10f);
         }
@@ -44,7 +52,9 @@ public class HeroController : MonoBehaviour {
 	//Translate移动控制函数
 	void MoveControlByTranslateGetAxis()
 	{
-		float horizontal = Input.GetAxis("Horizontal"); //A D 左右
+        
+
+        float horizontal = Input.GetAxis("Horizontal"); //A D 左右
 		float vertical = Input.GetAxis("Vertical"); //W S 上 下
 
 		_rigidbody.MovePosition(this.transform.position + new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime);

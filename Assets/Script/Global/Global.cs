@@ -5,12 +5,15 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Global{
-	/// <summary>
-	/// 设置场景的通用组件
-	/// </summary>
-	/// <returns>The scene common.</returns>
-	/// <param name="gameObject">Game object.</param>
-	public static void setSceneCommonComponent(){
+    //获取屏幕宽度和高度
+    public static float screenWidth = Screen.width;
+    public static float screenHeight = Screen.height;
+    /// <summary>
+    /// 设置场景的通用组件
+    /// </summary>
+    /// <returns>The scene common.</returns>
+    /// <param name="gameObject">Game object.</param>
+    public static void setSceneCommonComponent(){
         
         GameObject gameObject = new GameObject();
         gameObject.name = "SceneCommonComponent";

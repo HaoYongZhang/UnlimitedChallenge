@@ -15,6 +15,10 @@ public class Global{
     // 3 = 右面
     public static int heroDirection = 0;
 
+    //获取屏幕宽度和高度
+    public static float screenWidth = Screen.width;
+    public static float screenHeight = Screen.height;
+
     /// <summary>
     /// 设置场景的通用组件
     /// </summary>

@@ -33,7 +33,7 @@ public class Global{
 	/// <param name="sceneName">场景名称.</param>
 	/// <param name="position">进入后的位置.</param>
 	public static void enterRoom(Collider collider, string sceneName, Vector3 position){
-		SceneManager.LoadScene (sceneName);
+		SceneManager.LoadScene (sceneName, LoadSceneMode.Additive);
 		collider.transform.position = position;
 	}
 }

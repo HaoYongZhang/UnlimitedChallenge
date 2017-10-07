@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Scene_1 : MonoBehaviour {
+public class World_1__Scene_1 : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Global.setSceneCommonComponent ();

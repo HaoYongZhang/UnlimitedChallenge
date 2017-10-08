@@ -32,7 +32,7 @@ public class StartMenu : MonoBehaviour {
 	//开始游戏
 	public void start(){
 		Debug.Log ("启动游戏");
-		SceneManager.LoadScene ("scene_1");
+		SceneManager.LoadScene ("World_1__Scene_1");
 	}
 
 	//设置游戏

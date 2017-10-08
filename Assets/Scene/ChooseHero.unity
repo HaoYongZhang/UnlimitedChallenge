@@ -499,4 +499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b953302c2ab12948a4567f5a4422ef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: {fileID: 2800000, guid: 304617e980b529b40b781f1462e14b29, type: 3}
+  icon_1: {fileID: 2800000, guid: 304617e980b529b40b781f1462e14b29, type: 3}
+  icon_2: {fileID: 2800000, guid: 304617e980b529b40b781f1462e14b29, type: 3}
+  icon_3: {fileID: 2800000, guid: 304617e980b529b40b781f1462e14b29, type: 3}
+  scrollPos: {x: 0, y: 0}

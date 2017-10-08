@@ -87,7 +87,7 @@ public class Global{
         collider.transform.position = position;
 	}
 
-    public static void outRoom(Collider collider, string sceneName, Vector3 position)
+    public static void outRoom(Collider collider, string sceneName)
     {
         collider.transform.position = Global.enterBeforPositions[Global.enterBeforPositions.Count - 1];
         //退出场景后清除最后一个记录点

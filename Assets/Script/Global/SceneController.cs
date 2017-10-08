@@ -9,7 +9,8 @@ public class SceneController : MonoBehaviour {
 	void Start () {
         mainScene.Add("World_1__Scene_1");
 
-        sceneEnterPosition.Add("World_1__Scene_1__Room_1", new Vector3(40.41f, -200f, -7.75f));
+        sceneEnterPosition.Add("World_1__Scene_1__Room_1", new Vector3(40.41f, -200f, -8.5f));
+        sceneEnterPosition.Add("World_1__Scene_1__Room_1_1", new Vector3(40.41f + 300f, -300f, -8.5f));
 
     }
 	
@@ -23,7 +24,7 @@ public class SceneController : MonoBehaviour {
         if(mainScene.IndexOf(this.name) != -1)
         {
             Debug.Log("退出");
-            Global.outRoom(collider, this.name, new Vector3(0f, 5f, 0f));
+            Global.outRoom(collider, this.name);
         }
         else
         {

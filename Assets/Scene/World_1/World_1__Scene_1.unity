@@ -7296,6 +7296,7 @@ MonoBehaviour:
   mp: 0
   hpMax: 0
   mpMax: 0
+  basicHpRegeneration: 0
   additionalHpRegeneration: 0
   mpRegeneration: 0
   armor: 0

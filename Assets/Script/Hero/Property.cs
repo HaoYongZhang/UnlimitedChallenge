@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeroModel {
+public class Property : MonoBehaviour {
 	//力量
     public float strength;
     //敏捷
@@ -19,18 +19,7 @@ public class HeroModel {
     //能量上限
     public float mpMax;
 	//基础血量恢复速度
-    public float basicHpRegeneration
-	{
-		get
-      	{
-			//每一点力量值增加0.06点生命恢复速率
-         	return strength * 0.06 + basicHpRegeneration; 
-      	}
-		set
-		{
-			basicHpRegeneration = value;
-		}
-    };
+	public float basicHpRegeneration;
 	//额外血量恢复速度
     public float additionalHpRegeneration;
 	//血量恢复速度
@@ -38,9 +27,10 @@ public class HeroModel {
 	{
 		get
       	{
-         	return basicHpRegeneration + additionalHpRegeneration; 
+			//每一点力量值增加0.06点生命恢复速率
+			return strength * 0.06f + basicHpRegeneration + additionalHpRegeneration; 
       	}
-    };
+    }
 	//能量回复速度
 	public float mpRegeneration;
 
@@ -60,7 +50,7 @@ public class HeroModel {
       {
          return basicAttack + additionalAttack; 
       }
-    };
+    }
 
     //物理抗性
     public float physicalResistance;
@@ -71,8 +61,14 @@ public class HeroModel {
     //魔法伤害格挡
     public float magicDamageBlock;
 
-    public HeroModel()
+	public Property()
     {
+		basicHpRegeneration = 1;
         magicDamageBlock = 0.25f;
     }
+
+	void Awake()
+	{
+		
+	}
 }

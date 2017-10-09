@@ -7,9 +7,9 @@ using System.Collections;
 public class HeroCamera : MonoBehaviour {
 
 	//摄像机固定在猪脚上方10米高度
-	public float camera_height=30.0f;
+	public float camera_height = 30.0f;
 	//摄像机离猪脚大概10米的水平距离
-	public float camera_distance=35.0f;
+	public float camera_distance = 35.0f;
 
 	//摄像机和猪脚的transform属性
 	private Transform player;
@@ -17,7 +17,7 @@ public class HeroCamera : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//初始化
-		player  = GameObject.FindGameObjectWithTag("Player").transform;
+		player = GameObject.FindGameObjectWithTag("Player").transform;
 
 		camera = Camera.main.transform;
 	}

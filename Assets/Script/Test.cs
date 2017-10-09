@@ -16,7 +16,7 @@ public class Test : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collider)
 	{
-		Global.enterRoom (collider, "scene_1_room_1", new Vector3 (40.41f, 0.5f, -12.75f));
+		
 		Debug.Log (this.name);
 	}
 }

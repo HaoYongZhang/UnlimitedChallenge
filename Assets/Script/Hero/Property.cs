@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Property : MonoBehaviour {
+public class Property {
 	//------基础的（basic）
 	//基础最大生命值
 	public float basHpMax;

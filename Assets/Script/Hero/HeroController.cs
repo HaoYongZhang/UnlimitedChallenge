@@ -10,12 +10,14 @@ public class HeroController : MonoBehaviour {
 	private Rigidbody _rigidbody;
 	public float speed = 20f;
 	public float rotationSpeed = 20;
-	public Canvas heroUI;
+
+	private Transform player;
 	// Use this for initialization
 	void Start () {
 		DontDestroyOnLoad (this);
 		_animator = this.GetComponent<Animator>();
 		_rigidbody = this.GetComponent<Rigidbody>();
+		player = GameObject.FindGameObjectWithTag("Player").transform;
         SceneUI.Instance.Set(200, 200, 100, 100);
 	}
 	
@@ -33,14 +35,15 @@ public class HeroController : MonoBehaviour {
         {
             Global.heroDirection = 2;
         }
-        if (Input.GetKeyDown(KeyCode.E))
+		if (Input.GetKeyDown(KeyCode.D))
         {
             Global.heroDirection = 3;
         }
 
         if (Input.GetKeyDown(KeyCode.E))
 		{
-            SceneUI.Instance.SetHp(SceneUI.Instance.hp - 10f);
+			Nomal nomal = player.GetComponent<Nomal> ();
+			nomal.property.strength += 2;
         }
 	}
 

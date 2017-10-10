@@ -13,10 +13,8 @@ public class SceneUI : MonoBehaviour {
     public Text hpText;
     public Text mpText;
 
-    public float hp = 100;
-    public float mp;
-    public float hpMax = 100;
-    public float mpMax;
+	private Transform player;
+
 
     /// <summary>
     /// 单例
@@ -56,10 +54,6 @@ public class SceneUI : MonoBehaviour {
         hpText = ComponentUtility.GetComponent<Text>(scene_ui_object, "HpText");
         mpText = ComponentUtility.GetComponent<Text>(scene_ui_object, "MpText");
 
-        hpBar.value = hp / hpMax;
-        mpBar.value = mp / mpMax;
-        hpText.text = hp + "/" + hpMax;
-        mpText.text = mp + "/" + mpMax;
     }
 
     /// <summary>
@@ -71,28 +65,15 @@ public class SceneUI : MonoBehaviour {
     /// <param name="mpMax">mpMax</param>
     public void Set(float hp, float hpMax, float mp, float mpMax)
     {
-        _instance.hp = hp;
-        _instance.hpMax = hpMax;
-        _instance.mp = mp;
-        _instance.mpMax = mpMax;
-
         hpBar.value = hp / hpMax;
         mpBar.value = mp / mpMax;
         hpText.text = hp + "/" + hpMax;
         mpText.text = mp + "/" + mpMax;
     }
 
-    public void SetHp(float value)
-    {
-        hp = value;
-        hpText.text = hp + "/" + hpMax;
-        hpBar.value = value / hpMax;
-    }
-
-        void Awake()
+   	void Awake()
     {
         _instance = this;
-        Debug.Log("执行scene_ui唤醒");
     }
 
     // Use this for initialization
@@ -103,5 +84,17 @@ public class SceneUI : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+
+
+	}
+
+	void FixedUpdate(){
+		if (player == null) {
+			player = GameObject.FindGameObjectWithTag ("Player").transform;
+		}
+
+		Nomal nomal = player.GetComponent<Nomal> ();
+
+		Set (nomal.property.hp, nomal.property.hpMax, nomal.property.mp, nomal.property.mpMax);
 	}
 }

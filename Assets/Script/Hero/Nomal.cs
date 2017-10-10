@@ -19,8 +19,7 @@ public class Nomal: Property
 		agility = 20;
 		intellect = 20;
 
-		armor = 0;
-		speed = 60;
+		basMoveSpeed = 60;
 		Debug.Log (this.hpRegeneration);
 	}
 }

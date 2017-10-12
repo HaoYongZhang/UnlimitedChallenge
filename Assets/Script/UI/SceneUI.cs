@@ -93,8 +93,8 @@ public class SceneUI : MonoBehaviour {
 			player = GameObject.FindGameObjectWithTag ("Player").transform;
 		}
 
-		Nomal nomal = player.GetComponent<Nomal> ();
+		HeroSystem heroSystem = player.GetComponent<HeroSystem> ();
 
-		Set (nomal.property.hp, nomal.property.hpMax, nomal.property.mp, nomal.property.mpMax);
+		Set (heroSystem.property.hp, heroSystem.property.hpMax, heroSystem.property.mp, heroSystem.property.mpMax);
 	}
 }

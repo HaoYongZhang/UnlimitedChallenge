@@ -9,7 +9,7 @@ public class Skill
 	//名字
 	public string name;
 	//类型
-	public SkillType type;
+	public SkillType type = 0;
 	//图片
 	public string imageName;
 	//描述
@@ -21,7 +21,7 @@ public class Skill
 	}
 }
 
-enum SkillType
+public enum SkillType
 {
 	//攻击
     Attack = 0,

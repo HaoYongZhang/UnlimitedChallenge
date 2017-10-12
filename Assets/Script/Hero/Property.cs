@@ -70,22 +70,27 @@ public class Property {
 			return basMpMax + intellect * 11f + addlMpMax;
 		}
 	}
-
-	//血量恢复速度
+		
+	/// <summary>
+	/// 生命恢复速度 = (基础生命恢复 + 力量生命恢复（力量*0.06） + 额外生命恢复)
+	/// </summary>
+	/// <value>The hp regeneration.</value>
 	public float hpRegeneration
 	{
 		get
       	{
-			//生命恢复 = (基础生命恢复 + 力量生命恢复（力量*0.06） + 额外生命恢复)
 			return basHpRegeneration + strength * 0.06f  + addlHpRegeneration; 
       	}
     }
-	//能量回复速度
+
+	/// <summary>
+	/// 能量恢复速度 = (基础能量恢复 + 智力能量恢复（智力*0.04） + 额外能量恢复)
+	/// </summary>
+	/// <value>The mp regeneration.</value>
 	public float mpRegeneration
 	{
 		get
 		{
-			//生命恢复 = (基础生命恢复 + 智力能量恢复（智力*0.04） + 额外生命恢复)
 			return basMpRegeneration + intellect * 0.04f + addlMpRegeneration;
 		}
 	}

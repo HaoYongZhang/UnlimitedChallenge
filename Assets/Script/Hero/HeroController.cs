@@ -42,9 +42,15 @@ public class HeroController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.E))
 		{
-			Nomal nomal = player.GetComponent<Nomal> ();
-			nomal.property.strength += 2;
+			HeroSystem hero = player.GetComponent<HeroSystem> ();
+			hero.property.strength += 2;
         }
+
+		if (Input.GetKeyDown(KeyCode.Q))
+		{
+			HeroSystem hero = player.GetComponent<HeroSystem> ();
+			hero.property.intellect += 2;
+		}
 	}
 
 	void FixedUpdate()

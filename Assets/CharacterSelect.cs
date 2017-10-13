@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class CharacterSelect : MonoBehaviour
 {
@@ -50,15 +51,16 @@ public class CharacterSelect : MonoBehaviour
             );
         if (onButton_1)
         {
-           
+            SceneManager.LoadScene("World_1__Scene_1");
         }
         if (onButton_2)
-        {  
-            
+        {
+            SceneManager.LoadScene("World_1__Scene_1");
         }
         if (onButton_3)
         {
             //GUI.ScrollTo(new Rect(Global.screenWidth / 3, 0, Global.screenWidth, Global.screenHeight));
+            SceneManager.LoadScene("World_1__Scene_1");
         }
         //  滚动结束
         GUI.EndScrollView();

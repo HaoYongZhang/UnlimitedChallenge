@@ -363,22 +363,22 @@ Prefab:
       propertyPath: m_Name
       value: SceneUIObject
       objectReference: {fileID: 0}
-    - target: {fileID: 224699183362673632, guid: a0e193ffaceb1473d954b7b8d51c585d,
+    - target: {fileID: 224163602240467178, guid: a0e193ffaceb1473d954b7b8d51c585d,
         type: 2}
       propertyPath: m_AnchorMax.x
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 224699183362673632, guid: a0e193ffaceb1473d954b7b8d51c585d,
+    - target: {fileID: 224163602240467178, guid: a0e193ffaceb1473d954b7b8d51c585d,
         type: 2}
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 224163602240467178, guid: a0e193ffaceb1473d954b7b8d51c585d,
+    - target: {fileID: 224699183362673632, guid: a0e193ffaceb1473d954b7b8d51c585d,
         type: 2}
       propertyPath: m_AnchorMax.x
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 224163602240467178, guid: a0e193ffaceb1473d954b7b8d51c585d,
+    - target: {fileID: 224699183362673632, guid: a0e193ffaceb1473d954b7b8d51c585d,
         type: 2}
       propertyPath: m_AnchorMax.y
       value: 1

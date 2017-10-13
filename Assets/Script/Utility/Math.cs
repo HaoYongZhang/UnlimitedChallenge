@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Utility
 {
-	public class MarhUtility
+	public class Math
 	{
 		public static float Round(float f, int acc)
 		{

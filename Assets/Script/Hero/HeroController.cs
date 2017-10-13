@@ -61,8 +61,6 @@ public class HeroController : MonoBehaviour {
 	//Translate移动控制函数
 	void MoveControlByTranslateGetAxis()
 	{
-        
-
         float horizontal = Input.GetAxis("Horizontal"); //A D 左右
 		float vertical = Input.GetAxis("Vertical"); //W S 上 下
 

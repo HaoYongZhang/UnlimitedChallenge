@@ -6,7 +6,7 @@ using UnityEngine;
 public class CSV
 {
 	static CSV csv;
-	public List<string> dataList;
+	public List<List<string>> dataList;
 	public static CSV Instance
 	{
 		get
@@ -22,10 +22,10 @@ public class CSV
 
 	private CSV()
 	{
-		dataList = new List<string>();
+		dataList = new List<List<string>>();
 	}
 
-	public List<string> loadFile(string path, string fileName)
+	public List<List<string>> loadFile(string path, string fileName)
 	{
 		dataList.Clear();
 		StreamReader sr = null;
@@ -37,14 +37,16 @@ public class CSV
 		catch
 		{
 			Debug.Log ("没有找到文件");
-			return new List<string>();
+			return new List<List<string>>();
 		}
 
 		string line;
 
 		while((line = sr.ReadLine()) != null)
 		{
-			dataList.Add(line);
+			List<string> newList = new List<string> (line.Split (','));
+
+			dataList.Add(newList);
 		}
 
 		sr.Close();

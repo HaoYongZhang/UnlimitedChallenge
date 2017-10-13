@@ -48,11 +48,11 @@ public class SceneUI : MonoBehaviour {
         scene_ui_object = Instantiate(scene_ui_object);
         scene_ui_object.transform.SetParent(_instance.transform);
 
-        hpBar = ComponentUtility.GetComponent<Slider>(scene_ui_object, "HpBar");
-        mpBar = ComponentUtility.GetComponent<Slider>(scene_ui_object, "MpBar");
+		hpBar = Utility.Context.GetComponent<Slider>(scene_ui_object, "HpBar");
+		mpBar = Utility.Context.GetComponent<Slider>(scene_ui_object, "MpBar");
 
-        hpText = ComponentUtility.GetComponent<Text>(scene_ui_object, "HpText");
-        mpText = ComponentUtility.GetComponent<Text>(scene_ui_object, "MpText");
+		hpText = Utility.Context.GetComponent<Text>(scene_ui_object, "HpText");
+		mpText = Utility.Context.GetComponent<Text>(scene_ui_object, "MpText");
 
     }
 

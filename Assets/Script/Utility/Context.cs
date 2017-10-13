@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Utility
 {
-    public class ComponentUtility
+	public class Context
     {
 
         /// <summary>

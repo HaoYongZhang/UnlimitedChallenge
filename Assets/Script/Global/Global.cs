@@ -37,22 +37,3 @@ public class Global{
 		SceneUI.Instance.transform.parent = _mainCamera.transform;
 	}
 }
-
-public enum SkillType
-{
-	//攻击
-    Attack = 0,
-    //防御
-    Defense = 1,
-    //治疗
-    Treatment = 2,
-    //强化
-    Intensify = 3,
-    //特殊
-    Specialty = 4
-}
-
-public enum category
-{
-
-}

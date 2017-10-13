@@ -29,13 +29,13 @@ public class HeroSystem : MonoBehaviour {
 		if (property.hp != property.hpMax) {
 
 			//当回复生命值后将会溢出最大值时
-			if (MarhUtility.Round (property.hp + property.hpRegeneration, 1) > property.hpMax) 
+			if (Math.Round (property.hp + property.hpRegeneration, 1) > property.hpMax) 
 			{
 				property.hp = property.hpMax;
 			}
 			else
 			{
-				property.hp = MarhUtility.Round (property.hp + property.hpRegeneration, 1);
+				property.hp = Math.Round (property.hp + property.hpRegeneration, 1);
 			}
 		}
 
@@ -43,13 +43,13 @@ public class HeroSystem : MonoBehaviour {
 		if (property.mp != property.mpMax) {
 
 			//当回复能量值后将会溢出最大值时
-			if (MarhUtility.Round (property.mp + property.mpRegeneration, 1) > property.mpMax) 
+			if (Math.Round (property.mp + property.mpRegeneration, 1) > property.mpMax) 
 			{
 				property.mp = property.mpMax;
 			}
 			else
 			{
-				property.mp = MarhUtility.Round (property.mp + property.mpRegeneration, 1);
+				property.mp = Math.Round (property.mp + property.mpRegeneration, 1);
 			}
 		}
 	}

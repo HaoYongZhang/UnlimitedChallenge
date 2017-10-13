@@ -2,11 +2,12 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
+
 public class CSV
 {
 	static CSV csv;
 	public List<string> dataList;
-	public static CSV Instance()
+	public static CSV Instance
 	{
 		get
 		{
@@ -31,12 +32,12 @@ public class CSV
 		try
 		{
 			sr = File.OpenText(path + "//" + fileName);
-			Debug.Log("找到文件")
+			Debug.Log("找到文件");
 		}
 		catch
 		{
-			Debug.Log("没有找到文件")
-			return;
+			Debug.Log ("没有找到文件");
+			return new List<string>();
 		}
 
 		string line;

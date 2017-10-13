@@ -41,13 +41,18 @@ public class Global{
 public enum SkillType
 {
 	//攻击
-    Attack = "Attack",
+    Attack = 0,
     //防御
-    Defense = "Defense",
+    Defense = 1,
     //治疗
-    Treatment = "Treatment",
+    Treatment = 2,
     //强化
-    Intensify = "Intensify",
+    Intensify = 3,
     //特殊
-    Specialty = "Specialty"
+    Specialty = 4
+}
+
+public enum category
+{
+
 }

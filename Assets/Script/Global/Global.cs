@@ -22,7 +22,6 @@ public class Global{
     /// 设置场景的通用组件
     /// </summary>
     /// <returns>The scene common.</returns>
-    /// <param name="gameObject">Game object.</param>
     public static void setSceneCommonComponent(){
         
         GameObject gameObject = new GameObject();
@@ -37,4 +36,18 @@ public class Global{
 		//设置场景UI
 		SceneUI.Instance.transform.parent = _mainCamera.transform;
 	}
+}
+
+public enum SkillType
+{
+	//攻击
+    Attack = "Attack",
+    //防御
+    Defense = "Defense",
+    //治疗
+    Treatment = "Treatment",
+    //强化
+    Intensify = "Intensify",
+    //特殊
+    Specialty = "Specialty"
 }

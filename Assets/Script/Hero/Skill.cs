@@ -5,32 +5,22 @@ using UnityEngine;
 public class Skill
 {
 	//id
-	public int id;
+	public string id;
 	//名字
 	public string name;
 	//类型
-	public SkillType type = 0;
+	public string type;
 	//图片
 	public string imageName;
 	//描述
 	public string description;
 
-	public Skill()
+	public Skill(Dictionary<string, string> dict)
 	{
-
+		this.id = dict["id"];
+		this.name = dict["name"];
+		this.type = dict["type"];
+		this.imageName = dict["imageName"];
+		this.description = dict["description"];
 	}
-}
-
-public enum SkillType
-{
-	//攻击
-    Attack = 0,
-    //防御
-    Defense = 1,
-    //治疗
-    Treatment = 2,
-    //强化
-    Intensify = 3,
-    //特殊
-    Specialty = 4
 }

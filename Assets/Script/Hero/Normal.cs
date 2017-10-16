@@ -8,9 +8,9 @@ public class Normal
 
 	public Normal()
 	{
-		property.strength = 20;
-		property.agility = 20;
-		property.intellect = 20;
+		property.basStrength = 20;
+		property.basAgility = 20;
+		property.basIntellect = 20;
 
 		property.hp = property.hpMax;
 		property.mp = property.mpMax;

@@ -3,22 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Utility;
 
 public class HeroController : MonoBehaviour {
 
-	private Animator _animator;
 	private Rigidbody _rigidbody;
-	public float speed = 20f;
 	public float rotationSpeed = 20;
 
 	private Transform player;
 	// Use this for initialization
 	void Start () {
 		DontDestroyOnLoad (this);
-		_animator = this.GetComponent<Animator>();
 		_rigidbody = this.GetComponent<Rigidbody>();
 		player = GameObject.FindGameObjectWithTag("Player").transform;
-        SceneUI.Instance.Set(200, 200, 100, 100);
 	}
 	
 	// Update is called once per frame
@@ -40,16 +37,16 @@ public class HeroController : MonoBehaviour {
             Global.heroDirection = 3;
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
 		{
 			HeroSystem hero = player.GetComponent<HeroSystem> ();
-			hero.property.strength += 2;
+//			hero.property.strength += 2;
         }
 
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
 			HeroSystem hero = player.GetComponent<HeroSystem> ();
-			hero.property.intellect += 2;
+//			hero.property.intellect += 2;
 		}
 	}
 
@@ -61,10 +58,11 @@ public class HeroController : MonoBehaviour {
 	//Translate移动控制函数
 	void MoveControlByTranslateGetAxis()
 	{
+		HeroSystem heroSystem = player.GetComponent<HeroSystem> ();
         float horizontal = Input.GetAxis("Horizontal"); //A D 左右
 		float vertical = Input.GetAxis("Vertical"); //W S 上 下
 
-		_rigidbody.MovePosition(this.transform.position + new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime);
+		_rigidbody.MovePosition(this.transform.position + new Vector3(horizontal, 0, vertical) * heroSystem.property.moveSpeed * Time.deltaTime);
 		if(horizontal != 0f || vertical != 0f)
 		{
 			Rotating(horizontal, vertical);

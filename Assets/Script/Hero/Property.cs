@@ -47,7 +47,7 @@ public class Property {
 	//额外护甲
 	public float addlArmor;
 	//额外移动速度
-	public float addlMoveSpeed;
+	public float addlMoveSpeed{get;set;}
 	//额外攻击力
 	public float addlAttack;
 	//额外攻击速度

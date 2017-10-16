@@ -12,6 +12,12 @@ public class Property {
 	public float basHpRegeneration;
 	//基础能量恢复速度
 	public float basMpRegeneration;
+	//基础力量
+    public float basStrength;
+    //基础敏捷
+    public float basAgility;
+    //基础智力
+    public float basIntellect;
 	//基础护甲
 	public float basArmor;
 	//基础移动速度
@@ -32,6 +38,12 @@ public class Property {
 	public float addlHpRegeneration;
 	//额外能量恢复速度
 	public float addlMpRegeneration;
+	//额外力量
+    public float addlStrength;
+    //额外敏捷
+    public float addlAgility;
+    //额外智力
+    public float addlIntellect;
 	//额外护甲
 	public float addlArmor;
 	//额外移动速度
@@ -48,11 +60,26 @@ public class Property {
 	public float mp;
 
 	//力量
-    public float strength;
+    public float strength{
+		get
+		{
+			return basStrength + addlStrength;
+		}
+	}
     //敏捷
-    public float agility;
+    public float agility{
+		get
+		{
+			return basAgility + addlAgility;
+		}
+	}
     //智力
-    public float intellect;
+    public float intellect{
+		get
+		{
+			return basIntellect + addlIntellect;
+		}
+	}
     
     //最大生命值
     public float hpMax{

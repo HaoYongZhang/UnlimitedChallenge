@@ -1,2 +1,2 @@
-id,name,type,description,imageName,levelMax
-540001,急速,强化,可以瞬间提升自身速度,skill_001,5
+id,name,type,description,imageName,isActive,levelMax,cooldown,energy
+540001,急速,强化,可以瞬间提升自身速度,skill_001,1,5,12,20

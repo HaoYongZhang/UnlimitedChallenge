@@ -7,71 +7,143 @@ namespace Skill.Collections
 	public class Skill
 	{
 		public SkillCategory category;
-
+		public SkillType type;
 		public Dictionary<string, string> data = new Dictionary<string, string>();
+		public Dictionary<string, string> skillData = new Dictionary<string, string>();
 
 		public Skill(string id)
 		{
 			int category = int.Parse(id.Substring (0, 1));
 			int type = int.Parse(id.Substring (1, 1));
 
+			loadCategoryProperty(category);
+			loadTypeProperty(type);
 
+		}
+	}
 
-			string fileName = "";
-			switch (category) {
-			case (int)SkillCategory.Bloodline:
-				{
-					
-				}
-				break;
-			case (int)SkillCategory.Careers:
-				{
-				}
-				break;
-			case (int)SkillCategory.Weapon:
-				{
-				}
-				break;
-			case (int)SkillCategory.Item:
-				{
-					
-				}
-				break;
-			case (int)SkillCategory.MartialArt:
-				{
-					this.category = SkillCategory.MartialArt;
-					fileName = "skill_martialArt.csv";
-				}
-				break;
-			case (int)SkillCategory.Mission:
-				{
-				}
-				break;
+	private void loadCategoryProperty(int category)
+	{
+		//根据类别查找技能
+		string categoryFileName = "";
+		switch (category) {
+		case (int)SkillCategory.Bloodline:
+			{
+				
+			}
+			break;
+		case (int)SkillCategory.Careers:
+			{
+			}
+			break;
+		case (int)SkillCategory.Weapon:
+			{
+			}
+			break;
+		case (int)SkillCategory.Item:
+			{
+				
+			}
+			break;
+		case (int)SkillCategory.MartialArt:
+			{
+				this.category = SkillCategory.MartialArt;
+				categoryFileName = "skill_martialArt.csv";
+			}
+			break;
+		case (int)SkillCategory.Mission:
+			{
+			}
+			break;
 
-			case (int)SkillCategory.Achievement:
-				{
+		case (int)SkillCategory.Achievement:
+			{
+			}
+			break;
+
+		}
+
+		//csv文件的第一行数据为属性数据
+		List<string> categoryProperty = new List<string> ();
+		//csv文件的列表数据
+		List<string> categoryPropertyValue = new List<string> ();
+
+		List<List<string>> basicData = CSV.Instance.loadFile (Application.dataPath + "/Resources/Data/Skill", categoryFileName);
+		for (int i = 0; i < basicData.Count; i++) {
+			if (i == 0) {
+				categoryProperty = basicData [i];
+			} else {
+				if (basicData [i] [0] == id) {
+					categoryPropertyValue = basicData [i];
+					break;
 				}
-				break;
+			}
+		}
+
+		//把类别数据装载到skill类的data里面
+		for (int i = 0; i < categoryProperty.Count; i++) {
+			data.Add (categoryProperty[i], categoryPropertyValue[i]);
+		}
+	}
+
+	private void loadTypeProperty(int type)
+	{
+		//根据类别查找技能
+		string fileName = "";
+		switch (type) {
+		case (int)SkillType.Attack:
+			{
+				
+			}
+			break;
+		case (int)SkillType.Defense:
+			{
+			}
+			break;
+		case (int)SkillType.Treatment:
+			{
+			}
+			break;
+		case (int)SkillType.Intensify:
+			{
+				this.type = SkillType.Intensify;
+				fileName = "skill_intensify.csv";
+			}
+			break;
+		case (int)SkillType.Complex:
+			{
 
 			}
+			break;
+		case (int)SkillType.Specialty:
+			{
+			}
+			break;
 
-			List<string> categoryProperty = new List<string> ();
-			List<string> categoryPropertyValue = new List<string> ();
+		}
 
-			List<List<string>> basicData = CSV.Instance.loadFile (Application.dataPath + "/Resources/Data/Skill", fileName);
-			for (int i = 0; i < basicData.Count; i++) {
-				if (i == 0) {
-					categoryProperty = basicData [i];
-				} else {
-					if (basicData [i] [0] == id) {
-						categoryPropertyValue = basicData [i];
-						break;
-					}
+		//csv文件的第一行数据为属性数据
+		List<string> property = new List<string> ();
+		//csv文件的列表数据
+		List<string> propertyValue = new List<string> ();
+
+		List<List<string>> basicData = CSV.Instance.loadFile (Application.dataPath + "/Resources/Data/Skill", fileName);
+		for (int i = 0; i < basicData.Count; i++) {
+			if (i == 0) {
+				property = basicData [i];
+			} else {
+				if (basicData [i] [0] == id) {
+					propertyValue = basicData [i];
+					break;
 				}
 			}
+		}
 
-			for (int i = 0; i < categoryProperty.Count; i++) {
-				data.Add (categoryProperty[i], categoryPropertyValue[i]);
+		//把类别数据装载到skill类的data里面
+		for (int i = 0; i < property.Count; i++) {
+			if(propertyValue[i] != "" && property[i] != "id")
+			{
+				skillData.Add (property[i], propertyValue[i]);
 			}
 		}
 	}

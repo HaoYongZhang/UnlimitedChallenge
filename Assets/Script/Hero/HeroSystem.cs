@@ -24,6 +24,9 @@ public class HeroSystem : MonoBehaviour {
 		
 	}
 
+	/// <summary>
+	/// 每秒恢复生命值和能量
+	/// </summary>
 	void RegenerationPerSecond(){
 		//当生命值不是最大值时
 		if (property.hp != property.hpMax) {
@@ -53,4 +56,6 @@ public class HeroSystem : MonoBehaviour {
 			}
 		}
 	}
+
+
 }

@@ -85,7 +85,6 @@ public class SceneUI : MonoBehaviour {
 	void Update () {
 		
 
-
 	}
 
 	void FixedUpdate(){
@@ -94,7 +93,9 @@ public class SceneUI : MonoBehaviour {
 		}
 
 		HeroSystem heroSystem = player.GetComponent<HeroSystem> ();
+		SkillManager skillManager = player.GetComponent<SkillManager> ();
 
+		//更新人物当前生命值和能量值
 		Set (heroSystem.property.hp, heroSystem.property.hpMax, heroSystem.property.mp, heroSystem.property.mpMax);
 	}
 }

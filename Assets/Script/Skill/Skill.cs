@@ -6,11 +6,24 @@ namespace Skill.Collections
 {
 	public class Skill
 	{
+		//技能id
 		public string id;
+		//技能类别
 		public SkillCategory category;
+		//技能类型
 		public SkillType type;
+		//通用技能数据
 		public Dictionary<string, string> data = new Dictionary<string, string>();
-		public Dictionary<string, string> skillData = new Dictionary<string, string>();
+		//特定技能数据
+		public Dictionary<string, string> addlData = new Dictionary<string, string>();
+		//技能是否冷却了
+		public bool isCooldown = true;
+		//技能是否持续中
+		public bool 
+		//技能当前的冷却时间
+		public float currentCoolDown = 0;
+		//技能是否在持续中
+		public float isInDuration = false;
 
 		public Skill(string id)
 		{
@@ -145,7 +158,7 @@ namespace Skill.Collections
 			for (int i = 0; i < property.Count; i++) {
 				if(propertyValue[i] != "" && property[i] != "id")
 				{
-					skillData.Add (property[i], propertyValue[i]);
+					addlData.Add (property[i], propertyValue[i]);
 				}
 			}
 		}

@@ -1,2 +1,2 @@
 id,addlHpMax,addlMpMax,addlHpRegeneration,addlMpRegeneration,addlStrength,addlAgility,addlIntellect,addlArmor,addlMoveSpeed,addlAttack,addlAttackSpeed,physicalResistance,magicResistance,physicalDamageBlock,magicDamageBlock
-540001,,,,,,,,,+60,,,,,,
+540001,+200,,,,,,,,+60,,,,,,

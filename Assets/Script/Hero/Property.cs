@@ -31,27 +31,27 @@ public class Property {
 
 	//------额外的（additional）
 	//额外最大生命值
-	public float addlHpMax;
+	public float addlHpMax{get;set;}
 	//额外最大能量值
-	public float addlMpMax;
+	public float addlMpMax{get;set;}
 	//额外生命恢复速度
-	public float addlHpRegeneration;
+	public float addlHpRegeneration{get;set;}
 	//额外能量恢复速度
-	public float addlMpRegeneration;
+	public float addlMpRegeneration{get;set;}
 	//额外力量
-    public float addlStrength;
+	public float addlStrength{get;set;}
     //额外敏捷
-    public float addlAgility;
+	public float addlAgility{get;set;}
     //额外智力
-    public float addlIntellect;
+	public float addlIntellect{get;set;}
 	//额外护甲
-	public float addlArmor;
+	public float addlArmor{get;set;}
 	//额外移动速度
 	public float addlMoveSpeed{get;set;}
 	//额外攻击力
-	public float addlAttack;
+	public float addlAttack{get;set;}
 	//额外攻击速度
-	public float addlAttackSpeed;
+	public float addlAttackSpeed{get;set;}
 
 	//------综合的属性
 	//生命值

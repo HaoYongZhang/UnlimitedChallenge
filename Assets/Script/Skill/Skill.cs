@@ -16,14 +16,12 @@ namespace Skill.Collections
 		public Dictionary<string, string> data = new Dictionary<string, string>();
 		//特定技能数据
 		public Dictionary<string, string> addlData = new Dictionary<string, string>();
-		//技能是否冷却了
-		public bool isCooldown = true;
-		//技能是否持续中
-		public bool 
+		//技能是否进入冷却
+		public bool isCooldown = false;
 		//技能当前的冷却时间
 		public float currentCoolDown = 0;
 		//技能是否在持续中
-		public float isInDuration = false;
+		public bool isInDuration = false;
 
 		public Skill(string id)
 		{

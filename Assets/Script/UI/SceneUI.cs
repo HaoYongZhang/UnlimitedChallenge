@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
+using Skill.Collections;
+using UnityEngine.EventSystems;
 
 public class SceneUI : MonoBehaviour {
 	static SceneUI _instance;
@@ -12,6 +14,9 @@ public class SceneUI : MonoBehaviour {
     public Slider mpBar;
     public Text hpText;
     public Text mpText;
+
+    //技能按钮集合
+    private List<Button> skillButtons = new List<Button>();
 
 	private Transform player;
 
@@ -54,6 +59,20 @@ public class SceneUI : MonoBehaviour {
 		hpText = Utility.Context.GetComponent<Text>(scene_ui_object, "HpText");
 		mpText = Utility.Context.GetComponent<Text>(scene_ui_object, "MpText");
 
+
+        GameObject skillObject = GameObject.Find("SkillObject");
+        skillButtons = new List<Button>(skillObject.GetComponentsInChildren<Button>());
+        for (int i = 0; i < skillButtons.Count; i++)
+        {
+            int j = i;
+
+            Button btn = skillButtons[i];
+
+            UIInfo uiInfo = btn.gameObject.GetComponent<UIInfo>();
+
+            uiInfo.onPointerEnterDelegate = onPointerEnterSkillButton;
+            uiInfo.onPointerExitDelegate = onPointerExitSkillButton;
+        }
     }
 
     /// <summary>
@@ -97,4 +116,60 @@ public class SceneUI : MonoBehaviour {
 		//更新人物当前生命值和能量值
 		Set (heroSystem.property.hp, heroSystem.property.hpMax, heroSystem.property.mp, heroSystem.property.mpMax);
 	}
+
+    /// <summary>
+    /// 鼠标移动到技能栏的按钮
+    /// </summary>
+    /// <param name="objectName">Object name.</param>
+    void onPointerEnterSkillButton(string objectName, PointerEventData eventData)
+    {
+        GameObject go = GameObject.Find(objectName);
+
+        int number = int.Parse(objectName.Split('_')[1]);
+
+        SkillManager skillManager = player.GetComponent<SkillManager>();
+
+        if (number <= (skillManager.skills.Count - 1))
+        {
+            Skill.Collections.Skill skill = skillManager.skills[number];
+            showSkillInfo(skill);
+        }
+
+    }
+
+    /// <summary>
+    /// 鼠标移出技能栏的按钮
+    /// </summary>
+    /// <param name="objectName">Object name.</param>
+    void onPointerExitSkillButton(string objectName, PointerEventData eventData)
+    {
+        hideSkillInfo();
+    }
+
+    void showSkillInfo(Skill.Collections.Skill skill)
+    {
+        //skill.data["imageName"];
+        //skill.data["name"];
+        //skill.data["isActive"];
+        //skill.data["levelMax"];
+        //skill.data["duration"];
+        //skill.data["cooldown"];
+        //skill.data["costEnergy"];
+        //skill.data["description"];
+
+        Debug.Log(skill.data["imageName"]);
+        Debug.Log(skill.data["name"]);
+        Debug.Log(skill.data["isActive"]);
+        Debug.Log(skill.data["description"]);
+        Debug.Log(skill.data["levelMax"]);
+        Debug.Log(skill.data["duration"]);
+        Debug.Log(skill.data["cooldown"]);
+        Debug.Log(skill.data["costEnergy"]);
+
+    }
+
+    void hideSkillInfo()
+    {
+        
+    }
 }

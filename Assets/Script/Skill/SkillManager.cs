@@ -34,8 +34,9 @@ namespace Skill.Collections
 			skillButtons = new List<Button>(skillObject.GetComponentsInChildren<Button>());
 			for (int i = 0; i < skillButtons.Count; i++)
 			{
+                int j = i;
+
 				Button btn = skillButtons[i];
-				int j = i;
 
 				btn.onClick.AddListener(delegate ()
 				{

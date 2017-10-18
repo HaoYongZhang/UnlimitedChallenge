@@ -22,6 +22,8 @@ namespace Skill.Collections
 		public float currentCoolDown = 0;
 		//技能是否在持续中
 		public bool isInDuration = false;
+        //当前技能等级
+        public int currentLevel = 1;
 
 		public Skill(string id)
 		{

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Skill.Collections
 {
@@ -8,6 +9,8 @@ namespace Skill.Collections
 	{
 		//技能id
 		public string id;
+        //技能图片
+        public Sprite imageSprite;
 		//技能类别
 		public SkillCategory category;
 		//技能类型
@@ -35,6 +38,7 @@ namespace Skill.Collections
 			loadCategoryProperty(category);
 			loadTypeProperty(type);
 
+			imageSprite = Resources.Load("Image/Skill/" + data["imageName"], typeof(Sprite)) as Sprite;
 		}
 
 		void loadCategoryProperty(int category)

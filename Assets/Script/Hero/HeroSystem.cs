@@ -29,10 +29,10 @@ public class HeroSystem : MonoBehaviour {
 	/// </summary>
 	void RegenerationPerSecond(){
 		//当生命值不是最大值时
-		if (property.hp != property.hpMax) {
-
+		if (property.hp <= property.hpMax) {
+            float afterRegeneration = Math.Round(property.hp + property.hpRegeneration, 1);
 			//当回复生命值后将会溢出最大值时
-			if (Math.Round (property.hp + property.hpRegeneration, 1) > property.hpMax) 
+			if (afterRegeneration > property.hpMax) 
 			{
 				property.hp = property.hpMax;
 			}
@@ -43,7 +43,7 @@ public class HeroSystem : MonoBehaviour {
 		}
 
 		//当能量值不是最大值时
-		if (property.mp != property.mpMax) {
+		if (property.mp <= property.mpMax) {
 
 			//当回复能量值后将会溢出最大值时
 			if (Math.Round (property.mp + property.mpRegeneration, 1) > property.mpMax) 

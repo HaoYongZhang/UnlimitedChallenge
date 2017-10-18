@@ -10,6 +10,8 @@ public class SceneUI : MonoBehaviour {
 	static SceneUI _instance;
 
     public GameObject scene_ui_object;
+	public GameObject skillInfo;
+	public GameObject skillsBar;
     public Slider hpBar;
     public Slider mpBar;
     public Text hpText;
@@ -59,9 +61,11 @@ public class SceneUI : MonoBehaviour {
 		hpText = Utility.Context.GetComponent<Text>(scene_ui_object, "HpText");
 		mpText = Utility.Context.GetComponent<Text>(scene_ui_object, "MpText");
 
+		skillInfo = GameObject.Find("SkillInfo");
+		skillInfo.SetActive (false);
 
-        GameObject skillObject = GameObject.Find("SkillObject");
-        skillButtons = new List<Button>(skillObject.GetComponentsInChildren<Button>());
+		skillsBar = GameObject.Find("SkillsBar");
+		skillButtons = new List<Button>(skillsBar.GetComponentsInChildren<Button>());
         for (int i = 0; i < skillButtons.Count; i++)
         {
             int j = i;
@@ -123,8 +127,6 @@ public class SceneUI : MonoBehaviour {
     /// <param name="objectName">Object name.</param>
     void onPointerEnterSkillButton(string objectName, PointerEventData eventData)
     {
-        GameObject go = GameObject.Find(objectName);
-
         int number = int.Parse(objectName.Split('_')[1]);
 
         SkillManager skillManager = player.GetComponent<SkillManager>();
@@ -148,6 +150,42 @@ public class SceneUI : MonoBehaviour {
 
     void showSkillInfo(Skill.Collections.Skill skill)
     {
+        Image image = Utility.Context.GetComponent<Image>(skillInfo, "Icon");
+		image.sprite = skill.imageSprite;
+
+        Debug.Log(image.name);
+
+		List<Text> labels = new List<Text>(SceneUI.Instance.skillInfo.GetComponentsInChildren<Text> ());
+
+		foreach(Text label in labels)
+		{
+			if (label.name == "Name") {
+				label.text = skill.data ["name"];
+			}
+			else if (label.name == "IsActive") {
+				label.text = skill.data ["isActive"] == "1" ? "主动技能":"被动技能";
+			}
+			else if (label.name == "LevelMax") {
+				label.text = "当前等级    " + skill.currentLevel + "/" + skill.data ["levelMax"];
+			}
+			else if (label.name == "Description") {
+				label.text = skill.data ["description"];
+//				Vector2 sizeDelta = label.GetComponent<RectTransform> ().sizeDelta;
+//				label.GetComponent<RectTransform> ().sizeDelta = new Vector2 (sizeDelta.x, sizeDelta.y * 2);
+//				Debug.Log(sizeDelta.y);
+			}
+			else if (label.name == "Duration") {
+				label.text = "持续时间    " + skill.data ["duration"];
+			}
+			else if (label.name == "Cooldown") {
+				label.text = "冷却时间    " + skill.data ["cooldown"];
+			}
+			else if (label.name == "CostEnergy") {
+				label.text = "能量消耗     " + skill.data ["costEnergy"];
+			}
+
+		}
+
         //skill.data["imageName"];
         //skill.data["name"];
         //skill.data["isActive"];
@@ -157,19 +195,11 @@ public class SceneUI : MonoBehaviour {
         //skill.data["costEnergy"];
         //skill.data["description"];
 
-        Debug.Log(skill.data["imageName"]);
-        Debug.Log(skill.data["name"]);
-        Debug.Log(skill.data["isActive"]);
-        Debug.Log(skill.data["description"]);
-        Debug.Log(skill.data["levelMax"]);
-        Debug.Log(skill.data["duration"]);
-        Debug.Log(skill.data["cooldown"]);
-        Debug.Log(skill.data["costEnergy"]);
-
+		skillInfo.SetActive (true);
     }
 
     void hideSkillInfo()
     {
-        
+		skillInfo.SetActive (false);
     }
 }

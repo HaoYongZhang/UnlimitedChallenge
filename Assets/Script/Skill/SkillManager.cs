@@ -30,8 +30,8 @@ namespace Skill.Collections
 		//技能的默认设置
 		void defaultSkillSetting()
 		{
-			GameObject skillObject = GameObject.Find("SkillObject");
-			skillButtons = new List<Button>(skillObject.GetComponentsInChildren<Button>());
+			GameObject skillsBar = GameObject.Find("SkillsBar");
+			skillButtons = new List<Button>(skillsBar.GetComponentsInChildren<Button>());
 			for (int i = 0; i < skillButtons.Count; i++)
 			{
                 int j = i;
@@ -46,8 +46,9 @@ namespace Skill.Collections
 
 			for (int i = 0; i < skills.Count; i++) {
 				Image image = skillButtons[i].transform.Find("SkillImage").GetComponent<Image>();
-				Sprite sp = Resources.Load("Image/Skill/" + skills[i].data["imageName"], typeof(Sprite)) as Sprite;
-				image.sprite = sp;
+                //Sprite sp = Resources.Load("Image/Skill/" + skills[i].data["imageName"], typeof(Sprite)) as Sprite;
+                //image.sprite = sp;
+                image.sprite = skills[i].imageSprite;
 			}
 		}
 

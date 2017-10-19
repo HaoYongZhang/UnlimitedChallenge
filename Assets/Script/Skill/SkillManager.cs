@@ -9,8 +9,6 @@ namespace SkillClass
 	public class SkillManager : MonoBehaviour {
         // SkillManager单例
         public static SkillManager _instance;
-        //每秒记录
-		private float second;
 
         void Awake()
         {
@@ -19,8 +17,6 @@ namespace SkillClass
 
 		void Start () {
 			defaultSkillSetting ();
-			second = Time.time;
-
 		}
 		
 		void Update () {
@@ -46,8 +42,9 @@ namespace SkillClass
 			}
 
             for (int i = 0; i < Global.activeSkills.Count; i++) {
-                Image image = SceneUI.Instance.skillButtons[i].transform.Find("SkillImage").GetComponent<Image>();
-                image.sprite = Global.activeSkills[i].imageSprite;
+                Image maskImage = SceneUI.Instance.skillButtons[i].transform.Find("MaskImage").GetComponent<Image>();
+                Image icon = maskImage.transform.Find("Icon").GetComponent<Image>();
+                icon.sprite = Global.activeSkills[i].imageSprite;
 			}
 		}
 
@@ -60,6 +57,14 @@ namespace SkillClass
             {
                 if (skill.isInDuration == false)
                 {
+                    GameObject skillStatusIcon = (GameObject)Resources.Load("UI/SkillStatusIcon");
+                    skillStatusIcon = Instantiate(skillStatusIcon);
+                    skillStatusIcon.name = "SkillStatusIcon_" + skill.id;
+                    skillStatusIcon.transform.SetParent(SceneUI.Instance.skillStatusBar.transform);
+
+                    Image icon = skillStatusIcon.transform.Find("Icon").GetComponent<Image>();
+                    icon.sprite = skill.imageSprite;
+
                     intensify(skill, false);
                 }
             }
@@ -76,6 +81,8 @@ namespace SkillClass
 				if (skill.isCooldown)
 				{
                     Image maskImage = SceneUI.Instance.skillButtons[i].transform.Find("MaskImage").GetComponent<Image>();
+                    Image cooldownImage = maskImage.transform.Find("CooldownImage").GetComponent<Image>();
+                   
                     Text cooldownText = SceneUI.Instance.skillButtons[i].transform.Find("CooldownText").GetComponent<Text>();
 					if (skill.currentCoolDown < float.Parse(skill.data["cooldown"]))
 					{
@@ -83,13 +90,13 @@ namespace SkillClass
 						skill.currentCoolDown += Time.deltaTime;
 
                         //每秒显示技能冷却时间
-						if (Time.time - second >= 1.0f) {
-							second = Time.time;
+                        if (Time.time - skill.second >= 1.0f) {
+                            skill.second = Time.time;
 							cooldownText.text = Utility.Math.Round((float.Parse (skill.data ["cooldown"]) - skill.currentCoolDown), 0).ToString();
 						}
 
                         // 显示冷却动画
-                        maskImage.fillAmount = 1 - (skill.currentCoolDown / float.Parse(skill.data["cooldown"]));
+                        cooldownImage.fillAmount = 1 - (skill.currentCoolDown / float.Parse(skill.data["cooldown"]));
 
                         //当技能持续时间结束时
 						if (skill.isInDuration && skill.currentCoolDown >= float.Parse(skill.data["duration"]))
@@ -101,7 +108,7 @@ namespace SkillClass
 					{
 						skill.currentCoolDown = 0;
 						skill.isCooldown = false;
-						maskImage.fillAmount = 0;
+                        cooldownImage.fillAmount = 0;
 						cooldownText.text = "";
 					}
 				}
@@ -151,8 +158,6 @@ namespace SkillClass
 		//使用技能
 		void useSkill(int i)
 		{
-			Debug.Log ("触发");
-
 			// 如果技能不存在，返回
             if (Global.activeSkills.Count < (i + 1))
 			{
@@ -183,7 +188,8 @@ namespace SkillClass
             heroManager.property.mp -= float.Parse (skill.data ["costEnergy"]);
 			skill.isCooldown = true;
             Image maskImage = SceneUI.Instance.skillButtons[i].transform.Find("MaskImage").GetComponent<Image>();
-			maskImage.fillAmount = 1;
+            Image cooldownImage = maskImage.transform.Find("CooldownImage").GetComponent<Image>();
+            cooldownImage.fillAmount = 1;
             //			Image skillImage = SceneUI.Instance.skillButtons[i].transform.Find("SkillImage").GetComponent<Image>();
 
 			switch (skill.type) {

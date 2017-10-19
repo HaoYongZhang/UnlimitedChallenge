@@ -28,6 +28,8 @@ namespace SkillClass
         //当前技能等级
         public int currentLevel = 1;
 
+        public float second = Time.time;
+
 		public Skill(string _id)
 		{
             id = _id;

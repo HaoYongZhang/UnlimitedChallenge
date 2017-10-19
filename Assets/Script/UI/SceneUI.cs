@@ -12,6 +12,7 @@ public class SceneUI : MonoBehaviour {
     public GameObject scene_ui_object;
 	public GameObject skillInfo;
 	public GameObject skillsBar;
+    public GameObject skillStatusBar;
     public Slider hpBar;
     public Slider mpBar;
     public Text hpText;
@@ -62,6 +63,8 @@ public class SceneUI : MonoBehaviour {
 
 		hpText = Utility.Context.GetComponent<Text>(scene_ui_object, "HpText");
 		mpText = Utility.Context.GetComponent<Text>(scene_ui_object, "MpText");
+
+        skillStatusBar = GameObject.Find("SkillStatusBar");
 
 		skillInfo = GameObject.Find("SkillInfo");
 		skillInfo.SetActive (false);

@@ -1,0 +1,2 @@
+id,name,type,description,isActive,levelMax,duration,cooldown,costEnergy
+540001,急速,强化,可以瞬间提升自身的移动速度,1,5,5,15,30

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Skill.Collections
+namespace SkillClass
 {
 	public class Intensify {
 		//力量

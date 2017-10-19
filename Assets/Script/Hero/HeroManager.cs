@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Utility;
-
-public class HeroSystem : MonoBehaviour {
-	public static HeroSystem _instance;
+using SkillClass;
+public class HeroManager : MonoBehaviour {
+    public static HeroManager _instance;
 	public Normal normal = new Normal();
 	public Property property;
 
@@ -15,12 +15,16 @@ public class HeroSystem : MonoBehaviour {
 
 	void Start()
 	{
-		this.InvokeRepeating ("RegenerationPerSecond", 0, 1f);
-		property = normal.property;
+        property = normal.property;
+
+        Global.skills.Add(new Skill(normal.talentSkillID));
+        Global.skills.Add(new Skill("140001"));
+
+		InvokeRepeating ("RegenerationPerSecond", 0, 1f);
 	}
 		
 	// Update is called once per frame
-	void Update () {	
+	void Update () {
 		
 	}
 

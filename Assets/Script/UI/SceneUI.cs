@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
-using Skill.Collections;
+using SkillClass;
 using UnityEngine.EventSystems;
 
 public class SceneUI : MonoBehaviour {
@@ -18,7 +18,7 @@ public class SceneUI : MonoBehaviour {
     public Text mpText;
 
     //技能按钮集合
-    private List<Button> skillButtons = new List<Button>();
+    public List<Button> skillButtons = new List<Button>();
 
 	private Transform player;
 
@@ -50,6 +50,8 @@ public class SceneUI : MonoBehaviour {
     /// </summary>
     private void init()
     {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+
         scene_ui_object = (GameObject)Resources.Load("UI/SceneUI");
         scene_ui_object.name = "SceneUIObject";
         scene_ui_object = Instantiate(scene_ui_object);
@@ -106,19 +108,15 @@ public class SceneUI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
 
+        HeroManager heroManager = player.GetComponent<HeroManager>();
+
+        //更新人物当前生命值和能量值
+        Set(heroManager.property.hp, heroManager.property.hpMax, heroManager.property.mp, heroManager.property.mpMax);
 	}
 
 	void FixedUpdate(){
-		if (player == null) {
-			player = GameObject.FindGameObjectWithTag ("Player").transform;
-		}
-
-		HeroSystem heroSystem = player.GetComponent<HeroSystem> ();
-
-		//更新人物当前生命值和能量值
-		Set (heroSystem.property.hp, heroSystem.property.hpMax, heroSystem.property.mp, heroSystem.property.mpMax);
+		
 	}
 
     /// <summary>
@@ -129,11 +127,9 @@ public class SceneUI : MonoBehaviour {
     {
         int number = int.Parse(objectName.Split('_')[1]);
 
-        SkillManager skillManager = player.GetComponent<SkillManager>();
-
-        if (number <= (skillManager.skills.Count - 1))
+        if (number <= (Global.activeSkills.Count - 1))
         {
-            Skill.Collections.Skill skill = skillManager.skills[number];
+            Skill skill = Global.activeSkills[number];
             showSkillInfo(skill);
         }
 
@@ -148,12 +144,10 @@ public class SceneUI : MonoBehaviour {
         hideSkillInfo();
     }
 
-    void showSkillInfo(Skill.Collections.Skill skill)
+    void showSkillInfo(Skill skill)
     {
         Image image = Utility.Context.GetComponent<Image>(skillInfo, "Icon");
 		image.sprite = skill.imageSprite;
-
-        Debug.Log(image.name);
 
 		List<Text> labels = new List<Text>(SceneUI.Instance.skillInfo.GetComponentsInChildren<Text> ());
 
@@ -185,15 +179,6 @@ public class SceneUI : MonoBehaviour {
 			}
 
 		}
-
-        //skill.data["imageName"];
-        //skill.data["name"];
-        //skill.data["isActive"];
-        //skill.data["levelMax"];
-        //skill.data["duration"];
-        //skill.data["cooldown"];
-        //skill.data["costEnergy"];
-        //skill.data["description"];
 
 		skillInfo.SetActive (true);
     }

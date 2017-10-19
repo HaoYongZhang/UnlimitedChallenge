@@ -2,41 +2,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Skill.Collections;
 using Utility;
 
-namespace Skill.Collections
+namespace SkillClass
 {
 	public class SkillManager : MonoBehaviour {
-		//技能按钮集合
-		private List<Button> skillButtons = new List<Button>();
-		//技能集合
-		public List<Skill> skills = new List<Skill>();
+        // SkillManager单例
+        public static SkillManager _instance;
+        //每秒记录
 		private float second;
+
+        void Awake()
+        {
+            _instance = this;
+        }
+
 		void Start () {
-			Skill skill = new Skill ("540001");
-			skills.Add(skill);
 			defaultSkillSetting ();
 			second = Time.time;
 
 		}
 		
-
 		void Update () {
 			cooldown();
-
+            keepUnactiveSkill();
 		}
 
 		//技能的默认设置
 		void defaultSkillSetting()
 		{
 			GameObject skillsBar = GameObject.Find("SkillsBar");
-			skillButtons = new List<Button>(skillsBar.GetComponentsInChildren<Button>());
-			for (int i = 0; i < skillButtons.Count; i++)
+            SceneUI.Instance.skillButtons = new List<Button>(skillsBar.GetComponentsInChildren<Button>());
+            for (int i = 0; i < SceneUI.Instance.skillButtons.Count; i++)
 			{
                 int j = i;
 
-				Button btn = skillButtons[i];
+                Button btn = SceneUI.Instance.skillButtons[i];
 
 				btn.onClick.AddListener(delegate ()
 				{
@@ -44,42 +45,57 @@ namespace Skill.Collections
 				});
 			}
 
-			for (int i = 0; i < skills.Count; i++) {
-				Image image = skillButtons[i].transform.Find("SkillImage").GetComponent<Image>();
-                //Sprite sp = Resources.Load("Image/Skill/" + skills[i].data["imageName"], typeof(Sprite)) as Sprite;
-                //image.sprite = sp;
-                image.sprite = skills[i].imageSprite;
+            for (int i = 0; i < Global.activeSkills.Count; i++) {
+                Image image = SceneUI.Instance.skillButtons[i].transform.Find("SkillImage").GetComponent<Image>();
+                image.sprite = Global.activeSkills[i].imageSprite;
 			}
 		}
 
-		//技能冷却
+        /// <summary>
+        /// 维持被动技能
+        /// </summary>
+        void keepUnactiveSkill()
+        {
+            foreach(Skill skill in Global.unactiveSkills)
+            {
+                if (skill.isInDuration == false)
+                {
+                    intensify(skill, false);
+                }
+            }
+        }
+
+		/// <summary>
+        /// 技能冷却
+        /// </summary>
 		void cooldown()
 		{
-			for (int i = 0; i < skills.Count; i++)
+            for (int i = 0; i < Global.activeSkills.Count; i++)
 			{
-				Skill skill = skills[i];
+                Skill skill = Global.activeSkills[i];
 				if (skill.isCooldown)
 				{
-					Image maskImage = skillButtons[i].transform.Find("MaskImage").GetComponent<Image>();
-					Text cooldownText = skillButtons[i].transform.Find("CooldownText").GetComponent<Text>();
+                    Image maskImage = SceneUI.Instance.skillButtons[i].transform.Find("MaskImage").GetComponent<Image>();
+                    Text cooldownText = SceneUI.Instance.skillButtons[i].transform.Find("CooldownText").GetComponent<Text>();
 					if (skill.currentCoolDown < float.Parse(skill.data["cooldown"]))
 					{
 						// 更新冷却
 						skill.currentCoolDown += Time.deltaTime;
 
+                        //每秒显示技能冷却时间
 						if (Time.time - second >= 1.0f) {
 							second = Time.time;
 							cooldownText.text = Utility.Math.Round((float.Parse (skill.data ["cooldown"]) - skill.currentCoolDown), 0).ToString();
 						}
 
+                        // 显示冷却动画
+                        maskImage.fillAmount = 1 - (skill.currentCoolDown / float.Parse(skill.data["cooldown"]));
+
+                        //当技能持续时间结束时
 						if (skill.isInDuration && skill.currentCoolDown >= float.Parse(skill.data["duration"]))
 						{
 							afterCooldown(skill);
 						}
-
-
-						// 显示冷却动画
-						maskImage.fillAmount = 1 - (skill.currentCoolDown / float.Parse(skill.data["cooldown"]));
 					}
 					else
 					{
@@ -93,7 +109,10 @@ namespace Skill.Collections
 			}
 		}
 
-		//技能冷却结束
+		/// <summary>
+        /// 技能冷却结束
+        /// </summary>
+        /// <param name="skill">Skill.</param>
 		void afterCooldown(Skill skill)
 		{
 			switch (skill.type)
@@ -135,12 +154,12 @@ namespace Skill.Collections
 			Debug.Log ("触发");
 
 			// 如果技能不存在，返回
-			if (skills.Count < (i + 1))
+            if (Global.activeSkills.Count < (i + 1))
 			{
 				return;
 			}
 
-			Skill skill = skills[i];
+            Skill skill = Global.activeSkills[i];
 
 			// 如果是被动技能，返回
 			if (skill.data["isActive"] == "0")
@@ -153,19 +172,19 @@ namespace Skill.Collections
 				return;
 			}
 
-			HeroSystem heroSystem = GetComponent<HeroSystem> ();
+            HeroManager heroManager = GetComponent<HeroManager> ();
 
 			// 如果蓝量不足，返回
-			if (heroSystem.property.mp < float.Parse (skill.data ["costEnergy"])) {
+            if (heroManager.property.mp < float.Parse (skill.data ["costEnergy"])) {
 				Debug.Log ("能量不足");
 				return;
 			}
 
-			heroSystem.property.mp -= float.Parse (skill.data ["costEnergy"]);
+            heroManager.property.mp -= float.Parse (skill.data ["costEnergy"]);
 			skill.isCooldown = true;
-			Image maskImage = skillButtons[i].transform.Find("MaskImage").GetComponent<Image>();
+            Image maskImage = SceneUI.Instance.skillButtons[i].transform.Find("MaskImage").GetComponent<Image>();
 			maskImage.fillAmount = 1;
-//			Image skillImage = skillButtons[i].transform.Find("SkillImage").GetComponent<Image>();
+            //			Image skillImage = SceneUI.Instance.skillButtons[i].transform.Find("SkillImage").GetComponent<Image>();
 
 			switch (skill.type) {
 			case SkillType.Attack:
@@ -179,6 +198,7 @@ namespace Skill.Collections
 				break;
 			case SkillType.Treatment:
 				{
+                    treatment(skill);
 				}
 				break;
 			case SkillType.Intensify:
@@ -199,6 +219,21 @@ namespace Skill.Collections
 			}
 		}
 
+
+        void treatment(Skill skill)
+        {
+            HeroManager heroManager = GetComponent<HeroManager>();
+            string increateHp = skill.addlData["increateHp"];
+            if (increateHp != null)
+            {
+                //截取字符串，获得+/-符号
+                string symbol = increateHp.Substring(0, 1);
+                //截取字符串，获得属性增加的值
+                float createValue = float.Parse(increateHp.Substring(1, increateHp.Length - 1));
+                heroManager.property.hp += createValue;
+            }
+        }
+
 		/// <summary>
 		/// 使用强化技能
 		/// </summary>
@@ -216,50 +251,28 @@ namespace Skill.Collections
 			}
 			//获取英雄对象
 			Transform player = GameObject.FindGameObjectWithTag ("Player").transform;
-			//获取英雄对象下面的heroSystem
-			HeroSystem heroSystem = player.GetComponent<HeroSystem> ();
-			//获取heroSystem的属性
-			Property property = heroSystem.property;
+            //获取英雄对象下面的HeroManager
+            HeroManager heroManager = player.GetComponent<HeroManager> ();
+            //获取HeroManager的属性
+            Property property = heroManager.property;
 
 			foreach (KeyValuePair<string, string> dict in skill.addlData)
            	{
-				//截取字符串，获得+/-符号
-				string symbol = dict.Value.Substring (0, 1);
 				//截取字符串，获得属性增加的值
-				float createValue = float.Parse(dict.Value.Substring (1, dict.Value.Length - 1));
+				float createValue = float.Parse(dict.Value);
 				//动态获取当前的属性值
 				float propertyValue = float.Parse(PropertyUtil.ReflectGetter(property, dict.Key).ToString());
-
-				if(symbol == "+")
-				{
-					//使用强化技能时间开始时，应该加上强化属性
-					if (isEnd == false)
-					{
-						PropertyUtil.ReflectSetter(property, dict.Key, propertyValue + createValue);
-					}
-					//使用强化技能时间结束后，应该减去强化属性
-					else
-					{
-						PropertyUtil.ReflectSetter(property, dict.Key, propertyValue - createValue);
-					}
-				}
-				else if(symbol == "-"){
-					//使用强化技能时间开始时，应该减去强化属性
-					if (isEnd == false)
-					{
-						PropertyUtil.ReflectSetter(property, dict.Key, propertyValue - createValue);
-					}
-					//使用强化技能时间结束后，应该加上强化属性
-					else
-					{
-						PropertyUtil.ReflectSetter(property, dict.Key, propertyValue + createValue);
-					}
-
-				}
-				else
-				{
-					Debug.Log ("技能属性的值没有写上+或者-");
-				}
+                Debug.Log(float.Parse(dict.Value));
+                //使用强化技能时间开始时，应该加上强化属性
+                if (isEnd == false)
+                {
+                    PropertyUtil.ReflectSetter(property, dict.Key, propertyValue + createValue);
+                }
+                //使用强化技能时间结束后，应该减去强化属性
+                else
+                {
+                    PropertyUtil.ReflectSetter(property, dict.Key, propertyValue - createValue);
+                }
            	}
 		}
 	}

@@ -2,11 +2,60 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using SkillClass;
 public class Global{
+    /// <summary>
+    /// 拥有的技能列表
+    /// </summary>
+    public static List<Skill> skills = new List<Skill>();
+
+    /// <summary>
+    /// 拥有的主动技能列表
+    /// </summary>
+    /// <value>The active skills.</value>
+    public static List<Skill> activeSkills
+    {
+        get{
+            List<Skill> activeSkillList = new List<Skill>();
+            foreach(Skill skill in Global.skills)
+            {
+                if(skill.data["isActive"] == "1")
+                {
+                    activeSkillList.Add(skill);
+                }
+            }
+
+            return activeSkillList;
+        }
+    }
+
+    /// <summary>
+    /// 拥有的被动技能列表
+    /// </summary>
+    /// <value>The active skills.</value>
+    public static List<Skill> unactiveSkills
+    {
+        get
+        {
+            List<Skill> unactiveSkillList = new List<Skill>();
+            foreach (Skill skill in Global.skills)
+            {
+                if (skill.data["isActive"] == "0")
+                {
+                    unactiveSkillList.Add(skill);
+                }
+            }
+
+            return unactiveSkillList;
+        }
+    }
+
+
+
+
+
     // 记录人物进入场景前的位置数组
 	public static List<Vector3> enterSceneBeforPositions = new List<Vector3>();
-
     // 人物面向的方向
     // 0 = 正面
     // 1 = 左面

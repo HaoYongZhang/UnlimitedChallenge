@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Skill.Collections
+namespace SkillClass
 {
 	public class Skill
 	{
@@ -28,71 +28,85 @@ namespace Skill.Collections
         //当前技能等级
         public int currentLevel = 1;
 
-		public Skill(string id)
+		public Skill(string _id)
 		{
-			this.id = id;
+            id = _id;
 
-			int category = int.Parse(id.Substring (0, 1));
-			int type = int.Parse(id.Substring (1, 1));
+			int _category = int.Parse(id.Substring (0, 1));
+			int _type = int.Parse(id.Substring (1, 1));
 
-			loadCategoryProperty(category);
-			loadTypeProperty(type);
+            loadCategoryProperty(_category);
+            loadTypeProperty(_type);
 
-			imageSprite = Resources.Load("Image/Skill/" + data["imageName"], typeof(Sprite)) as Sprite;
+			imageSprite = Resources.Load("Image/Skill/skill_" + id, typeof(Sprite)) as Sprite;
 		}
 
-		void loadCategoryProperty(int category)
+        /// <summary>
+        /// 加载技能的类别属性
+        /// </summary>
+        /// <param name="_category">Category.</param>
+		void loadCategoryProperty(int _category)
 		{
 			//根据类别查找技能
 			string categoryFileName = "";
-			switch (category) {
-			case (int)SkillCategory.Bloodline:
-				{
+            switch (_category) {
+    			case (int)SkillCategory.Bloodline:
+    				{
+                        category = SkillCategory.Bloodline;
+                        categoryFileName = "skill_bloodline.csv";
+    				}
+    				break;
+    			case (int)SkillCategory.Careers:
+    				{
+                        category = SkillCategory.Careers;
+                        categoryFileName = "skill_careers.csv";
+    				}
+    				break;
+    			case (int)SkillCategory.Weapon:
+    				{
+                        category = SkillCategory.Weapon;
+                        categoryFileName = "skill_weapon.csv";
+    				}
+    				break;
+    			case (int)SkillCategory.Item:
+    				{
+                        category = SkillCategory.Item;
+                        categoryFileName = "skill_item.csv";
+    				}
+    				break;
+    			case (int)SkillCategory.MartialArt:
+    				{
+    					category = SkillCategory.MartialArt;
+    					categoryFileName = "skill_martialArt.csv";
+    				}
+    				break;
+    			case (int)SkillCategory.Mission:
+    				{
+                        category = SkillCategory.Mission;
+                        categoryFileName = "skill_mission.csv";
+    				}
+    				break;
 
-				}
-				break;
-			case (int)SkillCategory.Careers:
-				{
-				}
-				break;
-			case (int)SkillCategory.Weapon:
-				{
-				}
-				break;
-			case (int)SkillCategory.Item:
-				{
+    			case (int)SkillCategory.Achievement:
+    				{
+                        category = SkillCategory.Achievement;
+                        categoryFileName = "skill_achievement.csv";
+    				}
+    				break;
 
-				}
-				break;
-			case (int)SkillCategory.MartialArt:
-				{
-					this.category = SkillCategory.MartialArt;
-					categoryFileName = "skill_martialArt.csv";
-				}
-				break;
-			case (int)SkillCategory.Mission:
-				{
-				}
-				break;
-
-			case (int)SkillCategory.Achievement:
-				{
-				}
-				break;
-
-			}
+    			}
 
 			//csv文件的第一行数据为属性数据
 			List<string> categoryProperty = new List<string> ();
 			//csv文件的列表数据
 			List<string> categoryPropertyValue = new List<string> ();
 
-			List<List<string>> basicData = CSV.Instance.loadFile (Application.dataPath + "/Resources/Data/Skill", categoryFileName);
+            List<List<string>> basicData = CSV.Instance.loadFile (Application.dataPath + "/Resources/Data/Skill/Category", categoryFileName);
 			for (int i = 0; i < basicData.Count; i++) {
 				if (i == 0) {
 					categoryProperty = basicData [i];
 				} else {
-					if (basicData [i] [0] == this.id) {
+					if (basicData [i] [0] == id) {
 						categoryPropertyValue = basicData [i];
 						break;
 					}
@@ -105,53 +119,66 @@ namespace Skill.Collections
 			}
 		}
 
-		void loadTypeProperty(int type)
+
+        /// <summary>
+        /// 加载技能的类型属性
+        /// </summary>
+        /// <param name="_type">Type.</param>
+		void loadTypeProperty(int _type)
 		{
 			//根据类别查找技能
 			string fileName = "";
-			switch (type) {
-			case (int)SkillType.Attack:
-				{
+            switch (_type) {
+    			case (int)SkillType.Attack:
+    				{
+                        type = SkillType.Attack;
+                        fileName = "skill_attack.csv";
+    				}
+    				break;
+    			case (int)SkillType.Defense:
+    				{
+                        type = SkillType.Defense;
+                        fileName = "skill_defense.csv";
+    				}
+    				break;
+    			case (int)SkillType.Treatment:
+    				{
+                        type = SkillType.Treatment;
+                        fileName = "skill_treatment.csv";
+    				}
+    				break;
+    			case (int)SkillType.Intensify:
+    				{
+    					type = SkillType.Intensify;
+    					fileName = "skill_intensify.csv";
+    				}
+    				break;
+    			case (int)SkillType.Complex:
+    				{
+                        type = SkillType.Complex;
+                        fileName = "skill_complex.csv";
+    				}
+    				break;
+    			case (int)SkillType.Specialty:
+    				{
+                        type = SkillType.Specialty;
+                        fileName = "skill_specialty.csv";
+    				}
+    				break;
 
-				}
-				break;
-			case (int)SkillType.Defense:
-				{
-				}
-				break;
-			case (int)SkillType.Treatment:
-				{
-				}
-				break;
-			case (int)SkillType.Intensify:
-				{
-					this.type = SkillType.Intensify;
-					fileName = "skill_intensify.csv";
-				}
-				break;
-			case (int)SkillType.Complex:
-				{
-
-				}
-				break;
-			case (int)SkillType.Specialty:
-				{
-				}
-				break;
-
-			}
+    		}
 
 			//csv文件的第一行数据为属性数据
 			List<string> property = new List<string> ();
 			//csv文件的列表数据
 			List<string> propertyValue = new List<string> ();
 
-			List<List<string>> basicData = CSV.Instance.loadFile (Application.dataPath + "/Resources/Data/Skill", fileName);
+			List<List<string>> basicData = CSV.Instance.loadFile (Application.dataPath + "/Resources/Data/Skill/Type", fileName);
 			for (int i = 0; i < basicData.Count; i++) {
 				if (i == 0) {
 					property = basicData [i];
 				} else {
-					if (basicData [i] [0] == this.id) {
+					if (basicData [i] [0] == id) {
 						propertyValue = basicData [i];
 						break;
 					}
@@ -169,7 +196,7 @@ namespace Skill.Collections
 	}
 }
 
-public enum SkillCategory:int
+public enum SkillCategory
 {
 	//血统
 	Bloodline = 1,
@@ -187,9 +214,9 @@ public enum SkillCategory:int
 	Achievement = 7
 }
 
-public enum SkillType:int
+public enum SkillType
 {
-	//攻击
+	//伤害
 	Attack = 1,
 	//防御
 	Defense = 2,

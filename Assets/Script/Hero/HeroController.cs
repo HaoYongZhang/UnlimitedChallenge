@@ -39,13 +39,13 @@ public class HeroController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
 		{
-			HeroSystem hero = player.GetComponent<HeroSystem> ();
+            HeroManager hero = player.GetComponent<HeroManager> ();
 
         }
 
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
-			HeroSystem hero = player.GetComponent<HeroSystem> ();
+            HeroManager hero = player.GetComponent<HeroManager> ();
 		}
 	}
 
@@ -57,11 +57,11 @@ public class HeroController : MonoBehaviour {
 	//Translate移动控制函数
 	void MoveControlByTranslateGetAxis()
 	{
-		HeroSystem heroSystem = player.GetComponent<HeroSystem> ();
+        HeroManager heroManager = player.GetComponent<HeroManager> ();
         float horizontal = Input.GetAxis("Horizontal"); //A D 左右
 		float vertical = Input.GetAxis("Vertical"); //W S 上 下
 
-		_rigidbody.MovePosition(this.transform.position + new Vector3(horizontal, 0, vertical) * heroSystem.property.moveSpeed * Time.deltaTime);
+        _rigidbody.MovePosition(this.transform.position + new Vector3(horizontal, 0, vertical) * heroManager.property.moveSpeed * Time.deltaTime);
 		if(horizontal != 0f || vertical != 0f)
 		{
 			Rotating(horizontal, vertical);

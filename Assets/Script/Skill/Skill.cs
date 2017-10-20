@@ -22,8 +22,15 @@ namespace SkillClass
 		public SkillType type;
         //技能类型的中文名称
         public string typeName;
+        //原来的技能描述
+        private string originalDescription;
         //技能描述
-        public string description;
+        public string description
+        {
+            get{
+                return resetDescription();
+            }
+        }
 		//通用技能数据
 		public Dictionary<string, string> data = new Dictionary<string, string>();
 		//特定技能数据
@@ -52,21 +59,7 @@ namespace SkillClass
 			imageSprite = Resources.Load("Image/Skill/skill_" + id, typeof(Sprite)) as Sprite;
             isActive = (data["isActive"] == "1");
 
-            Property property = new Property();
-            int i = 0;
-            description = data["description"];
-            foreach (KeyValuePair<string, string> dict in addlData)
-            {
-                if (PropertyUtil.isExist(property, dict.Key))
-                {
-                    string descriptionName = PropertyUtil.ReflectDescription(property, dict.Key);
-                    string s = "@" + i;
-                    description = description.Replace(s, descriptionName);
-                    i++;
-                }
-            }
 
-            Debug.Log(data["name"] + "=" + description);
 		}
 
         /// <summary>
@@ -234,6 +227,47 @@ namespace SkillClass
 				}
 			}
 		}
+
+        /// <summary>
+        /// 重设描述说明
+        /// </summary>
+        /// <returns>The description.</returns>
+        string resetDescription()
+        {
+            Property property = new Property();
+            int i = 0;
+            originalDescription = data["description"];
+            foreach (KeyValuePair<string, string> dict in addlData)
+            {
+                if (PropertyUtil.isExist(property, dict.Key))
+                {
+                    //截取字符串，获得+/-符号
+                    string symbol = dict.Value.Substring(0, 1);
+                    string increateStr = (symbol == "+" ? "增加":"减少");
+
+                    string increateValue;
+                    //加成
+                    if(dict.Key.StartsWith("addl"))
+                    {
+                        increateValue = dict.Value.Substring(1, dict.Value.Length - 1) + "点";
+                    }
+                    //比率
+                    else
+                    {
+                        float rate = float.Parse(dict.Value.Substring(1, dict.Value.Length - 1));
+
+                        increateValue = rate * 100 + "%";
+                    }
+
+                    string descriptionName = PropertyUtil.ReflectDescription(property, dict.Key);
+                    string s = "@" + i;
+                    originalDescription = originalDescription.Replace(s, descriptionName + increateStr + increateValue);
+                    i++;
+                }
+            }
+
+            return originalDescription;
+        }
 	}
 }
 

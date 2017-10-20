@@ -84,7 +84,7 @@ namespace SkillClass
                         //每秒显示技能冷却时间
                         if (Time.time - skill.second >= 1.0f) {
                             skill.second = Time.time;
-							cooldownText.text = Utility.Math.Round((float.Parse (skill.data ["cooldown"]) - skill.currentCoolDown), 0).ToString();
+							//cooldownText.text = Utility.Math.Round((float.Parse (skill.data ["cooldown"]) - skill.currentCoolDown), 0).ToString();
 						}
 
                         // 显示冷却动画
@@ -101,7 +101,7 @@ namespace SkillClass
 						skill.currentCoolDown = 0;
 						skill.isCooldown = false;
                         cooldownImage.fillAmount = 0;
-						cooldownText.text = "";
+						//cooldownText.text = "";
 					}
 				}
 
@@ -149,7 +149,7 @@ namespace SkillClass
 		}
 
 		//使用技能
-		void useSkill(int i)
+		public void useSkill(int i)
 		{
 			// 如果技能不存在，返回
             if (Global.activeSkills.Count < (i + 1))

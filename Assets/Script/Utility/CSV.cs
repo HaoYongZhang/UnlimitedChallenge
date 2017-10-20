@@ -32,7 +32,6 @@ public class CSV
 		try
 		{
 			sr = File.OpenText(path + "//" + fileName);
-			Debug.Log("找到文件");
 		}
 		catch
 		{

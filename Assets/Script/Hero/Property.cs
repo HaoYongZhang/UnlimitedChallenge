@@ -38,10 +38,10 @@ public class Property {
     [Description("最大能量值")]
 	public float addlMpMax{get;set;}
 	//额外生命恢复速度
-    [Description("生命恢复速度")]
+    [Description("生命恢复")]
 	public float addlHpRegeneration{get;set;}
 	//额外能量恢复速度
-    [Description("能量恢复速度")]
+    [Description("能量恢复")]
 	public float addlMpRegeneration{get;set;}
 	//额外力量
     [Description("力量")]
@@ -67,37 +67,37 @@ public class Property {
 
     //------比例的（rate）
     //最大生命值比率
-    [Description("生命值比率")]
+    [Description("生命值")]
     public float rateHpMax{ get; set; }
     //最大能量值比率
-    [Description("能量值比率")]
+    [Description("能量值")]
     public float rateMpMax{ get; set; }
     //生命恢复速度比率
-    [Description("生命恢复速度比率")]
+    [Description("生命恢复")]
     public float rateHpRegeneration{ get; set; }
     //能量恢复速度比率
-    [Description("能量恢复速度比率")]
+    [Description("能量恢复")]
     public float rateMpRegeneration{ get; set; }
     //力量比率
-    [Description("力量比率")]
+    [Description("力量")]
     public float rateStrength{ get; set; }
     //敏捷比率
-    [Description("敏捷比率")]
+    [Description("敏捷")]
     public float rateAgility{ get; set; }
     //智力比率
-    [Description("智力比率")]
+    [Description("智力")]
     public float rateIntellect{ get; set; }
     //护甲比率
-    [Description("护甲比率")]
+    [Description("护甲")]
     public float rateArmor{ get; set; }
     //移动速度比率
-    [Description("移动速度比率")]
+    [Description("移动速度")]
     public float rateMoveSpeed{ get; set; }
     //攻击力比率
-    [Description("攻击力比率")]
+    [Description("攻击力")]
     public float rateAttack{ get; set; }
     //攻击速度比率
-    [Description("攻击速度比率")]
+    [Description("攻击速度")]
     public float rateAttackSpeed{ get; set; }
 
 	//------综合的属性

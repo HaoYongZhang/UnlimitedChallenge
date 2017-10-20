@@ -17,6 +17,8 @@ public class SceneUI : MonoBehaviour {
     public Slider mpBar;
     public Text hpText;
     public Text mpText;
+    public Text hpRegenerationText;
+    public Text mpRegenerationText;
 
     //技能按钮集合
     public List<Button> skillButtons = new List<Button>();
@@ -65,6 +67,9 @@ public class SceneUI : MonoBehaviour {
 		hpText = Utility.Context.GetComponent<Text>(scene_ui_object, "HpText");
 		mpText = Utility.Context.GetComponent<Text>(scene_ui_object, "MpText");
 
+        hpRegenerationText = Utility.Context.GetComponent<Text>(scene_ui_object, "HpRegenerationText");
+        mpRegenerationText = Utility.Context.GetComponent<Text>(scene_ui_object, "MpRegenerationText");
+
         skillStatusBar = GameObject.Find("SkillStatusBar");
 
 		skillInfo = GameObject.Find("SkillInfo");
@@ -98,6 +103,8 @@ public class SceneUI : MonoBehaviour {
         mpBar.value = mp / mpMax;
         hpText.text = hp + "/" + hpMax;
         mpText.text = mp + "/" + mpMax;
+
+
     }
 
    	void Awake()
@@ -115,8 +122,30 @@ public class SceneUI : MonoBehaviour {
 
         HeroManager heroManager = player.GetComponent<HeroManager>();
 
+        hpBar.value = heroManager.property.hp / heroManager.property.hpMax;
+        mpBar.value = heroManager.property.mp / heroManager.property.mpMax;
+        hpText.text = heroManager.property.hp + "/" + heroManager.property.hpMax;
+        mpText.text = heroManager.property.mp + "/" + heroManager.property.mpMax;
+
+        if(heroManager.property.hpRegeneration > 0)
+        {
+            hpRegenerationText.text = "+" + Math.Round(heroManager.property.hpRegeneration, 1);
+        }
+        else
+        {
+            hpRegenerationText.text = "-" + Math.Round(heroManager.property.hpRegeneration, 1);
+        }
+
+        if (heroManager.property.mpRegeneration > 0)
+        {
+            mpRegenerationText.text = "+" + Math.Round(heroManager.property.mpRegeneration, 1);
+        }
+        else
+        {
+            mpRegenerationText.text = "-" + Math.Round(heroManager.property.mpRegeneration, 1);
+        }
         //更新人物当前生命值和能量值
-        Set(heroManager.property.hp, heroManager.property.hpMax, heroManager.property.mp, heroManager.property.mpMax);
+        //Set(heroManager.property.hp, heroManager.property.hpMax, heroManager.property.mp, heroManager.property.mpMax);
 	}
 
 	void FixedUpdate(){
@@ -194,14 +223,14 @@ public class SceneUI : MonoBehaviour {
             texts.Add("持续时间    " + skill.data["duration"]);
             texts.Add("冷却时间    " + skill.data["cooldown"]);
             texts.Add("能量消耗     " + skill.data["costEnergy"]);
-            texts.Add(skill.data["description"]);
+            texts.Add(skill.description);
         }
         else
         {
             texts.Add("被动技能");
             texts.Add(skill.categoryName);
             texts.Add(skill.typeName);
-            texts.Add(skill.data["description"]);
+            texts.Add(skill.description);
         }
 
         for (int i = 0; i < labels.Count;i++)
@@ -252,9 +281,13 @@ public class SceneUI : MonoBehaviour {
         GameObject skillObject = skillStatusBar.transform.Find(skillName).gameObject;
         Destroy(skillObject);
         //如果当前正在显示技能状态的详细信息时，关闭
-        if(currentShowInfoSkill.id == skill.id)
+        if(currentShowInfoSkill != null)
         {
-            hideSkillInfo();
+            if (currentShowInfoSkill.id == skill.id)
+            {
+                currentShowInfoSkill = null;
+                hideSkillInfo();
+            }
         }
     }
 }

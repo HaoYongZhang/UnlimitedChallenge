@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.ComponentModel;
 
 public class Property {
 	//------基础的（basic）
@@ -31,27 +32,73 @@ public class Property {
 
 	//------额外的（additional）
 	//额外最大生命值
+    [Description("最大生命值")]
 	public float addlHpMax{get;set;}
 	//额外最大能量值
+    [Description("最大能量值")]
 	public float addlMpMax{get;set;}
 	//额外生命恢复速度
+    [Description("生命恢复速度")]
 	public float addlHpRegeneration{get;set;}
 	//额外能量恢复速度
+    [Description("能量恢复速度")]
 	public float addlMpRegeneration{get;set;}
 	//额外力量
+    [Description("力量")]
 	public float addlStrength{get;set;}
     //额外敏捷
+    [Description("敏捷")]
 	public float addlAgility{get;set;}
     //额外智力
+    [Description("智力")]
 	public float addlIntellect{get;set;}
 	//额外护甲
+    [Description("护甲")]
 	public float addlArmor{get;set;}
 	//额外移动速度
+    [Description("移动速度")]
 	public float addlMoveSpeed{get;set;}
 	//额外攻击力
+    [Description("攻击力")]
 	public float addlAttack{get;set;}
 	//额外攻击速度
+    [Description("攻击速度")]
 	public float addlAttackSpeed{get;set;}
+
+    //------比例的（rate）
+    //最大生命值比率
+    [Description("生命值比率")]
+    public float rateHpMax{ get; set; }
+    //最大能量值比率
+    [Description("能量值比率")]
+    public float rateMpMax{ get; set; }
+    //生命恢复速度比率
+    [Description("生命恢复速度比率")]
+    public float rateHpRegeneration{ get; set; }
+    //能量恢复速度比率
+    [Description("能量恢复速度比率")]
+    public float rateMpRegeneration{ get; set; }
+    //力量比率
+    [Description("力量比率")]
+    public float rateStrength{ get; set; }
+    //敏捷比率
+    [Description("敏捷比率")]
+    public float rateAgility{ get; set; }
+    //智力比率
+    [Description("智力比率")]
+    public float rateIntellect{ get; set; }
+    //护甲比率
+    [Description("护甲比率")]
+    public float rateArmor{ get; set; }
+    //移动速度比率
+    [Description("移动速度比率")]
+    public float rateMoveSpeed{ get; set; }
+    //攻击力比率
+    [Description("攻击力比率")]
+    public float rateAttack{ get; set; }
+    //攻击速度比率
+    [Description("攻击速度比率")]
+    public float rateAttackSpeed{ get; set; }
 
 	//------综合的属性
 	//生命值
@@ -63,21 +110,21 @@ public class Property {
     public float strength{
 		get
 		{
-			return basStrength + addlStrength;
+            return (basStrength + addlStrength) * rateStrength;
 		}
 	}
     //敏捷
     public float agility{
 		get
 		{
-			return basAgility + addlAgility;
+            return (basAgility + addlAgility) * rateAgility;
 		}
 	}
     //智力
     public float intellect{
 		get
 		{
-			return basIntellect + addlIntellect;
+            return (basIntellect + addlIntellect) * rateIntellect;
 		}
 	}
     
@@ -85,16 +132,16 @@ public class Property {
     public float hpMax{
 		get
 		{
-			//最大生命值 = 基础最大生命值 + 力量最大生命值（力量*20） + 额外最大生命值
-			return basHpMax + strength * 20f  + addlHpMax;
+			//最大生命值 = 基础最大生命值 + 力量最大生命值（力量*20） + 额外最大生命值 * 比率
+            return (basHpMax + strength * 20f  + addlHpMax) * rateHpMax;
 		}
 	}
     //最大能量值
     public float mpMax{
 		get
 		{
-			//最大能量值 = 基础最大魔法值 + 智力最大魔法值（智力*11） + 额外最大魔法值
-			return basMpMax + intellect * 11f + addlMpMax;
+			//最大能量值 = 基础最大魔法值 + 智力最大魔法值（智力*11） + 额外最大魔法值 * 比率
+            return (basMpMax + intellect * 11f + addlMpMax) * rateHpMax;
 		}
 	}
 		
@@ -106,7 +153,7 @@ public class Property {
 	{
 		get
       	{
-			return basHpRegeneration + strength * 0.06f  + addlHpRegeneration; 
+            return (basHpRegeneration + strength * 0.06f  + addlHpRegeneration) * rateHpRegeneration; 
       	}
     }
 
@@ -118,7 +165,7 @@ public class Property {
 	{
 		get
 		{
-			return basMpRegeneration + intellect * 0.04f + addlMpRegeneration;
+            return (basMpRegeneration + intellect * 0.04f + addlMpRegeneration) * rateMpRegeneration;
 		}
 	}
 
@@ -128,7 +175,7 @@ public class Property {
 		get
 		{
 			//护甲 = 基础护甲 + 敏捷护甲（敏捷*0.143） + 额外护甲
-			return basArmor + agility * 0.143f + addlArmor;
+            return (basArmor + agility * 0.143f + addlArmor) * rateArmor;
 		}
 	}
 
@@ -137,7 +184,7 @@ public class Property {
 	{
 		get
 		{
-			return basMoveSpeed + addlMoveSpeed;
+            return (basMoveSpeed + addlMoveSpeed) *rateMoveSpeed;
 		}
 	}
 
@@ -145,7 +192,7 @@ public class Property {
 	public float attack{
 		get 
       {
-         return basAttack + addlAttack; 
+            return (basAttack + addlAttack) * rateAttack; 
       }
     }
 
@@ -155,7 +202,7 @@ public class Property {
 		get
 		{
 			//攻击速度 = 基础攻击速度 + 敏捷速度（敏捷*1） + 额外攻击速度
-			return basAttackSpeed + agility + addlAttackSpeed;
+            return (basAttackSpeed + agility + addlAttackSpeed) * rateAttackSpeed; 
 		}
 	}
 
@@ -185,6 +232,29 @@ public class Property {
 		basHpMax = 200f;
 		basMpMax = 75f;
         magicDamageBlock = 0.25f;
+
+        //最大生命值比率
+        rateHpMax = 1f;
+        //最大能量值比率
+        rateMpMax = 1f;
+        //生命恢复速度比率
+        rateHpRegeneration = 1f;
+        //能量恢复速度比率
+        rateMpRegeneration = 1f;
+        //力量比率
+        rateStrength = 1f;
+        //敏捷比率
+        rateAgility = 1f;
+        //智力比率
+        rateIntellect = 1f;
+        //护甲比率
+        rateArmor = 1f;
+        //移动速度比率
+        rateMoveSpeed = 1f;
+        //攻击力比率
+        rateAttack = 1f;
+        //攻击速度比率
+        rateAttackSpeed = 1f;
     }
 
 	void Awake()

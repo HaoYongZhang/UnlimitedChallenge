@@ -57,15 +57,7 @@ namespace SkillClass
             {
                 if (skill.isInDuration == false)
                 {
-                    GameObject skillStatusIcon = (GameObject)Resources.Load("UI/SkillStatusIcon");
-                    skillStatusIcon = Instantiate(skillStatusIcon);
-                    skillStatusIcon.name = "SkillStatusIcon_" + skill.id;
-                    skillStatusIcon.transform.SetParent(SceneUI.Instance.skillStatusBar.transform);
-
-                    Image icon = skillStatusIcon.transform.Find("Icon").GetComponent<Image>();
-                    icon.sprite = skill.imageSprite;
-
-                    intensify(skill, false);
+                    intensify(skill);
                 }
             }
         }
@@ -135,11 +127,12 @@ namespace SkillClass
 					break;
 				case SkillType.Treatment:
 					{
+                        endIntensify(skill);
 					}
 					break;
 				case SkillType.Intensify:
 					{
-						intensify(skill, true);
+						endIntensify(skill);
 					}
 					break;
 				case SkillType.Complex:
@@ -209,7 +202,7 @@ namespace SkillClass
 				break;
 			case SkillType.Intensify:
 				{
-					intensify(skill, false);
+					intensify(skill);
 				}
 				break;
 			case SkillType.Complex:
@@ -232,11 +225,12 @@ namespace SkillClass
             string increateHp = skill.addlData["increateHp"];
             if (increateHp != null)
             {
-                //截取字符串，获得+/-符号
-                string symbol = increateHp.Substring(0, 1);
                 //截取字符串，获得属性增加的值
-                float createValue = float.Parse(increateHp.Substring(1, increateHp.Length - 1));
+                float createValue = float.Parse(increateHp);
+                //使用治疗技能后，加上的血量
                 heroManager.property.hp += createValue;
+
+                intensify(skill);
             }
         }
 
@@ -244,17 +238,12 @@ namespace SkillClass
 		/// 使用强化技能
 		/// </summary>
 		/// <param name="skill">Skill.</param>
-		/// <param name="isEnd">强化技能时间是否结束</param>
-		void intensify(Skill skill, bool isEnd)
+		void intensify(Skill skill)
 		{
-			if(isEnd == false)
-			{
-				skill.isInDuration = true;
-			}
-			else
-			{
-				skill.isInDuration = false;
-			}
+            //添加强化的小图标
+            SceneUI.Instance.addSkillStatusIcon(skill);
+            //开始技能的持续时间
+            skill.isInDuration = true;
 			//获取英雄对象
 			Transform player = GameObject.FindGameObjectWithTag ("Player").transform;
             //获取英雄对象下面的HeroManager
@@ -264,22 +253,47 @@ namespace SkillClass
 
 			foreach (KeyValuePair<string, string> dict in skill.addlData)
            	{
-				//截取字符串，获得属性增加的值
-				float createValue = float.Parse(dict.Value);
-				//动态获取当前的属性值
-				float propertyValue = float.Parse(PropertyUtil.ReflectGetter(property, dict.Key).ToString());
-                Debug.Log(float.Parse(dict.Value));
-                //使用强化技能时间开始时，应该加上强化属性
-                if (isEnd == false)
+                if (PropertyUtil.isExist(property, dict.Key))
                 {
+                    //截取字符串，获得属性增加的值
+                    float createValue = float.Parse(dict.Value);
+                    //动态获取当前的属性值
+                    float propertyValue = float.Parse(PropertyUtil.ReflectGetter(property, dict.Key).ToString());
+                    //使用强化技能时间开始时，应该加上强化属性
                     PropertyUtil.ReflectSetter(property, dict.Key, propertyValue + createValue);
-                }
-                //使用强化技能时间结束后，应该减去强化属性
-                else
-                {
-                    PropertyUtil.ReflectSetter(property, dict.Key, propertyValue - createValue);
                 }
            	}
 		}
+
+        /// <summary>
+        /// 强化技能的持续时间结束
+        /// </summary>
+        /// <param name="skill">Skill.</param>
+        void endIntensify(Skill skill)
+        {
+            //删除强化的小图标
+            SceneUI.Instance.removeSkillStatusIcon(skill);
+            //结束技能的持续时间
+            skill.isInDuration = false;
+            //获取英雄对象
+            Transform player = GameObject.FindGameObjectWithTag("Player").transform;
+            //获取英雄对象下面的HeroManager
+            HeroManager heroManager = player.GetComponent<HeroManager>();
+            //获取HeroManager的属性
+            Property property = heroManager.property;
+
+            foreach (KeyValuePair<string, string> dict in skill.addlData)
+            {
+                if (PropertyUtil.isExist(property, dict.Key))
+                {
+                    //截取字符串，获得属性增加的值
+                    float createValue = float.Parse(dict.Value);
+                    //动态获取当前的属性值
+                    float propertyValue = float.Parse(PropertyUtil.ReflectGetter(property, dict.Key).ToString());
+                    //使用强化技能时间结束后，应该减去强化属性
+                    PropertyUtil.ReflectSetter(property, dict.Key, propertyValue - createValue);
+                }
+            }
+        }
 	}
 }

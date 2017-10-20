@@ -21,8 +21,9 @@ public class SceneUI : MonoBehaviour {
     //技能按钮集合
     public List<Button> skillButtons = new List<Button>();
 
-	private Transform player;
-
+	Transform player;
+    //当前显示详细信息的技能
+    Skill currentShowInfoSkill;
 
     /// <summary>
     /// 单例
@@ -49,7 +50,7 @@ public class SceneUI : MonoBehaviour {
     /// <summary>
     /// 初始化
     /// </summary>
-    private void init()
+    void init()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
@@ -147,47 +148,113 @@ public class SceneUI : MonoBehaviour {
         hideSkillInfo();
     }
 
+    /// <summary>
+    /// 鼠标移动到技能状态
+    /// </summary>
+    /// <param name="objectName">Object name.</param>
+    public void onPointerEnterSkillStatus(string objectName, PointerEventData eventData)
+    {
+        foreach(Skill skill in Global.skills)
+        {
+            if(skill.id == objectName)
+            {
+                showSkillInfo(skill);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 鼠标移出技能状态
+    /// </summary>
+    /// <param name="objectName">Object name.</param>
+    public void onPointerExitSkillStatus(string objectName, PointerEventData eventData)
+    {
+        hideSkillInfo();
+    }
+
+
+    /// <summary>
+    /// 显示技能的详细信息
+    /// </summary>
+    /// <param name="skill">Skill.</param>
     void showSkillInfo(Skill skill)
     {
+        currentShowInfoSkill = skill;
+
         Image image = Utility.Context.GetComponent<Image>(skillInfo, "Icon");
 		image.sprite = skill.imageSprite;
 
 		List<Text> labels = new List<Text>(SceneUI.Instance.skillInfo.GetComponentsInChildren<Text> ());
 
-		foreach(Text label in labels)
-		{
-			if (label.name == "Name") {
-				label.text = skill.data ["name"];
-			}
-			else if (label.name == "IsActive") {
-				label.text = skill.data ["isActive"] == "1" ? "主动技能":"被动技能";
-			}
-			else if (label.name == "LevelMax") {
-				label.text = "当前等级    " + skill.currentLevel + "/" + skill.data ["levelMax"];
-			}
-			else if (label.name == "Description") {
-				label.text = skill.data ["description"];
-//				Vector2 sizeDelta = label.GetComponent<RectTransform> ().sizeDelta;
-//				label.GetComponent<RectTransform> ().sizeDelta = new Vector2 (sizeDelta.x, sizeDelta.y * 2);
-//				Debug.Log(sizeDelta.y);
-			}
-			else if (label.name == "Duration") {
-				label.text = "持续时间    " + skill.data ["duration"];
-			}
-			else if (label.name == "Cooldown") {
-				label.text = "冷却时间    " + skill.data ["cooldown"];
-			}
-			else if (label.name == "CostEnergy") {
-				label.text = "能量消耗     " + skill.data ["costEnergy"];
-			}
+        List<string> texts = new List<string>();
 
+        texts.Add(skill.data["name"]);
+        if(skill.isActive)
+        {
+            texts.Add("持续时间    " + skill.data["duration"]);
+            texts.Add("冷却时间    " + skill.data["cooldown"]);
+            texts.Add("能量消耗     " + skill.data["costEnergy"]);
+            texts.Add(skill.data["description"]);
+        }
+        else
+        {
+            texts.Add("被动技能");
+            texts.Add(skill.categoryName);
+            texts.Add(skill.typeName);
+            texts.Add(skill.data["description"]);
+        }
+
+        for (int i = 0; i < labels.Count;i++)
+		{
+            Text label = labels[i];
+            label.text = texts[i];
 		}
+
+
 
 		skillInfo.SetActive (true);
     }
 
+    /// <summary>
+    /// 隐藏技能的详细信息
+    /// </summary>
     void hideSkillInfo()
     {
 		skillInfo.SetActive (false);
+    }
+
+    /// <summary>
+    /// 添加技能的小状态图标
+    /// </summary>
+    /// <param name="skill">Skill.</param>
+    public void addSkillStatusIcon(Skill skill){
+        GameObject skillStatusIcon = (GameObject)Resources.Load("UI/SkillStatusIcon");
+        skillStatusIcon = Instantiate(skillStatusIcon);
+        skillStatusIcon.name = skill.id;
+        skillStatusIcon.transform.SetParent(skillStatusBar.transform);
+
+        Image icon = skillStatusIcon.transform.Find("Icon").GetComponent<Image>();
+        icon.sprite = skill.imageSprite;
+
+        UIInfo uiInfo = skillStatusIcon.GetComponent<UIInfo>();
+        uiInfo.onPointerEnterDelegate = onPointerEnterSkillStatus;
+        uiInfo.onPointerExitDelegate = onPointerExitSkillStatus;
+    }
+
+    /// <summary>
+    /// 移除技能的小状态图标
+    /// </summary>
+    /// <param name="skill">Skill.</param>
+    public void removeSkillStatusIcon(Skill skill)
+    {
+        string skillName = skill.id;
+
+        GameObject skillObject = skillStatusBar.transform.Find(skillName).gameObject;
+        Destroy(skillObject);
+        //如果当前正在显示技能状态的详细信息时，关闭
+        if(currentShowInfoSkill.id == skill.id)
+        {
+            hideSkillInfo();
+        }
     }
 }

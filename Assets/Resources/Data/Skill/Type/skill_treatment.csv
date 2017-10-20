@@ -1,2 +1,2 @@
-id,increateHp,increateMp,reduceHp,reduceMp,addlHpRegeneration,addlMpRegeneration
-430001,+100,,,,+10,
+id,increateHp,increateMp,addlHpRegeneration,addlMpRegeneration
+430001,+100,,+10,

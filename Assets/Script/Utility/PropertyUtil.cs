@@ -7,6 +7,7 @@ using System.Threading;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Linq.Expressions;
+using System.ComponentModel;
 
 namespace Utility
 {
@@ -15,6 +16,26 @@ namespace Utility
     /// </summary>
     public class PropertyUtil
     {
+        /// <summary>
+        /// 判断属性是否存在
+        /// </summary>
+        /// <returns><c>true</c>, if exist was ised, <c>false</c> otherwise.</returns>
+        /// <param name="obj">Object.</param>
+        /// <param name="propertyName">Property name.</param>
+        public static bool isExist(object obj, string propertyName)
+        {
+            Type type = obj.GetType();
+            PropertyInfo propertyInfo = type.GetProperty(propertyName);
+            if(propertyInfo != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// 反射获取对象的属性值
         /// </summary>
@@ -41,6 +62,22 @@ namespace Utility
 			Type type = obj.GetType();
 			PropertyInfo propertyInfo = type.GetProperty(propertyName);
 			propertyInfo.SetValue(obj, propertyValue, null);
+        }
+
+        public static string ReflectDescription(object obj, string propertyName)
+        {
+            Type type = obj.GetType();
+            PropertyInfo propertyInfo = type.GetProperty(propertyName);
+
+            object[] objs = propertyInfo.GetCustomAttributes(typeof(DescriptionAttribute), true);
+            if (objs.Length > 0)
+            {
+                return ((DescriptionAttribute)objs[0]).Description;
+            }
+            else
+            {
+                return "";
+            }
         }
 
 

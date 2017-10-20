@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Utility;
 
 namespace SkillClass
 {
@@ -9,12 +10,20 @@ namespace SkillClass
 	{
 		//技能id
 		public string id;
+        //是否主动技能
+        public bool isActive;
         //技能图片
         public Sprite imageSprite;
 		//技能类别
 		public SkillCategory category;
+        //技能类别的中文名称
+        public string categoryName;
 		//技能类型
 		public SkillType type;
+        //技能类型的中文名称
+        public string typeName;
+        //技能描述
+        public string description;
 		//通用技能数据
 		public Dictionary<string, string> data = new Dictionary<string, string>();
 		//特定技能数据
@@ -41,6 +50,23 @@ namespace SkillClass
             loadTypeProperty(_type);
 
 			imageSprite = Resources.Load("Image/Skill/skill_" + id, typeof(Sprite)) as Sprite;
+            isActive = (data["isActive"] == "1");
+
+            Property property = new Property();
+            int i = 0;
+            description = data["description"];
+            foreach (KeyValuePair<string, string> dict in addlData)
+            {
+                if (PropertyUtil.isExist(property, dict.Key))
+                {
+                    string descriptionName = PropertyUtil.ReflectDescription(property, dict.Key);
+                    string s = "@" + i;
+                    description = description.Replace(s, descriptionName);
+                    i++;
+                }
+            }
+
+            Debug.Log(data["name"] + "=" + description);
 		}
 
         /// <summary>
@@ -55,36 +81,42 @@ namespace SkillClass
     			case (int)SkillCategory.Bloodline:
     				{
                         category = SkillCategory.Bloodline;
+                        categoryName = "血统";
                         categoryFileName = "skill_bloodline.csv";
     				}
     				break;
     			case (int)SkillCategory.Careers:
     				{
                         category = SkillCategory.Careers;
+                        categoryName = "职业";
                         categoryFileName = "skill_careers.csv";
     				}
     				break;
     			case (int)SkillCategory.Weapon:
     				{
                         category = SkillCategory.Weapon;
+                        categoryName = "武器";
                         categoryFileName = "skill_weapon.csv";
     				}
     				break;
     			case (int)SkillCategory.Item:
     				{
                         category = SkillCategory.Item;
+                        categoryName = "物品";
                         categoryFileName = "skill_item.csv";
     				}
     				break;
     			case (int)SkillCategory.MartialArt:
     				{
     					category = SkillCategory.MartialArt;
+                        categoryName = "武学";
     					categoryFileName = "skill_martialArt.csv";
     				}
     				break;
     			case (int)SkillCategory.Mission:
     				{
                         category = SkillCategory.Mission;
+                        categoryName = "任务";
                         categoryFileName = "skill_mission.csv";
     				}
     				break;
@@ -92,6 +124,7 @@ namespace SkillClass
     			case (int)SkillCategory.Achievement:
     				{
                         category = SkillCategory.Achievement;
+                        categoryName = "成就";
                         categoryFileName = "skill_achievement.csv";
     				}
     				break;
@@ -134,36 +167,42 @@ namespace SkillClass
     			case (int)SkillType.Attack:
     				{
                         type = SkillType.Attack;
+                        typeName = "伤害";
                         fileName = "skill_attack.csv";
     				}
     				break;
     			case (int)SkillType.Defense:
     				{
                         type = SkillType.Defense;
+                        typeName = "防御";
                         fileName = "skill_defense.csv";
     				}
     				break;
     			case (int)SkillType.Treatment:
     				{
                         type = SkillType.Treatment;
+                        typeName = "治疗";
                         fileName = "skill_treatment.csv";
     				}
     				break;
     			case (int)SkillType.Intensify:
     				{
     					type = SkillType.Intensify;
+                        typeName = "强化";
     					fileName = "skill_intensify.csv";
     				}
     				break;
     			case (int)SkillType.Complex:
     				{
                         type = SkillType.Complex;
+                        typeName = "复合";
                         fileName = "skill_complex.csv";
     				}
     				break;
     			case (int)SkillType.Specialty:
     				{
                         type = SkillType.Specialty;
+                        typeName = "特殊";
                         fileName = "skill_specialty.csv";
     				}
     				break;

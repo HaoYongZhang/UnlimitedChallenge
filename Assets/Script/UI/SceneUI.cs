@@ -54,8 +54,8 @@ public class SceneUI : MonoBehaviour {
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
         scene_ui_object = (GameObject)Resources.Load("UI/SceneUI");
-        scene_ui_object.name = "SceneUIObject";
         scene_ui_object = Instantiate(scene_ui_object);
+        scene_ui_object.name = "SceneUIObject";
         scene_ui_object.transform.SetParent(_instance.transform);
 
 		hpBar = Utility.Context.GetComponent<Slider>(scene_ui_object, "HpBar");

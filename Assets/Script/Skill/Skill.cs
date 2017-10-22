@@ -243,7 +243,7 @@ namespace SkillClass
                 {
                     //截取字符串，获得+/-符号
                     string symbol = dict.Value.Substring(0, 1);
-                    string increateStr = (symbol == "+" ? "增加":"减少");
+                    string increateStr = (symbol == "+" ? "+":"-");
 
                     string increateValue;
                     //加成

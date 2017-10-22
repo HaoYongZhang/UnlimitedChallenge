@@ -34,7 +34,6 @@ public class SceneUI : MonoBehaviour {
 		get {  
             if (_instance == null)  // 如果没有找到
             {
-                Debug.Log("执行scene_ui初始化");
                 GameObject go = new GameObject("SceneUI"); // 创建一个新的GameObject
                 _instance = go.AddComponent<SceneUI>(); // 将实例挂载到GameObject上
 

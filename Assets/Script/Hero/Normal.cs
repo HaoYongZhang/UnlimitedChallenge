@@ -6,6 +6,7 @@ using SkillClass;
 public class Normal
 {
 	public Property property = new Property();
+    public Knowledge knowledge = new Knowledge();
 
     public string talentSkillID = "540001";
 
@@ -18,5 +19,7 @@ public class Normal
 		property.hp = property.hpMax;
 		property.mp = property.mpMax;
 		property.basMoveSpeed = 20;
+
+        knowledge.shot = 3;
 	}
 }

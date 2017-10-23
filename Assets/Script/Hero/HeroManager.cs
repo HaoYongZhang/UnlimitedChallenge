@@ -6,7 +6,9 @@ using SkillClass;
 public class HeroManager : MonoBehaviour {
     public static HeroManager _instance;
 	public Normal normal = new Normal();
+
 	public Property property;
+    public Knowledge knowledge;
 
 	void Awake()
 	{
@@ -16,9 +18,11 @@ public class HeroManager : MonoBehaviour {
 	void Start()
 	{
         property = normal.property;
+        knowledge = normal.knowledge;
 
         Global.skills.Add(new Skill(normal.talentSkillID));
         Global.skills.Add(new Skill("140001"));
+        Global.skills.Add(new Skill("510030"));
         Global.skills.Add(new Skill("430001"));
 		InvokeRepeating ("RegenerationPerSecond", 0, 1f);
 	}

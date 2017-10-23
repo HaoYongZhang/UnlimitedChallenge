@@ -116,31 +116,31 @@ namespace SkillClass
 		{
 			switch (skill.type)
 			{
-				case SkillType.Attack:
+				case SkillType.attack:
 					{
 
 					}
 					break;
-				case SkillType.Defense:
+				case SkillType.defense:
 					{
 					}
 					break;
-				case SkillType.Treatment:
+				case SkillType.treatment:
 					{
                         endIntensify(skill);
 					}
 					break;
-				case SkillType.Intensify:
+				case SkillType.intensify:
 					{
 						endIntensify(skill);
 					}
 					break;
-				case SkillType.Complex:
+				case SkillType.complex:
 					{
 
 					}
 					break;
-				case SkillType.Specialty:
+				case SkillType.specialty:
 					{
 					}
 					break;
@@ -186,31 +186,31 @@ namespace SkillClass
             //			Image skillImage = SceneUI.Instance.skillButtons[i].transform.Find("SkillImage").GetComponent<Image>();
 
 			switch (skill.type) {
-			case SkillType.Attack:
+			case SkillType.attack:
 				{
-					
+                        attack(skill);
 				}
 			break;
-			case SkillType.Defense:
+			case SkillType.defense:
 				{
 				}
 				break;
-			case SkillType.Treatment:
+			case SkillType.treatment:
 				{
                     treatment(skill);
 				}
 				break;
-			case SkillType.Intensify:
+			case SkillType.intensify:
 				{
 					intensify(skill);
 				}
 				break;
-			case SkillType.Complex:
+			case SkillType.complex:
 				{
 
 				}
 				break;
-			case SkillType.Specialty:
+			case SkillType.specialty:
 				{
 				}
 				break;
@@ -219,6 +219,36 @@ namespace SkillClass
 		}
 
 
+        void attack(Skill skill)
+        {
+            //获取英雄对象
+            Transform player = GameObject.FindGameObjectWithTag("Player").transform;
+            //获取HeroManager的属性
+            Property property = player.GetComponent<HeroManager>().property;
+            Knowledge knowledge = player.GetComponent<HeroManager>().knowledge;
+
+            //动态获取当前的属性值
+            int knowledgeValue = int.Parse(PropertyUtil.ReflectGetter(knowledge, skill.addlData["knowledgePromote"]).ToString());
+
+            DamageType damageType = SkillEnum.getEnum<DamageType>(skill.addlData["damageType"]);
+            SkillEffectType skillEffectType = SkillEnum.getEnum<SkillEffectType>(skill.addlData["skillEffectType"]);
+            float damage =
+                (float.Parse(skill.addlData["basicDamage"]) +
+                 property.strength * float.Parse(skill.addlData["strength"]) +
+                 property.agility * float.Parse(skill.addlData["agility"]) +
+                 property.intellect * float.Parse(skill.addlData["agility"])) *
+                (1 + Math.Round((float)knowledgeValue / 10, 1));
+
+
+
+        }
+
+
+        /// <summary>
+        /// 使用治疗技能
+        /// </summary>
+        /// <returns>The treatment.</returns>
+        /// <param name="skill">Skill.</param>
         void treatment(Skill skill)
         {
             HeroManager heroManager = GetComponent<HeroManager>();

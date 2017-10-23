@@ -1,2 +1,2 @@
-id,name,type,description,isActive,levelMax,duration,cooldown,costEnergy
-140001,T病毒,强化,初级丧尸病毒：丧尸里面最底层的存在，自身的@0和@2，@1和@3,0,5,0,0,0
+id,name,type,description,isActive,duration,cooldown,costEnergy
+140001,T病毒,强化,初级丧尸病毒：丧尸里面最底层的存在，自身的@0和@2，@1和@3,0,0,0,0

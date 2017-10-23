@@ -1,2 +1,2 @@
-id,name,type,description,isActive,levelMax,duration,cooldown,costEnergy
-430001,绷带,治愈,瞬间恢复100点生命值，而且每秒恢复10点生命值,1,1,5,30,0
+id,name,type,description,isActive,duration,cooldown,costEnergy
+430001,绷带,治愈,瞬间恢复100点生命值，而且每秒恢复10点生命值,1,5,30,0

@@ -51,8 +51,20 @@ public class Global{
     }
 
 
+    public static SkillRelease skillRelease = SkillRelease.none;
 
+    public static Skill FindSkillInSkills(string _id)
+    {
+        foreach(Skill skill in Global.skills)
+        {
+            if(skill.id == _id)
+            {
+                return skill;
+            }
+        }
 
+        return null;
+    }
 
     // 记录人物进入场景前的位置数组
 	public static List<Vector3> enterSceneBeforPositions = new List<Vector3>();

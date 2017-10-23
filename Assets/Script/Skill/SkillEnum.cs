@@ -12,6 +12,17 @@ namespace SkillClass
             return enumObj;
         }
     }
+
+    public enum SkillRelease
+    {
+        //未释放
+        none,
+        //选择中
+        selecting,
+        //已选择
+        selected
+    }
+
     /// <summary>
     /// 技能的类别
     /// </summary>

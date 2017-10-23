@@ -10,6 +10,8 @@ namespace SkillClass
         // SkillManager单例
         public static SkillManager _instance;
 
+        public Skill hasSelectedSkill;
+
         void Awake()
         {
             _instance = this;
@@ -22,6 +24,18 @@ namespace SkillClass
 		void Update () {
 			cooldown();
             keepUnactiveSkill();
+
+            if (Input.GetMouseButton(0) && Global.skillRelease == SkillRelease.selecting)
+            {
+                Global.skillRelease = SkillRelease.selected;
+            }
+
+
+            if(Global.skillRelease == SkillRelease.selected)
+            {
+                inAttack(hasSelectedSkill);
+                Global.skillRelease = SkillRelease.none;
+            }
 		}
 
 		//技能的默认设置
@@ -37,7 +51,7 @@ namespace SkillClass
 
 				btn.onClick.AddListener(delegate ()
 				{
-					this.useSkill(j);
+                    this.onSkillBarButtion(j);
 				});
 			}
 
@@ -47,6 +61,18 @@ namespace SkillClass
                 icon.sprite = Global.activeSkills[i].imageSprite;
 			}
 		}
+
+        void onSkillBarButtion(int i)
+        {
+            if (i > (Global.activeSkills.Count - 1))
+            {
+                return;
+            }
+            else
+            {
+                useSkill(Global.activeSkills[i]);
+            }
+        }
 
         /// <summary>
         /// 维持被动技能
@@ -149,41 +175,12 @@ namespace SkillClass
 		}
 
 		//使用技能
-		public void useSkill(int i)
+        public void useSkill(Skill skill)
 		{
-			// 如果技能不存在，返回
-            if (Global.activeSkills.Count < (i + 1))
-			{
-				return;
-			}
-
-            Skill skill = Global.activeSkills[i];
-
-			// 如果是被动技能，返回
-			if (skill.data["isActive"] == "0")
-			{
-				return;
-			}
-
-			// 如果技能正在冷却中，返回
-			if (skill.isCooldown == true) {
-				return;
-			}
-
-            HeroManager heroManager = GetComponent<HeroManager> ();
-
-			// 如果蓝量不足，返回
-            if (heroManager.property.mp < float.Parse (skill.data ["costEnergy"])) {
-				Debug.Log ("能量不足");
-				return;
-			}
-
-            heroManager.property.mp -= float.Parse (skill.data ["costEnergy"]);
-			skill.isCooldown = true;
-            Image maskImage = SceneUI.Instance.skillButtons[i].transform.Find("MaskImage").GetComponent<Image>();
-            Image cooldownImage = maskImage.transform.Find("CooldownImage").GetComponent<Image>();
-            cooldownImage.fillAmount = 1;
-            //			Image skillImage = SceneUI.Instance.skillButtons[i].transform.Find("SkillImage").GetComponent<Image>();
+            if (beforeUseSkill(skill) == false)
+            {
+                return;
+            }
 
 			switch (skill.type) {
 			case SkillType.attack:
@@ -197,11 +194,13 @@ namespace SkillClass
 				break;
 			case SkillType.treatment:
 				{
+                        inUseSkill(skill);
                     treatment(skill);
 				}
 				break;
 			case SkillType.intensify:
 				{
+                        inUseSkill(skill);
 					intensify(skill);
 				}
 				break;
@@ -218,8 +217,66 @@ namespace SkillClass
 			}
 		}
 
+        bool beforeUseSkill(Skill skill)
+        {
+            // 如果技能不存在，返回
+            if (skill == null)
+            {
+                return false;
+            }
+
+            // 如果是被动技能，返回
+            if (skill.data["isActive"] == "0")
+            {
+                return false;
+            }
+
+            // 如果技能正在冷却中，返回
+            if (skill.isCooldown == true)
+            {
+                return false;
+            }
+
+            HeroManager heroManager = GetComponent<HeroManager>();
+
+            // 如果蓝量不足，返回
+            if (heroManager.property.mp < float.Parse(skill.data["costEnergy"]))
+            {
+                Debug.Log("能量不足");
+                return false;
+            }
+
+            return true;
+        }
+
+        void inUseSkill(Skill skill)
+        {
+            skill.isCooldown = true;
+
+            HeroManager heroManager = GetComponent<HeroManager>();
+            heroManager.property.mp -= float.Parse(skill.data["costEnergy"]);
+
+            Image maskImage = SceneUI.Instance.skillButtons[Global.skills.IndexOf(skill)].transform.Find("MaskImage").GetComponent<Image>();
+            Image cooldownImage = maskImage.transform.Find("CooldownImage").GetComponent<Image>();
+            cooldownImage.fillAmount = 1;
+        }
 
         void attack(Skill skill)
+        {
+            hasSelectedSkill = skill;
+
+            beforeAttack(skill);
+        }
+
+        void beforeAttack(Skill skill)
+        {
+            Range range = GetComponent<Range>();
+            range.setSkillRange(skill);
+
+            Global.skillRelease = SkillRelease.selecting;
+        }
+
+        void inAttack(Skill skill)
         {
             //获取英雄对象
             Transform player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -239,8 +296,7 @@ namespace SkillClass
                  property.intellect * float.Parse(skill.addlData["agility"])) *
                 (1 + Math.Round((float)knowledgeValue / 10, 1));
 
-
-
+            Debug.Log(skill.data["name"]);
         }
 
 

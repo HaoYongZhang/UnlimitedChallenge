@@ -296,7 +296,19 @@ namespace SkillClass
                  property.intellect * float.Parse(skill.addlData["agility"])) *
                 (1 + Math.Round((float)knowledgeValue / 10, 1));
 
-            Debug.Log(skill.data["name"]);
+            GameObject skillPoint = GameObject.Find("ShootPoint");
+
+            GameObject bolt = (GameObject)Resources.Load("UI/BoltOrange");
+            bolt = Instantiate(bolt, skillPoint.transform.position, skillPoint.transform.rotation);
+            bolt.GetComponent<Rigidbody>().velocity = bolt.transform.forward * 200;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit rayHit;
+            if (Physics.Raycast(ray, out rayHit, 2000f))
+            {
+                
+                Debug.Log(rayHit.point);
+            }
+
         }
 
 

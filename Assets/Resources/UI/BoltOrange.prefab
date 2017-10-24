@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 54308788087507652}
   - component: {fileID: 65470506202794568}
   m_Layer: 0
-  m_Name: bolt_origin
+  m_Name: BoltOrange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

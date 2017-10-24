@@ -6,48 +6,46 @@ using Utility;
 
 namespace SkillClass
 {
-	public class Skill
-	{
-		//技能id
-		public string id;
+    public class Skill
+    {
+        //技能id
+        public string id;
         //是否主动技能
         public bool isActive;
         //技能图片
         public Sprite imageSprite;
-		//技能类别
-		public SkillCategory category;
+        //技能类别
+        public SkillCategory category;
         //技能类别的中文名称
         public string categoryName;
-		//技能类型
-		public SkillType type;
+        //技能类型
+        public SkillType type;
         //技能类型的中文名称
         public string typeName;
-        //原来的技能描述
-        private string originalDescription;
         //技能描述
         public string description
         {
             get{
-                return resetDescription();
+                return SkillDescription.GetDescription(this);
             }
         }
-		//通用技能数据
-		public Dictionary<string, string> data = new Dictionary<string, string>();
-		//特定技能数据
-		public Dictionary<string, string> addlData = new Dictionary<string, string>();
-		//技能是否进入冷却
-		public bool isCooldown = false;
-		//技能当前的冷却时间
-		public float currentCoolDown = 0;
-		//技能是否在持续中
-		public bool isInDuration = false;
+        //通用技能数据
+        public Dictionary<string, string> data = new Dictionary<string, string>();
+        //特定技能数据
+        public Dictionary<string, string> addlData = new Dictionary<string, string>();
+        //技能是否进入冷却
+        public bool isCooldown = false;
+        //技能当前的冷却时间
+        public float currentCoolDown = 0;
+        //技能是否在持续中
+        public bool isInDuration = false;
         //当前技能等级
         public int currentLevel = 1;
         //每秒实际CD间隔时间
         public float second = Time.time;
 
-		public Skill(string _id)
-		{
+        public Skill(string _id)
+        {
             id = _id;
 
             category = SkillEnum.getEnum<SkillCategory>(id.Substring(0, 1));
@@ -59,113 +57,72 @@ namespace SkillClass
             loadCategoryProperty();
             loadTypeProperty();
 
-			imageSprite = Resources.Load("Image/Skill/skill_" + id, typeof(Sprite)) as Sprite;
+            imageSprite = Resources.Load("Image/Skill/skill_" + id, typeof(Sprite)) as Sprite;
             isActive = (data["isActive"] == "1");
-		}
+        }
 
         /// <summary>
         /// 加载技能的类别属性
         /// </summary>
-		void loadCategoryProperty()
-		{
+        void loadCategoryProperty()
+        {
             //查找技能的csv文件
             string fileName = "skill_" + category.ToString() + ".csv";
-			//csv文件的第一行数据为属性数据
-			List<string> property = new List<string> ();
-			//csv文件的列表数据
-			List<string> propertyValue = new List<string> ();
+            //csv文件的第一行数据为属性数据
+            List<string> property = new List<string> ();
+            //csv文件的列表数据
+            List<string> propertyValue = new List<string> ();
 
             List<List<string>> basicData = CSV.Instance.loadFile (Application.dataPath + "/Resources/Data/Skill/Category", fileName);
-			for (int i = 0; i < basicData.Count; i++) {
-				if (i == 0) {
+            for (int i = 0; i < basicData.Count; i++) {
+                if (i == 0) {
                     property = basicData [i];
-				} else {
-					if (basicData [i] [0] == id) {
+                } else {
+                    if (basicData [i] [0] == id) {
                         propertyValue = basicData [i];
-						break;
-					}
-				}
-			}
+                        break;
+                    }
+                }
+            }
 
-			//把类别数据装载到skill类的data里面
+            //把类别数据装载到skill类的data里面
             for (int i = 0; i < property.Count; i++) {
                 data.Add (property[i], propertyValue[i]);
-			}
-		}
+            }
+        }
 
 
         /// <summary>
         /// 加载技能的类型属性
         /// </summary>
-		void loadTypeProperty()
-		{
-			//查找技能的csv文件
-            string fileName = "skill_" + type.ToString() + ".csv";
-			//csv文件的第一行数据为属性数据
-			List<string> property = new List<string> ();
-			//csv文件的列表数据
-			List<string> propertyValue = new List<string> ();
-
-			List<List<string>> basicData = CSV.Instance.loadFile (Application.dataPath + "/Resources/Data/Skill/Type", fileName);
-			for (int i = 0; i < basicData.Count; i++) {
-				if (i == 0) {
-					property = basicData [i];
-				} else {
-					if (basicData [i] [0] == id) {
-						propertyValue = basicData [i];
-						break;
-					}
-				}
-			}
-
-			//把类别数据装载到skill类的data里面
-			for (int i = 0; i < property.Count; i++) {
-				if(propertyValue[i] != "" && property[i] != "id")
-				{
-					addlData.Add (property[i], propertyValue[i]);
-				}
-			}
-		}
-
-        /// <summary>
-        /// 重设描述说明
-        /// </summary>
-        /// <returns>The description.</returns>
-        string resetDescription()
+        void loadTypeProperty()
         {
-            Property property = new Property();
-            int i = 0;
-            originalDescription = data["description"];
-            foreach (KeyValuePair<string, string> dict in addlData)
-            {
-                if (PropertyUtil.isExist(property, dict.Key))
-                {
-                    //截取字符串，获得+/-符号
-                    string symbol = dict.Value.Substring(0, 1);
-                    string increateStr = (symbol == "+" ? "+":"-");
+            //查找技能的csv文件
+            string fileName = "skill_" + type.ToString() + ".csv";
+            //csv文件的第一行数据为属性数据
+            List<string> property = new List<string> ();
+            //csv文件的列表数据
+            List<string> propertyValue = new List<string> ();
 
-                    string increateValue;
-                    //加成
-                    if(dict.Key.StartsWith("addl"))
-                    {
-                        increateValue = dict.Value.Substring(1, dict.Value.Length - 1) + "点";
+            List<List<string>> basicData = CSV.Instance.loadFile (Application.dataPath + "/Resources/Data/Skill/Type", fileName);
+            for (int i = 0; i < basicData.Count; i++) {
+                if (i == 0) {
+                    property = basicData [i];
+                } else {
+                    if (basicData [i] [0] == id) {
+                        propertyValue = basicData [i];
+                        break;
                     }
-                    //比率
-                    else
-                    {
-                        float rate = float.Parse(dict.Value.Substring(1, dict.Value.Length - 1));
-
-                        increateValue = rate * 100 + "%";
-                    }
-
-                    string descriptionName = PropertyUtil.ReflectDescription(property, dict.Key);
-                    string s = "@" + i;
-                    originalDescription = originalDescription.Replace(s, descriptionName + increateStr + increateValue);
-                    i++;
                 }
             }
 
-            return originalDescription;
+            //把类别数据装载到skill类的data里面
+            for (int i = 0; i < property.Count; i++) {
+                if(propertyValue[i] != "" && property[i] != "id")
+                {
+                    addlData.Add (property[i], propertyValue[i]);
+                }
+            }
         }
-	}
+    }
 }

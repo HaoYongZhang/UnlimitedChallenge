@@ -38,35 +38,49 @@ public class HeroController : MonoBehaviour {
             Global.heroDirection = 3;
         }
 
-  //      if (Input.GetKeyDown(KeyCode.Alpha1))
-		//{
-        //    SkillManager skillManager = player.GetComponent<SkillManager>();
-        //    skillManager.useSkill(0);
-        //}
 
-        //if (Input.GetKeyDown(KeyCode.Alpha2))
-        //{
-        //    SkillManager skillManager = player.GetComponent<SkillManager>();
-        //    skillManager.useSkill(1);
-        //}
+        //当正在释放技能时点击左键，实行释放
+        if (Input.GetMouseButton(0) && Global.skillRelease == SkillRelease.selecting)
+        {
+            Global.skillRelease = SkillRelease.selected;
+        }
 
-        //if (Input.GetKeyDown(KeyCode.Alpha3))
-        //{
-        //    SkillManager skillManager = player.GetComponent<SkillManager>();
-        //    skillManager.useSkill(2);
-        //}
+        //当正在释放技能时点击右键，取消释放
+        if (Input.GetMouseButton(1) && Global.skillRelease == SkillRelease.selecting)
+        {
+            Global.skillRelease = SkillRelease.none;
+        }
 
-        //if (Input.GetKeyDown(KeyCode.Alpha4))
-        //{
-        //    SkillManager skillManager = player.GetComponent<SkillManager>();
-        //    skillManager.useSkill(3);
-        //}
+        //------技能栏快捷键
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+		{
+            SkillManager skillManager = player.GetComponent<SkillManager>();
+            skillManager.useSkill(Global.shortcutsSkills[0]);
+        }
 
-        //if (Input.GetKeyDown(KeyCode.Alpha5))
-        //{
-        //    SkillManager skillManager = player.GetComponent<SkillManager>();
-        //    skillManager.useSkill(4);
-        //}
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SkillManager skillManager = player.GetComponent<SkillManager>();
+            skillManager.useSkill(Global.shortcutsSkills[1]);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            SkillManager skillManager = player.GetComponent<SkillManager>();
+            skillManager.useSkill(Global.shortcutsSkills[2]);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            SkillManager skillManager = player.GetComponent<SkillManager>();
+            skillManager.useSkill(Global.shortcutsSkills[3]);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            SkillManager skillManager = player.GetComponent<SkillManager>();
+            skillManager.useSkill(Global.shortcutsSkills[4]);
+        }
 
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
@@ -86,7 +100,7 @@ public class HeroController : MonoBehaviour {
         float horizontal = Input.GetAxis("Horizontal"); //A D 左右
 		float vertical = Input.GetAxis("Vertical"); //W S 上 下
 
-        _rigidbody.MovePosition(this.transform.position + new Vector3(horizontal, 0, vertical) * heroManager.property.moveSpeed * Time.deltaTime);
+        _rigidbody.MovePosition(transform.position + new Vector3(horizontal, 0, vertical) * heroManager.property.moveSpeed * Time.deltaTime);
 		if(horizontal != 0f || vertical != 0f)
 		{
 			Rotating(horizontal, vertical);

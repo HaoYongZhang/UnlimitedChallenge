@@ -12,36 +12,36 @@ public class HeroCamera : MonoBehaviour {
 	public float camera_distance = 35.0f;
 
 	//摄像机和猪脚的transform属性
-	private Transform player;
-	private Transform camera;
+	Transform _player;
+	Transform _camera;
 	// Use this for initialization
 	void Start () {
 		//初始化
-		player = GameObject.FindGameObjectWithTag("Player").transform;
+		_player = GameObject.FindGameObjectWithTag("Player").transform;
 
-		camera = Camera.main.transform;
+		_camera = Camera.main.transform;
 	}
 
 	// Update is called once per frame
 	void Update () {
 		//与猪脚的正前方为正前方(只取Y轴的旋转度)
-		camera.eulerAngles =new Vector3(
-			player.eulerAngles.x + 35,
+        _camera.eulerAngles =new Vector3(
+            _player.eulerAngles.x + 35,
 			-45,
-			player.eulerAngles.z
+            _player.eulerAngles.z
 		);
 		//获取当前的镜头的Y轴旋转度
-		float angle = camera.eulerAngles.y;
+        float angle = _camera.eulerAngles.y;
 
 		//计算x轴的距离差:
 		float deltaX = camera_distance * Mathf.Sin(angle * Mathf.PI /180 );
 		float deltaZ = camera_distance * Mathf.Cos (angle * Mathf.PI / 180);
 
 		//每一帧都改变摄像机的高度
-		camera.position = new Vector3 (
-			player.position.x - deltaX,
-			player.position.y + camera_height,
-			player.position.z - deltaZ
+        _camera.position = new Vector3 (
+            _player.position.x - deltaX,
+            _player.position.y + camera_height,
+            _player.position.z - deltaZ
 		);
 
 	}

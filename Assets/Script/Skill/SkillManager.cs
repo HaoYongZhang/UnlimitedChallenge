@@ -25,12 +25,6 @@ namespace SkillClass
 			cooldown();
             keepUnactiveSkill();
 
-            if (Input.GetMouseButton(0) && Global.skillRelease == SkillRelease.selecting)
-            {
-                Global.skillRelease = SkillRelease.selected;
-            }
-
-
             if(Global.skillRelease == SkillRelease.selected)
             {
                 inAttack(hasSelectedSkill);
@@ -51,26 +45,26 @@ namespace SkillClass
 
 				btn.onClick.AddListener(delegate ()
 				{
-                    this.onSkillBarButtion(j);
+                    onSkillBarButtion(j);
 				});
 			}
 
-            for (int i = 0; i < Global.activeSkills.Count; i++) {
+            for (int i = 0; i < Global.shortcutsSkills.Count; i++) {
                 Image maskImage = SceneUI.Instance.skillButtons[i].transform.Find("MaskImage").GetComponent<Image>();
                 Image icon = maskImage.transform.Find("Icon").GetComponent<Image>();
-                icon.sprite = Global.activeSkills[i].imageSprite;
+                icon.sprite = Global.shortcutsSkills[i].imageSprite;
 			}
 		}
 
         void onSkillBarButtion(int i)
         {
-            if (i > (Global.activeSkills.Count - 1))
+            if (i > (Global.shortcutsSkills.Count - 1))
             {
                 return;
             }
             else
             {
-                useSkill(Global.activeSkills[i]);
+                useSkill(Global.shortcutsSkills[i]);
             }
         }
 
@@ -93,9 +87,9 @@ namespace SkillClass
         /// </summary>
 		void cooldown()
 		{
-            for (int i = 0; i < Global.activeSkills.Count; i++)
+            for (int i = 0; i < Global.shortcutsSkills.Count; i++)
 			{
-                Skill skill = Global.activeSkills[i];
+                Skill skill = Global.shortcutsSkills[i];
 				if (skill.isCooldown)
 				{
                     Image maskImage = SceneUI.Instance.skillButtons[i].transform.Find("MaskImage").GetComponent<Image>();
@@ -182,43 +176,49 @@ namespace SkillClass
                 return;
             }
 
-			switch (skill.type) {
-			case SkillType.attack:
-				{
+            switch (skill.type)
+            {
+                case SkillType.attack:
+                    {
                         attack(skill);
-				}
-			break;
-			case SkillType.defense:
-				{
-				}
-				break;
-			case SkillType.treatment:
-				{
+                    }
+                    break;
+                case SkillType.defense:
+                    {
+                    }
+                    break;
+                case SkillType.treatment:
+                    {
                         inUseSkill(skill);
-                    treatment(skill);
-				}
-				break;
-			case SkillType.intensify:
-				{
+                        treatment(skill);
+                    }
+                    break;
+                case SkillType.intensify:
+                    {
                         inUseSkill(skill);
-					intensify(skill);
-				}
-				break;
-			case SkillType.complex:
-				{
+                        intensify(skill);
+                    }
+                    break;
+                case SkillType.complex:
+                    {
 
-				}
-				break;
-			case SkillType.specialty:
-				{
-				}
-				break;
-
-			}
+                    }
+                    break;
+                case SkillType.specialty:
+                    {
+                    }
+                    break;
+            }
 		}
 
         bool beforeUseSkill(Skill skill)
         {
+            //如果当前有技能正在释放时，不能同时点其他技能
+            if (Global.skillRelease != SkillRelease.none)
+            {
+                return false;
+            }
+
             // 如果技能不存在，返回
             if (skill == null)
             {
@@ -256,7 +256,7 @@ namespace SkillClass
             HeroManager heroManager = GetComponent<HeroManager>();
             heroManager.property.mp -= float.Parse(skill.data["costEnergy"]);
 
-            Image maskImage = SceneUI.Instance.skillButtons[Global.skills.IndexOf(skill)].transform.Find("MaskImage").GetComponent<Image>();
+            Image maskImage = SceneUI.Instance.skillButtons[Global.shortcutsSkills.IndexOf(skill)].transform.Find("MaskImage").GetComponent<Image>();
             Image cooldownImage = maskImage.transform.Find("CooldownImage").GetComponent<Image>();
             cooldownImage.fillAmount = 1;
         }

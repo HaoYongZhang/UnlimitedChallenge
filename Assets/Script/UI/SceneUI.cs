@@ -53,6 +53,8 @@ public class SceneUI : MonoBehaviour {
     /// </summary>
     void init()
     {
+        gameObject.AddComponent<UICursor>();
+
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
         scene_ui_object = (GameObject)Resources.Load("UI/SceneUI");

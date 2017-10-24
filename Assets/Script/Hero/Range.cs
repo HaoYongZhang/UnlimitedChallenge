@@ -59,21 +59,21 @@ public class Range : MonoBehaviour
 
     void Update()
     {
-        if (Global.skillRelease == SkillRelease.selecting)   //按下D键显示
+        if (Global.skillRelease == SkillRelease.none)
+        {
+            rendering = false;
+        }
+
+        if (Global.skillRelease == SkillRelease.selecting)
         {
             rendering = true;
 
         }
 
-        if (Input.GetMouseButton(1) && Global.skillRelease == SkillRelease.selecting)
+        if (Global.skillRelease == SkillRelease.selected) 
         {
             rendering = false;
-            Global.skillRelease = SkillRelease.none;
-        }
 
-        if(Global.skillRelease == SkillRelease.none)
-        {
-            rendering = false;
         }
 
         if (rendering)

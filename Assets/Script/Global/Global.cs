@@ -10,6 +10,11 @@ public class Global{
     public static List<Skill> skills = new List<Skill>();
 
     /// <summary>
+    /// 快捷技能栏里面的技能
+    /// </summary>
+    public static List<Skill> shortcutsSkills = new List<Skill>();
+
+    /// <summary>
     /// 拥有的主动技能列表
     /// </summary>
     /// <value>The active skills.</value>

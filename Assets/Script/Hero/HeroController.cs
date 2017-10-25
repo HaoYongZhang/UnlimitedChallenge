@@ -113,11 +113,11 @@ public class HeroController : MonoBehaviour {
 		Vector3 targetDirection = new Vector3(horizontal, 0f, vertical);
 		// 创建目标旋转值 并假设Y轴正方向为"上"方向
 		Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up); //函数参数解释: LookRotation(目标方向为"前方向", 定义声明"上方向")
-		// 创建新旋转值 并根据转向速度平滑转至目标旋转值
+		
+        // 创建新旋转值 并根据转向速度平滑转至目标旋转值
 		//函数参数解释: Lerp(角色刚体当前旋转值, 目标旋转值, 根据旋转速度平滑转向)
 		Quaternion newRotation = Quaternion.Lerp(_rigidbody.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 		// 更新刚体旋转值为 新旋转值
 		_rigidbody.MoveRotation(newRotation);
-
 	}
 }

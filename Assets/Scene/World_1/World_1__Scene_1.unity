@@ -2587,11 +2587,12 @@ GameObject:
   - component: {fileID: 1003062384}
   - component: {fileID: 1003062387}
   - component: {fileID: 1003062388}
+  - component: {fileID: 1003062392}
   - component: {fileID: 1003062383}
   - component: {fileID: 1003062389}
   - component: {fileID: 1003062390}
   - component: {fileID: 1003062391}
-  - component: {fileID: 1003062392}
+  - component: {fileID: 1003062393}
   m_Layer: 0
   m_Name: hero
   m_TagString: Player
@@ -2983,6 +2984,17 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &1003062393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1003062382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb4f6656f294449a588561336ba8141c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1007868952
 Prefab:
   m_ObjectHideFlags: 0
@@ -8179,7 +8191,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1187194754}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 4.95, z: 1.03}
+  m_LocalPosition: {x: 0, y: 5.75, z: 4.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1003062386}

@@ -100,6 +100,6 @@ public class Global{
 		_mainCamera.gameObject.AddComponent<HeroCamera> ();
 
 		//设置场景UI
-		SceneUI.Instance.transform.parent = _mainCamera.transform;
+        UIScene.Instance.transform.parent = _mainCamera.transform;
 	}
 }

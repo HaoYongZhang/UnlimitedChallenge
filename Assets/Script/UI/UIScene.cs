@@ -6,12 +6,13 @@ using Utility;
 using SkillClass;
 using UnityEngine.EventSystems;
 
-public class SceneUI : MonoBehaviour {
-	static SceneUI _instance;
+public class UIScene : MonoBehaviour
+{
+    static UIScene _instance;
 
     public GameObject scene_ui_object;
-	public GameObject skillInfo;
-	public GameObject skillsBar;
+    public GameObject skillInfo;
+    public GameObject skillsBar;
     public GameObject skillStatusBar;
     public Slider hpBar;
     public Slider mpBar;
@@ -23,27 +24,29 @@ public class SceneUI : MonoBehaviour {
     //技能按钮集合
     public List<Button> skillButtons = new List<Button>();
 
-	Transform player;
+    Transform player;
     //当前显示详细信息的技能
     Skill currentShowInfoSkill;
 
     /// <summary>
     /// 单例
     /// </summary>
-    public static SceneUI Instance {  
-		get {  
+    public static UIScene Instance
+    {
+        get
+        {
             if (_instance == null)  // 如果没有找到
             {
-                GameObject go = new GameObject("SceneUI"); // 创建一个新的GameObject
-                _instance = go.AddComponent<SceneUI>(); // 将实例挂载到GameObject上
+                GameObject go = new GameObject("UIScene"); // 创建一个新的GameObject
+                _instance = go.AddComponent<UIScene>(); // 将实例挂载到GameObject上
 
                 _instance.init();
             }
             return _instance;
-        }  
-	}
+        }
+    }
 
-    private SceneUI()
+    private UIScene()
     {
 
     }
@@ -57,27 +60,27 @@ public class SceneUI : MonoBehaviour {
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        scene_ui_object = (GameObject)Resources.Load("UI/SceneUI");
+        scene_ui_object = (GameObject)Resources.Load("UI/UIScene");
         scene_ui_object = Instantiate(scene_ui_object);
-        scene_ui_object.name = "SceneUIObject";
+        scene_ui_object.name = "UISceneObject";
         scene_ui_object.transform.SetParent(_instance.transform);
 
-		hpBar = Utility.Context.GetComponent<Slider>(scene_ui_object, "HpBar");
-		mpBar = Utility.Context.GetComponent<Slider>(scene_ui_object, "MpBar");
+        hpBar = Utility.Context.GetComponent<Slider>(scene_ui_object, "HpBar");
+        mpBar = Utility.Context.GetComponent<Slider>(scene_ui_object, "MpBar");
 
-		hpText = Utility.Context.GetComponent<Text>(scene_ui_object, "HpText");
-		mpText = Utility.Context.GetComponent<Text>(scene_ui_object, "MpText");
+        hpText = Utility.Context.GetComponent<Text>(scene_ui_object, "HpText");
+        mpText = Utility.Context.GetComponent<Text>(scene_ui_object, "MpText");
 
         hpRegenerationText = Utility.Context.GetComponent<Text>(scene_ui_object, "HpRegenerationText");
         mpRegenerationText = Utility.Context.GetComponent<Text>(scene_ui_object, "MpRegenerationText");
 
         skillStatusBar = GameObject.Find("SkillStatusBar");
 
-		skillInfo = GameObject.Find("SkillInfo");
-		skillInfo.SetActive (false);
+        skillInfo = GameObject.Find("SkillInfo");
+        skillInfo.SetActive(false);
 
-		skillsBar = GameObject.Find("SkillsBar");
-		skillButtons = new List<Button>(skillsBar.GetComponentsInChildren<Button>());
+        skillsBar = GameObject.Find("SkillsBar");
+        skillButtons = new List<Button>(skillsBar.GetComponentsInChildren<Button>());
         for (int i = 0; i < skillButtons.Count; i++)
         {
             int j = i;
@@ -108,18 +111,20 @@ public class SceneUI : MonoBehaviour {
 
     }
 
-   	void Awake()
+    void Awake()
     {
         _instance = this;
     }
 
     // Use this for initialization
-    void Start () {
-        
+    void Start()
+    {
+
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
 
         HeroManager heroManager = player.GetComponent<HeroManager>();
 
@@ -128,7 +133,7 @@ public class SceneUI : MonoBehaviour {
         hpText.text = heroManager.property.hp + "/" + heroManager.property.hpMax;
         mpText.text = heroManager.property.mp + "/" + heroManager.property.mpMax;
 
-        if(heroManager.property.hpRegeneration > 0)
+        if (heroManager.property.hpRegeneration > 0)
         {
             hpRegenerationText.text = "+" + Math.Round(heroManager.property.hpRegeneration, 1);
         }
@@ -147,11 +152,12 @@ public class SceneUI : MonoBehaviour {
         }
         //更新人物当前生命值和能量值
         //Set(heroManager.property.hp, heroManager.property.hpMax, heroManager.property.mp, heroManager.property.mpMax);
-	}
+    }
 
-	void FixedUpdate(){
-		
-	}
+    void FixedUpdate()
+    {
+
+    }
 
     /// <summary>
     /// 鼠标移动到技能栏的按钮
@@ -184,9 +190,9 @@ public class SceneUI : MonoBehaviour {
     /// <param name="objectName">Object name.</param>
     public void onPointerEnterSkillStatus(string objectName, PointerEventData eventData)
     {
-        foreach(Skill skill in Global.skills)
+        foreach (Skill skill in Global.skills)
         {
-            if(skill.id == objectName)
+            if (skill.id == objectName)
             {
                 showSkillInfo(skill);
             }
@@ -212,14 +218,14 @@ public class SceneUI : MonoBehaviour {
         currentShowInfoSkill = skill;
 
         Image image = Utility.Context.GetComponent<Image>(skillInfo, "Icon");
-		image.sprite = skill.imageSprite;
+        image.sprite = skill.imageSprite;
 
-		List<Text> labels = new List<Text>(SceneUI.Instance.skillInfo.GetComponentsInChildren<Text> ());
+        List<Text> labels = new List<Text>(Instance.skillInfo.GetComponentsInChildren<Text>());
 
         List<string> texts = new List<string>();
 
         texts.Add(skill.data["name"]);
-        if(skill.isActive)
+        if (skill.isActive)
         {
             texts.Add("持续时间    " + skill.data["duration"]);
             texts.Add("冷却时间    " + skill.data["cooldown"]);
@@ -234,15 +240,15 @@ public class SceneUI : MonoBehaviour {
             texts.Add(skill.description);
         }
 
-        for (int i = 0; i < labels.Count;i++)
-		{
+        for (int i = 0; i < labels.Count; i++)
+        {
             Text label = labels[i];
             label.text = texts[i];
-		}
+        }
 
 
 
-		skillInfo.SetActive (true);
+        skillInfo.SetActive(true);
     }
 
     /// <summary>
@@ -250,14 +256,15 @@ public class SceneUI : MonoBehaviour {
     /// </summary>
     void hideSkillInfo()
     {
-		skillInfo.SetActive (false);
+        skillInfo.SetActive(false);
     }
 
     /// <summary>
     /// 添加技能的小状态图标
     /// </summary>
     /// <param name="skill">Skill.</param>
-    public void addSkillStatusIcon(Skill skill){
+    public void addSkillStatusIcon(Skill skill)
+    {
         GameObject skillStatusIcon = (GameObject)Resources.Load("UI/SkillStatusIcon");
         skillStatusIcon = Instantiate(skillStatusIcon);
         skillStatusIcon.name = skill.id;
@@ -282,7 +289,7 @@ public class SceneUI : MonoBehaviour {
         GameObject skillObject = skillStatusBar.transform.Find(skillName).gameObject;
         Destroy(skillObject);
         //如果当前正在显示技能状态的详细信息时，关闭
-        if(currentShowInfoSkill != null)
+        if (currentShowInfoSkill != null)
         {
             if (currentShowInfoSkill.id == skill.id)
             {

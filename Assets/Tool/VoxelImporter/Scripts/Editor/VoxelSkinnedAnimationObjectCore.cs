@@ -748,8 +748,6 @@ namespace VoxelImporter
             animationObject.transform.localScale = Vector3.one;
             switch (animationObject.rigAnimationType)
             {
-            case VoxelSkinnedAnimationObject.RigAnimationType.Legacy:
-                break;
             case VoxelSkinnedAnimationObject.RigAnimationType.Generic:
                 if (animationObject.rootBone != null)
                 {
@@ -997,6 +995,12 @@ namespace VoxelImporter
                 result = exporter.Export(path, transforms, clips);
                 if (result)
                 {
+                    MethodInfo HasMotionCurves = null;
+                    {
+                        var asmUnityEditor = Assembly.LoadFrom(InternalEditorUtility.GetEditorAssemblyPath());
+                        var animationUtilityType = asmUnityEditor.GetType("UnityEditor.AnimationUtility");
+                        Assert.IsNotNull(HasMotionCurves = animationUtilityType.GetMethod("HasMotionCurves", BindingFlags.NonPublic | BindingFlags.Static));
+                    }
                     foreach (var p in exporter.exportedFiles)
                     {
                         if (p.IndexOf(Application.dataPath) < 0) continue;
@@ -1031,32 +1035,28 @@ namespace VoxelImporter
                                 if (index >= 0)
                                 {
                                     var settings = AnimationUtility.GetAnimationClipSettings(clips[index]);
+                                    bool hasMotionCurves = (bool)HasMotionCurves.Invoke(null, new object[] { clips[index] });
                                     var setClips = modelImporter.defaultClipAnimations;
                                     foreach (var setClip in setClips)
                                     {
-                                        setClip.events = AnimationUtility.GetAnimationEvents(clips[index]);
-                                        setClip.mirror = settings.mirror;
-                                        setClip.heightFromFeet = settings.heightFromFeet;
-                                        setClip.keepOriginalPositionXZ = settings.keepOriginalPositionXZ;
-                                        setClip.keepOriginalPositionY = settings.keepOriginalPositionY;
-                                        setClip.keepOriginalOrientation = settings.keepOriginalOrientation;
-                                        setClip.lockRootPositionXZ = settings.loopBlendPositionXZ;
-                                        setClip.lockRootHeightY = settings.loopBlendPositionY;
-                                        setClip.lockRootRotation = settings.loopBlendOrientation;
-                                        setClip.cycleOffset = settings.cycleOffset;
-                                        setClip.heightOffset = settings.level;
-                                        setClip.rotationOffset = settings.orientationOffsetY;
+                                        setClip.keepOriginalPositionXZ = true;
+                                        setClip.keepOriginalPositionY = true;
+                                        setClip.keepOriginalOrientation = true;
+                                        if (!hasMotionCurves)
+                                        {
+                                            setClip.lockRootPositionXZ = settings.loopBlendPositionXZ;
+                                            setClip.lockRootHeightY = settings.loopBlendPositionY;
+                                            setClip.lockRootRotation = settings.loopBlendOrientation;
+                                        }
                                         setClip.name = clips[index].name;
                                         if (modelImporter.animationType == ModelImporterAnimationType.Legacy)
                                         {
-                                            setClip.loopTime = settings.loopBlend;
                                             setClip.wrapMode = settings.loopTime ? WrapMode.Loop : WrapMode.Default;
                                         }
                                         else
                                         {
                                             setClip.loop = settings.loopTime;
                                             setClip.loopTime = settings.loopTime;
-                                            setClip.loopPose = settings.loopBlend;
                                         }
                                     }
                                     modelImporter.clipAnimations = setClips;

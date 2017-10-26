@@ -164,7 +164,7 @@ namespace VoxelImporter
                 {
                     Func<Keyframe, Keyframe, bool> IsKeyFrameEqual = (keyA, keyB) =>
                     {
-                        return (keyA.inTangent == keyB.inTangent && keyA.outTangent == keyB.outTangent && keyA.tangentMode == keyB.tangentMode && keyA.time == keyB.time && keyA.value == keyA.value);
+                        return (keyA.inTangent == keyB.inTangent && keyA.outTangent == keyB.outTangent && keyA.tangentMode == keyB.tangentMode && keyA.time == keyB.time && keyA.value == keyB.value);
                     };
                     foreach (var clip in animator.runtimeAnimatorController.animationClips)
                     {

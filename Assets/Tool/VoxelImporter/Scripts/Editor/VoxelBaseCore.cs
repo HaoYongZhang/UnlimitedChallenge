@@ -2054,6 +2054,9 @@ namespace VoxelImporter
 
             #region Mesh
             {
+#if UNITY_2017_3_OR_NEWER
+                result.indexFormat = vertices.Count > 65000 ? UnityEngine.Rendering.IndexFormat.UInt32 : UnityEngine.Rendering.IndexFormat.UInt16;
+#else
                 if (vertices.Count > 65000)
                 {
                     const int Sepalate = 64999;
@@ -2081,6 +2084,7 @@ namespace VoxelImporter
                         }
                     }
                 }
+#endif
                 result.vertices = vertices.ToArray();
                 result.uv = uv.ToArray();
                 result.normals = normals.ToArray();
@@ -2378,6 +2382,9 @@ namespace VoxelImporter
 
             #region Mesh
             {
+#if UNITY_2017_3_OR_NEWER
+                result.indexFormat = vertices.Count > 65000 ? UnityEngine.Rendering.IndexFormat.UInt32 : UnityEngine.Rendering.IndexFormat.UInt16;
+#else
                 if (vertices.Count > 65000)
                 {
                     const int Sepalate = 64999;
@@ -2405,6 +2412,7 @@ namespace VoxelImporter
                         }
                     }
                 }
+#endif
                 result.vertices = vertices.ToArray();
                 result.uv = uv.ToArray();
                 result.normals = normals.ToArray();
@@ -2993,6 +3001,9 @@ namespace VoxelImporter
             #region Mesh
             var result = new Mesh();
             {
+#if UNITY_2017_3_OR_NEWER
+                result.indexFormat = vertices.Count > 65000 ? UnityEngine.Rendering.IndexFormat.UInt32 : UnityEngine.Rendering.IndexFormat.UInt16;
+#else
                 if (vertices.Count > 65000)
                 {
                     const int Sepalate = 64999;
@@ -3021,6 +3032,7 @@ namespace VoxelImporter
                         dstList.RemoveRange(Sepalate, dstList.Count - Sepalate);
                     }
                 }
+#endif
                 result.vertices = vertices.ToArray();
                 result.uv = uv.ToArray();
                 result.normals = normals.ToArray();
@@ -3679,7 +3691,7 @@ namespace VoxelImporter
                 if (renderer != null)
                 {
 #if UNITY_5_5_OR_NEWER
-                    EditorUtility.SetSelectedRenderState(renderer, hidden ? EditorSelectedRenderState.Hidden : EditorSelectedRenderState.Highlight);
+                    EditorUtility.SetSelectedRenderState(renderer, hidden ? EditorSelectedRenderState.Hidden : EditorSelectedRenderState.Wireframe | EditorSelectedRenderState.Highlight);
 #else
                     EditorUtility.SetSelectedWireframeHidden(renderer, hidden);
 #endif

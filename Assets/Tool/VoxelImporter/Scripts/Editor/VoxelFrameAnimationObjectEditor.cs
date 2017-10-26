@@ -66,6 +66,7 @@ namespace VoxelImporter
                 {
                     EditorGUILayout.BeginVertical(GUI.skin.box);
                     #region Mesh
+                    if (baseTarget.advancedMode)
                     {
                         EditorGUILayout.LabelField("Mesh", EditorStyles.boldLabel);
                         EditorGUI.indentLevel++;
@@ -81,27 +82,15 @@ namespace VoxelImporter
                             }
                         }
                         #endregion
-                        #region meshAdvancedFoldout
+                        #region meshFaceVertexOffset
                         {
                             EditorGUI.BeginChangeCheck();
-                            var flag = EditorGUILayout.Foldout(baseTarget.edit_meshAdvancedFoldout, "Advanced");
+                            var value = EditorGUILayout.Slider(new GUIContent("Vertex Offset", "Increase this value if flickering of polygon gaps occurs at low resolution."), baseTarget.meshFaceVertexOffset, 0f, 0.01f);
                             if (EditorGUI.EndChangeCheck())
                             {
                                 UndoRecordObject("Inspector");
-                                baseTarget.edit_meshAdvancedFoldout = flag;
-                            }
-                            if (baseTarget.edit_meshAdvancedFoldout)
-                            {
-                                #region meshFaceVertexOffset
-                                EditorGUI.BeginChangeCheck();
-                                var value = EditorGUILayout.Slider(new GUIContent("Vertex Offset", "Increase this value if flickering of polygon gaps occurs at low resolution."), baseTarget.meshFaceVertexOffset, 0f, 0.01f);
-                                if (EditorGUI.EndChangeCheck())
-                                {
-                                    UndoRecordObject("Inspector");
-                                    baseTarget.meshFaceVertexOffset = value;
-                                    Refresh();
-                                }
-                                #endregion
+                                baseTarget.meshFaceVertexOffset = value;
+                                Refresh();
                             }
                         }
                         #endregion
@@ -131,6 +120,7 @@ namespace VoxelImporter
                         }
                         EditorGUI.indentLevel++;
                         #region updateMeshRendererMaterials
+                        if (baseTarget.advancedMode)
                         {
                             EditorGUI.BeginChangeCheck();
                             var updateMeshRendererMaterials = EditorGUILayout.ToggleLeft("Update the Mesh Renderer Materials", baseTarget.updateMeshRendererMaterials);
@@ -174,6 +164,7 @@ namespace VoxelImporter
                             EditorGUILayout.Space();
                             EditorGUILayout.EndHorizontal();
                             EditorGUI.EndDisabledGroup();
+                            EditorGUILayout.Space();
                         }
                         else
                         {
@@ -184,6 +175,7 @@ namespace VoxelImporter
                     }
                     #endregion
                     #region Texture
+                    if (baseTarget.advancedMode)
                     {
                         TypeTitle(objectTarget.atlasTexture, "Texture");
                         EditorGUI.indentLevel++;
@@ -765,16 +757,17 @@ namespace VoxelImporter
                     #region Mesh
                     {
                         r.y += 18 + 2;
-                        r.width -= 104;
-                        if(IsMainAsset(objectTarget.frames[index].mesh))
+                        if (baseTarget.advancedMode)
+                            r.width -= 104;
+                        if (baseTarget.advancedMode && IsMainAsset(objectTarget.frames[index].mesh))
                             r.width += 48;
                         EditorGUI.BeginDisabledGroup(true);
                         EditorGUI.ObjectField(r, objectTarget.frames[index].mesh, typeof(Mesh), false);
                         EditorGUI.EndDisabledGroup();
                         r.x += r.width + 4;
-                        if (IsMainAsset(objectTarget.frames[index].mesh))
+                        if (baseTarget.advancedMode && IsMainAsset(objectTarget.frames[index].mesh))
                             r.x -= 48;
-                        if (objectTarget.frames[index].mesh != null)
+                        if (baseTarget.advancedMode && objectTarget.frames[index].mesh != null)
                         {
                             r.width = 48;
                             r.height = 16;

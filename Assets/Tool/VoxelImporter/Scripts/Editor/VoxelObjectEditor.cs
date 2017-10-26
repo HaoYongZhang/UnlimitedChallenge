@@ -73,6 +73,7 @@ namespace VoxelImporter
         protected virtual void InspectorGUI_Object_Mesh()
         {
             #region Mesh
+            if (baseTarget.advancedMode)
             {
                 TypeTitle(mesh, "Mesh");
                 EditorGUI.indentLevel++;
@@ -136,27 +137,15 @@ namespace VoxelImporter
                     }
                 }
                 #endregion
-                #region meshAdvancedFoldout
+                #region meshFaceVertexOffset
                 {
                     EditorGUI.BeginChangeCheck();
-                    var flag = EditorGUILayout.Foldout(baseTarget.edit_meshAdvancedFoldout, "Advanced");
+                    var value = EditorGUILayout.Slider(new GUIContent("Vertex Offset", "Increase this value if flickering of polygon gaps occurs at low resolution."), baseTarget.meshFaceVertexOffset, 0f, 0.01f);
                     if (EditorGUI.EndChangeCheck())
                     {
                         UndoRecordObject("Inspector");
-                        baseTarget.edit_meshAdvancedFoldout = flag;
-                    }
-                    if(baseTarget.edit_meshAdvancedFoldout)
-                    {
-                        #region meshFaceVertexOffset
-                        EditorGUI.BeginChangeCheck();
-                        var value = EditorGUILayout.Slider(new GUIContent("Vertex Offset", "Increase this value if flickering of polygon gaps occurs at low resolution."), baseTarget.meshFaceVertexOffset, 0f, 0.01f);
-                        if (EditorGUI.EndChangeCheck())
-                        {
-                            UndoRecordObject("Inspector");
-                            baseTarget.meshFaceVertexOffset = value;
-                            Refresh();
-                        }
-                        #endregion
+                        baseTarget.meshFaceVertexOffset = value;
+                        Refresh();
                     }
                 }
                 #endregion
@@ -196,6 +185,7 @@ namespace VoxelImporter
                 #endregion
                 EditorGUI.indentLevel++;
                 #region updateMeshRendererMaterials
+                if (baseTarget.advancedMode)
                 {
                     EditorGUI.BeginChangeCheck();
                     var updateMeshRendererMaterials = EditorGUILayout.ToggleLeft("Update the Mesh Renderer Materials", baseTarget.updateMeshRendererMaterials);
@@ -239,6 +229,7 @@ namespace VoxelImporter
                     EditorGUILayout.Space();
                     EditorGUILayout.EndHorizontal();
                     EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.Space();
                 }
                 else
                 {
@@ -252,6 +243,7 @@ namespace VoxelImporter
         protected virtual void InspectorGUI_Object_Texture()
         {
             #region Texture
+            if (baseTarget.advancedMode)
             {
                 TypeTitle(atlasTexture, "Texture");
                 EditorGUI.indentLevel++;

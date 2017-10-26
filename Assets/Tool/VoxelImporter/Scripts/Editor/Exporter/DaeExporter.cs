@@ -13,11 +13,44 @@ namespace VoxelImporter
 {
     public class DaeExporter
     {
+        private string ContributorAuthoring_Tool = "Voxel Importer";
+        //private string ContributorComments = "https://www.assetstore.unity3d.com/#!/content/96826";     //VA
+        private string ContributorComments = "https://www.assetstore.unity3d.com/#!/content/62914";   //VI
+
         public bool Export(string path, List<Transform> transforms, AnimationClip[] clips = null)
         {
             int progressTotal = 1 + (clips != null ? clips.Length : 0);
             int progressIndex = 0;
             EditorUtility.DisplayProgressBar("Exporting Collada(dae) File...", Path.GetFileName(path), (progressIndex++ / (float)progressTotal));
+
+            #region TransformSave
+            TransformSave[] transformSaves = new TransformSave[transforms.Count];
+            for (int i = 0; i < transforms.Count; i++)
+            {
+                transformSaves[i] = new TransformSave(transforms[i]);
+            }
+            #endregion
+            #region FixTransform
+            foreach (var t in transforms)
+            {
+                #region Do not allow scale zero
+                {
+                    bool update = false;
+                    var scale = t.localScale;
+                    for (int si = 0; si < 3; si++)
+                    {
+                        if (scale[si] == 0f)
+                        {
+                            scale[si] = Mathf.Epsilon;
+                            update = true;
+                        }
+                    }
+                    if (update)
+                        t.localScale = scale;
+                }
+                #endregion
+            }
+            #endregion
 
             try
             {
@@ -37,7 +70,7 @@ namespace VoxelImporter
                     #region SkinnedMeshRenderer
                     {
                         var skinnedMeshRenderer = t.GetComponent<SkinnedMeshRenderer>();
-                        if (skinnedMeshRenderer != null && skinnedMeshRenderer.sharedMesh != null && skinnedMeshRenderer.sharedMaterials != null)
+                        if (skinnedMeshRenderer != null && skinnedMeshRenderer.enabled && skinnedMeshRenderer.sharedMesh != null && skinnedMeshRenderer.sharedMaterials != null)
                             return skinnedMeshRenderer.sharedMesh;
                     }
                     #endregion
@@ -45,7 +78,7 @@ namespace VoxelImporter
                     {
                         var meshFilter = t.GetComponent<MeshFilter>();
                         var meshRenderer = t.GetComponent<MeshRenderer>();
-                        if (meshFilter != null && meshFilter.sharedMesh != null && meshRenderer != null && meshRenderer.sharedMaterials != null)
+                        if (meshFilter != null && meshFilter.sharedMesh != null && meshRenderer != null && meshRenderer.enabled && meshRenderer.sharedMaterials != null)
                             return meshFilter.sharedMesh;
                     }
                     #endregion
@@ -56,7 +89,7 @@ namespace VoxelImporter
                     #region SkinnedMeshRenderer
                     {
                         var skinnedMeshRenderer = t.GetComponent<SkinnedMeshRenderer>();
-                        if (skinnedMeshRenderer != null && skinnedMeshRenderer.sharedMesh != null && skinnedMeshRenderer.sharedMaterials != null)
+                        if (skinnedMeshRenderer != null && skinnedMeshRenderer.enabled && skinnedMeshRenderer.sharedMesh != null && skinnedMeshRenderer.sharedMaterials != null)
                             return skinnedMeshRenderer.sharedMaterials;
                     }
                     #endregion
@@ -64,7 +97,7 @@ namespace VoxelImporter
                     {
                         var meshFilter = t.GetComponent<MeshFilter>();
                         var meshRenderer = t.GetComponent<MeshRenderer>();
-                        if (meshFilter != null && meshFilter.sharedMesh != null && meshRenderer != null && meshRenderer.sharedMaterials != null)
+                        if (meshFilter != null && meshFilter.sharedMesh != null && meshRenderer != null && meshRenderer.enabled && meshRenderer.sharedMaterials != null)
                             return meshRenderer.sharedMaterials;
                     }
                     #endregion
@@ -74,10 +107,11 @@ namespace VoxelImporter
                 {
                     foreach (var t in transforms)
                     {
+                        if (!t.gameObject.activeInHierarchy) continue;
                         #region SkinnedMeshRenderer
                         {
                             var skinnedMeshRenderer = t.GetComponent<SkinnedMeshRenderer>();
-                            if (skinnedMeshRenderer != null && skinnedMeshRenderer.sharedMesh != null && skinnedMeshRenderer.sharedMaterials != null)
+                            if (skinnedMeshRenderer != null && skinnedMeshRenderer.enabled && skinnedMeshRenderer.sharedMesh != null && skinnedMeshRenderer.sharedMaterials != null)
                             {
                                 action(t, skinnedMeshRenderer.sharedMesh, skinnedMeshRenderer.sharedMaterials);
                                 continue;
@@ -88,7 +122,7 @@ namespace VoxelImporter
                         {
                             var meshFilter = t.GetComponent<MeshFilter>();
                             var meshRenderer = t.GetComponent<MeshRenderer>();
-                            if (meshFilter != null && meshFilter.sharedMesh != null && meshRenderer != null && meshRenderer.sharedMaterials != null)
+                            if (meshFilter != null && meshFilter.sharedMesh != null && meshRenderer != null && meshRenderer.enabled && meshRenderer.sharedMaterials != null)
                             {
                                 action(t, meshFilter.sharedMesh, meshRenderer.sharedMaterials);
                                 continue;
@@ -129,8 +163,8 @@ namespace VoxelImporter
                         {
                             new Grendgine_Collada_Asset_Contributor()
                             {
-                                Authoring_Tool = "Voxel Importer",
-                                Comments = "https://www.assetstore.unity3d.com/#!/content/62914",
+                                Authoring_Tool = ContributorAuthoring_Tool,
+                                Comments = ContributorComments,
                             },
                         },
                         Revision = "1.0",
@@ -202,7 +236,14 @@ namespace VoxelImporter
                                 texpath = path.Remove(path.Length - EXT.Length, EXT.Length) + EXT;
                             else
                                 texpath = string.Format("{0}/{1}_tex{2}{3}", Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path), imagesDic.Count, EXT);
-                            File.WriteAllBytes(texpath, tex.EncodeToPNG());
+                            try
+                            {
+                                File.WriteAllBytes(texpath, tex.EncodeToPNG());
+                            }
+                            catch
+                            {
+                                Debug.LogWarningFormat("<color=green>[Voxel Importer]</color> Texture Export Error. '{0}'", tex.name);
+                            }
                         }
                         exportedFiles.Add(texpath);
                         return Path.GetFileName(texpath);
@@ -241,26 +282,53 @@ namespace VoxelImporter
                         foreach (var material in materials)
                         {
                             var tex2D = material.mainTexture as Texture2D;
-                            if (tex2D == null || !imagesDic.ContainsKey(tex2D)) continue;
                             if (effectsDic.ContainsKey(material)) continue;
-                            Grendgine_Collada_New_Param surfaceParam = new Grendgine_Collada_New_Param()
+                            Grendgine_Collada_New_Param[] New_Param = null;
+                            Grendgine_Collada_FX_Common_Color_Or_Texture_Type Diffuse = null;
+                            if (tex2D != null && imagesDic.ContainsKey(tex2D))
                             {
-                                sID = "Surface_" + MakeID(material),
-                                Surface = new Grendgine_Collada_Surface_1_4_1()
+                                Grendgine_Collada_New_Param surfaceParam = new Grendgine_Collada_New_Param()
                                 {
-                                    Type = Grendgine_Collada_FX_Surface_Type._2D,
-                                    Init_From = imagesDic[tex2D].ID,
-                                },
-                            };
-                            Grendgine_Collada_New_Param sampler2DParam = new Grendgine_Collada_New_Param()
+                                    sID = "Surface_" + MakeID(material),
+                                    Surface = new Grendgine_Collada_Surface_1_4_1()
+                                    {
+                                        Type = Grendgine_Collada_FX_Surface_Type._2D,
+                                        Init_From = imagesDic[tex2D].ID,
+                                    },
+                                };
+                                Grendgine_Collada_New_Param sampler2DParam = new Grendgine_Collada_New_Param()
+                                {
+                                    sID = "Sampler2D_" + MakeID(material),
+                                    Sampler2D = new Grendgine_Collada_Sampler2D()
+                                    {
+                                        Source = surfaceParam.sID,
+                                    },
+                                };
+                                New_Param = new Grendgine_Collada_New_Param[]
+                                {
+                                    surfaceParam,
+                                    sampler2DParam,
+                                };
+                                Diffuse = new Grendgine_Collada_FX_Common_Color_Or_Texture_Type()
+                                {
+                                    Texture = new Grendgine_Collada_Texture()
+                                    {
+                                        TexCoord = "TexCoord_" + MakeID(material.mainTexture),
+                                        Texture = sampler2DParam.sID,
+                                    },
+                                };
+                            }
+                            else
                             {
-                                sID = "Sampler2D_" + MakeID(material),
-                                Sampler2D = new Grendgine_Collada_Sampler2D()
+                                Diffuse = new Grendgine_Collada_FX_Common_Color_Or_Texture_Type()
                                 {
-                                    Source = surfaceParam.sID,
-                                },
-                            };
-
+                                    Color = new Grendgine_Collada_Color()
+                                    {
+                                        sID = "diffuse",
+                                        Value_As_String = string.Format("{0} {1} {2} {3}", material.color.r, material.color.g, material.color.b, material.color.a),
+                                    },
+                                };
+                            }
                             var e = new Grendgine_Collada_Effect()
                             {
                                 ID = "Effect_" + MakeID(material),
@@ -270,11 +338,7 @@ namespace VoxelImporter
                                     new Grendgine_Collada_Profile_COMMON()
                                     {
                                         ID = "Profile_" + MakeID(material),
-                                        New_Param = new Grendgine_Collada_New_Param[]
-                                        {
-                                            surfaceParam,
-                                            sampler2DParam,
-                                        },
+                                        New_Param = New_Param,
                                         Technique = new Grendgine_Collada_Effect_Technique_COMMON()
                                         {
                                             sID = "Technique_" + MakeID(material),
@@ -296,20 +360,13 @@ namespace VoxelImporter
                                                         Value_As_String = "1 1 1 1",
                                                     },
                                                 },
-                                                Diffuse = new Grendgine_Collada_FX_Common_Color_Or_Texture_Type()
-                                                {
-                                                    Texture = new Grendgine_Collada_Texture()
-                                                    {
-                                                        TexCoord = "TexCoord_" + MakeID(material.mainTexture),
-                                                        Texture = sampler2DParam.sID,
-                                                    },
-                                                },
+                                                Diffuse = Diffuse,
                                                 Specular = new Grendgine_Collada_FX_Common_Color_Or_Texture_Type()
                                                 {
                                                     Color = new Grendgine_Collada_Color()
                                                     {
                                                         sID = "specular",
-                                                        Value_As_String = "0.5 0.5 0.5 1",
+                                                        Value_As_String = "0 0 0 1",
                                                     },
                                                 },
                                                 Shininess = new Grendgine_Collada_FX_Common_Float_Or_Param_Type()
@@ -383,8 +440,6 @@ namespace VoxelImporter
                     };
                     MakeFromTransform((t, mesh, materials) =>
                     {
-                        var matLocal = makeJoint ? (rootObject.transform.worldToLocalMatrix * t.localToWorldMatrix) * matMirrorX : matMirrorX;
-
                         #region Source
                         #region Vertex
                         Grendgine_Collada_Source vertexSource;
@@ -394,7 +449,7 @@ namespace VoxelImporter
                                 var sb = new StringBuilder();
                                 foreach (var v in mesh.vertices)
                                 {
-                                    var mv = matLocal.MultiplyPoint(v);
+                                    var mv = matMirrorX.MultiplyPoint(v);
                                     sb.AppendFormat("\n{0} {1} {2}", mv.x, mv.y, mv.z);
                                 }
                                 array = new Grendgine_Collada_Float_Array()
@@ -474,7 +529,7 @@ namespace VoxelImporter
                                 var sb = new StringBuilder();
                                 foreach (var n in mesh.normals)
                                 {
-                                    var mn = matLocal.MultiplyVector(n);
+                                    var mn = matMirrorX.MultiplyVector(n);
                                     sb.AppendFormat("\n{0} {1} {2}", mn.x, mn.y, mn.z);
                                 }
                                 array = new Grendgine_Collada_Float_Array()
@@ -642,6 +697,7 @@ namespace VoxelImporter
                             {
                                 var ct = t.GetChild(i);
                                 if (!transforms.Contains(ct)) continue;
+                                if (!t.gameObject.activeInHierarchy) continue;
                                 var n = MakeNode(ct);
                                 nodes.Add(n);
                                 nodesDic.Add(ct, n);
@@ -663,7 +719,10 @@ namespace VoxelImporter
                                 {
                                     Target = "#" + mat.ID,
                                     Symbol = mat.ID,
-                                    Bind_Vertex_Input = new Grendgine_Collada_Bind_Vertex_Input[]
+                                };
+                                if (effectsDic[materials[j]].Profile_COMMON[0].Technique.Phong.Diffuse.Texture != null)
+                                {
+                                    Instance_Material[j].Bind_Vertex_Input = new Grendgine_Collada_Bind_Vertex_Input[]
                                     {
                                         new Grendgine_Collada_Bind_Vertex_Input()
                                         {
@@ -671,8 +730,8 @@ namespace VoxelImporter
                                             Input_Set = 1,
                                             Semantic = effectsDic[materials[j]].Profile_COMMON[0].Technique.Phong.Diffuse.Texture.TexCoord,
                                         },
-                                    },
-                                };
+                                    };
+                                }
                             }
                             node.Instance_Geometry = new Grendgine_Collada_Instance_Geometry[]
                             {
@@ -777,6 +836,7 @@ namespace VoxelImporter
                         {
                             var ct = t.GetChild(i);
                             if (!transforms.Contains(ct)) continue;
+                            if (!t.gameObject.activeInHierarchy) continue;
                             var n = MakeJoint(ct);
                             joints.Add(n);
                             jointsDic.Add(ct, n);
@@ -800,14 +860,13 @@ namespace VoxelImporter
 
                     foreach (var t in transforms)
                     {
-                        var matLocal = (rootObject.transform.worldToLocalMatrix * t.localToWorldMatrix) * matMirrorX;
-
+                        if (!t.gameObject.activeInHierarchy) continue;
                         Mesh mesh = null;
                         Material[] materials = null;
                         #region SkinnedMeshRenderer
                         var skinnedMeshRenderer = t.GetComponent<SkinnedMeshRenderer>();
                         {
-                            if (skinnedMeshRenderer != null && skinnedMeshRenderer.sharedMesh != null && skinnedMeshRenderer.sharedMaterials != null)
+                            if (skinnedMeshRenderer != null && skinnedMeshRenderer.enabled && skinnedMeshRenderer.sharedMesh != null && skinnedMeshRenderer.sharedMaterials != null)
                             {
                                 mesh = skinnedMeshRenderer.sharedMesh;
                                 materials = skinnedMeshRenderer.sharedMaterials;
@@ -818,7 +877,7 @@ namespace VoxelImporter
                         var meshFilter = t.GetComponent<MeshFilter>();
                         var meshRenderer = t.GetComponent<MeshRenderer>();
                         {
-                            if (meshFilter != null && meshFilter.sharedMesh != null && meshRenderer != null && meshRenderer.sharedMaterials != null)
+                            if (meshFilter != null && meshFilter.sharedMesh != null && meshRenderer != null && meshRenderer.enabled && meshRenderer.sharedMaterials != null)
                             {
                                 mesh = meshFilter.sharedMesh;
                                 materials = meshRenderer.sharedMaterials;
@@ -829,6 +888,7 @@ namespace VoxelImporter
                         Grendgine_Collada_Controller c;
                         if (mesh != null && materials != null && skinnedMeshRenderer != null && mesh.boneWeights.Length > 0)
                         {
+                            #region SkinnedMeshRenderer
                             var boneWeights = mesh.boneWeights;
 
                             #region Joints_Source
@@ -943,10 +1003,10 @@ namespace VoxelImporter
                                             Source = "#" + Weights_Float_Array.ID,
                                             Param = new Grendgine_Collada_Param[]
                                             {
-                                            new Grendgine_Collada_Param()
-                                            {
-                                                Type = "float",
-                                            },
+                                                new Grendgine_Collada_Param()
+                                                {
+                                                    Type = "float",
+                                                },
                                             },
                                         },
                                     },
@@ -965,11 +1025,20 @@ namespace VoxelImporter
                                     var sb = new StringBuilder();
                                     for (int i = 0; i < bindposes.Length; i++)
                                     {
-                                        Matrix4x4 mat = bindposes[i] * matLocal.inverse;
+                                        Matrix4x4 mat = bindposes[i];
                                         {
                                             var position = mat.GetColumn(3);
-                                            var rotation = Quaternion.LookRotation(mat.GetColumn(2), mat.GetColumn(1));
+                                            var rotation = (mat.GetColumn(2).sqrMagnitude > 0f && mat.GetColumn(1).sqrMagnitude > 0f) ? Quaternion.LookRotation(mat.GetColumn(2), mat.GetColumn(1)) : Quaternion.identity;
                                             var scale = new Vector3(mat.GetColumn(0).magnitude, mat.GetColumn(1).magnitude, mat.GetColumn(2).magnitude);
+                                            #region Do not allow scale zero
+                                            {
+                                                for (int si = 0; si < 3; si++)
+                                                {
+                                                    if (scale[si] == 0f)
+                                                        scale[si] = Mathf.Epsilon;
+                                                }
+                                            }
+                                            #endregion
                                             mat = Matrix4x4.TRS(matMirrorX.MultiplyPoint3x4(position),
                                                                 new Quaternion(rotation.x, -rotation.y, -rotation.z, rotation.w), //mirrorX
                                                                 scale);
@@ -993,10 +1062,10 @@ namespace VoxelImporter
                                             Stride = 16,
                                             Param = new Grendgine_Collada_Param[]
                                             {
-                                            new Grendgine_Collada_Param()
-                                            {
-                                                Type = "float4x4",
-                                            },
+                                                new Grendgine_Collada_Param()
+                                                {
+                                                    Type = "float4x4",
+                                                },
                                             },
                                         },
                                     },
@@ -1063,9 +1132,11 @@ namespace VoxelImporter
                                     },
                                 },
                             };
+                            #endregion
                         }
                         else if (mesh != null && materials != null)
                         {
+                            #region MeshRenderer
                             var vertexCount = mesh.vertexCount;
                             const int boneCount = 1;
 
@@ -1096,10 +1167,10 @@ namespace VoxelImporter
                                             Source = "#" + Joints_Name_Array.ID,
                                             Param = new Grendgine_Collada_Param[]
                                             {
-                                            new Grendgine_Collada_Param()
-                                            {
-                                                Type = "name",
-                                            },
+                                                new Grendgine_Collada_Param()
+                                                {
+                                                    Type = "name",
+                                                },
                                             },
                                         },
                                     },
@@ -1150,10 +1221,10 @@ namespace VoxelImporter
                                             Source = "#" + Weights_Float_Array.ID,
                                             Param = new Grendgine_Collada_Param[]
                                             {
-                                            new Grendgine_Collada_Param()
-                                            {
-                                                Type = "float",
-                                            },
+                                                new Grendgine_Collada_Param()
+                                                {
+                                                    Type = "float",
+                                                },
                                             },
                                         },
                                     },
@@ -1171,15 +1242,7 @@ namespace VoxelImporter
                                     var sb = new StringBuilder();
                                     for (int i = 0; i < boneCount; i++)
                                     {
-                                        Matrix4x4 mat = matLocal.inverse;
-                                        {
-                                            var position = mat.GetColumn(3);
-                                            var rotation = Quaternion.LookRotation(mat.GetColumn(2), mat.GetColumn(1));
-                                            var scale = new Vector3(mat.GetColumn(0).magnitude, mat.GetColumn(1).magnitude, mat.GetColumn(2).magnitude);
-                                            mat = Matrix4x4.TRS(matMirrorX.MultiplyPoint3x4(position),
-                                                                new Quaternion(rotation.x, -rotation.y, -rotation.z, rotation.w), //mirrorX
-                                                                scale);
-                                        }
+                                        Matrix4x4 mat = Matrix4x4.identity;
                                         for (int r = 0; r < 4; r++)
                                             sb.AppendFormat("\n{0} {1} {2} {3}", mat[r, 0], mat[r, 1], mat[r, 2], mat[r, 3]);
                                     }
@@ -1269,6 +1332,7 @@ namespace VoxelImporter
                                     },
                                 },
                             };
+                            #endregion
                         }
                         else
                         {
@@ -1379,19 +1443,34 @@ namespace VoxelImporter
                 if (clips != null)
                 {
                     var tmpObject = GameObject.Instantiate<GameObject>(rootObject);
-                    tmpObject.hideFlags = HideFlags.HideAndDontSave;
+                    tmpObject.hideFlags |= HideFlags.HideAndDontSave;
                     tmpObject.transform.SetParent(null);
                     tmpObject.transform.localPosition = Vector3.zero;
                     tmpObject.transform.localRotation = Quaternion.identity;
                     tmpObject.transform.localScale = Vector3.one;
+                    { //Remove OnAnimatorMove etc
+                        var component = tmpObject.GetComponents<Component>();
+                        for (int i = 0; i < component.Length; i++)
+                        {
+                            if (component[i] is Transform || component[i] is Animator || component[i] is Animation || component[i] is Renderer || component[i] is MeshFilter) continue;
+                            try
+                            {
+                                Component.DestroyImmediate(component[i]);
+                            }
+                            catch
+                            {
+                            }
+                        }
+                    }
                     Avatar tmpAvatar = null;
+                    AnimationClip tmpClip = null;
                     try
                     {
                         var animator = tmpObject.GetComponent<Animator>();
                         if (animator != null && animator.isHuman && animator.avatar != null)
                         {
                             tmpAvatar = Avatar.Instantiate<Avatar>(animator.avatar);
-                            tmpAvatar.hideFlags = HideFlags.HideAndDontSave;
+                            tmpAvatar.hideFlags |= HideFlags.HideAndDontSave;
                             {
                                 var serializedObject = new UnityEditor.SerializedObject(tmpAvatar);
                                 var pArmStretch = serializedObject.FindProperty("m_Avatar.m_Human.data.m_ArmStretch");
@@ -1429,12 +1508,17 @@ namespace VoxelImporter
                             }
                             foreach (var clip in clips)
                             {
-                                var pathAnim = path.Insert(path.LastIndexOf(".dae"), "@" + clip.name);
-                                EditorUtility.DisplayProgressBar("Exporting Collada(dae) File...", Path.GetFileName(pathAnim), (progressIndex++ / (float)progressTotal));
+                                tmpClip = AnimationClip.Instantiate<AnimationClip>(clip);
+                                tmpClip.hideFlags |= HideFlags.HideAndDontSave;
+                                tmpClip.name = clip.name;
+                                AnimationUtility.SetAnimationEvents(tmpClip, new AnimationEvent[0]);
 
+                                var pathAnim = path.Insert(path.LastIndexOf(".dae"), "@" + tmpClip.name);
+                                EditorUtility.DisplayProgressBar("Exporting Collada(dae) File...", Path.GetFileName(pathAnim), (progressIndex++ / (float)progressTotal));
+                                #region enableTransforms
                                 bool[] enableTransforms = new bool[transforms.Count];
                                 {
-                                    foreach (var binding in AnimationUtility.GetCurveBindings(clip))
+                                    foreach (var binding in AnimationUtility.GetCurveBindings(tmpClip))
                                     {
                                         if (binding.type == typeof(Transform))
                                         {
@@ -1460,33 +1544,59 @@ namespace VoxelImporter
                                         }
                                     }
                                 }
-
-                                AnimationClipSettings animationClipSettings = AnimationUtility.GetAnimationClipSettings(clip);
+                                #endregion
+                                #region transformCurves
+                                TransformCurves[] transformCurves = new TransformCurves[tmpTransforms.Length];
+                                for (int i = 0; i < tmpTransforms.Length; i++)
+                                {
+                                    transformCurves[i] = new TransformCurves()
+                                    {
+                                        position = new AnimationCurve[]
+                                        {
+                                            AnimationUtility.GetEditorCurve(tmpClip, EditorCurveBinding.FloatCurve(paths[i], typeof(Transform), "m_LocalPosition.x")),
+                                            AnimationUtility.GetEditorCurve(tmpClip, EditorCurveBinding.FloatCurve(paths[i], typeof(Transform), "m_LocalPosition.y")),
+                                            AnimationUtility.GetEditorCurve(tmpClip, EditorCurveBinding.FloatCurve(paths[i], typeof(Transform), "m_LocalPosition.z")),
+                                        },
+                                        rotation = new AnimationCurve[]
+                                        {
+                                            AnimationUtility.GetEditorCurve(tmpClip, EditorCurveBinding.FloatCurve(paths[i], typeof(Transform), "m_LocalRotation.x")),
+                                            AnimationUtility.GetEditorCurve(tmpClip, EditorCurveBinding.FloatCurve(paths[i], typeof(Transform), "m_LocalRotation.y")),
+                                            AnimationUtility.GetEditorCurve(tmpClip, EditorCurveBinding.FloatCurve(paths[i], typeof(Transform), "m_LocalRotation.z")),
+                                            AnimationUtility.GetEditorCurve(tmpClip, EditorCurveBinding.FloatCurve(paths[i], typeof(Transform), "m_LocalRotation.w")),
+                                        },
+                                        scale = new AnimationCurve[]
+                                        {
+                                            AnimationUtility.GetEditorCurve(tmpClip, EditorCurveBinding.FloatCurve(paths[i], typeof(Transform), "m_LocalScale.x")),
+                                            AnimationUtility.GetEditorCurve(tmpClip, EditorCurveBinding.FloatCurve(paths[i], typeof(Transform), "m_LocalScale.y")),
+                                            AnimationUtility.GetEditorCurve(tmpClip, EditorCurveBinding.FloatCurve(paths[i], typeof(Transform), "m_LocalScale.z")),
+                                        },
+                                    };
+                                    if (transformCurves[i].rotation[0] == null)
+                                    {
+                                        transformCurves[i].rotation = new AnimationCurve[]
+                                        {
+                                            AnimationUtility.GetEditorCurve(tmpClip, EditorCurveBinding.FloatCurve(paths[i], typeof(Transform), "localEulerAnglesRaw.x")),
+                                            AnimationUtility.GetEditorCurve(tmpClip, EditorCurveBinding.FloatCurve(paths[i], typeof(Transform), "localEulerAnglesRaw.y")),
+                                            AnimationUtility.GetEditorCurve(tmpClip, EditorCurveBinding.FloatCurve(paths[i], typeof(Transform), "localEulerAnglesRaw.z")),
+                                        };
+                                    }
+                                }
+                                #endregion
+                                AnimationClipSettings animationClipSettings = AnimationUtility.GetAnimationClipSettings(tmpClip);
                                 var totalTime = animationClipSettings.stopTime - animationClipSettings.startTime;
                                 #region frameTimes
                                 float[] frameTimes;
                                 {
-                                    var lastFrame = Mathf.FloorToInt(totalTime * clip.frameRate);
+                                    var lastFrame = Mathf.RoundToInt(totalTime * tmpClip.frameRate);
                                     frameTimes = new float[lastFrame + 1];
                                     for (int i = 0; i <= lastFrame; i++)
                                     {
-                                        var time = i * (1f / clip.frameRate);
-                                        frameTimes[i] = Mathf.Round(time * clip.frameRate) / clip.frameRate;
+                                        var time = i * (1f / tmpClip.frameRate);
+                                        frameTimes[i] = Mathf.Round(time * tmpClip.frameRate) / tmpClip.frameRate;
                                     }
                                 }
                                 #endregion
                                 #region Transforms
-                                {
-                                    tmpTransforms[0].localPosition = Vector3.zero;
-                                    tmpTransforms[0].localRotation = Quaternion.identity;
-                                    tmpTransforms[0].localScale = Vector3.one;
-                                }
-                                for (int i = 1; i < transforms.Count; i++)
-                                {
-                                    tmpTransforms[i].localPosition = transforms[i].localPosition;
-                                    tmpTransforms[i].localRotation = transforms[i].localRotation;
-                                    tmpTransforms[i].localScale = transforms[i].localScale;
-                                }
                                 Matrix4x4[,] tmpTransformMatrixs = new Matrix4x4[tmpTransforms.Length, frameTimes.Length];
                                 if (animator != null)
                                 {
@@ -1505,58 +1615,96 @@ namespace VoxelImporter
                                         {
                                             var stateMachine = layer.stateMachine;
                                             stateMachine.hideFlags |= HideFlags.HideAndDontSave;
-                                            var state = stateMachine.AddState(clip.name);
+                                            var state = stateMachine.AddState(tmpClip.name);
                                             state.hideFlags |= HideFlags.HideAndDontSave;
                                             state.iKOnFeet = settings_iKOnFeet;
-                                            state.motion = clip;
+                                            state.motion = tmpClip;
                                             layer.stateMachine = stateMachine;
                                         }
                                         tmpAnimatorController.layers = layers;
                                     }
                                     UnityEditor.Animations.AnimatorController.SetAnimatorController(animator, tmpAnimatorController);
+                                    if (!animator.isInitialized)
+                                        animator.Rebind();
+                                    #region ResetTransform
                                     {
-                                        if (!animator.isInitialized)
-                                            animator.Rebind();
+                                        tmpTransforms[0].localPosition = Vector3.zero;
+                                        tmpTransforms[0].localRotation = Quaternion.identity;
+                                        tmpTransforms[0].localScale = Vector3.one;
+                                    }
+                                    for (int i = 1; i < transforms.Count; i++)
+                                    {
+                                        tmpTransforms[i].localPosition = transforms[i].localPosition;
+                                        tmpTransforms[i].localRotation = transforms[i].localRotation;
+                                        tmpTransforms[i].localScale = transforms[i].localScale;
+                                    }
+                                    #endregion
+                                    {
                                         if (animator.isHuman)
                                         {
-                                            animator.Play(clip.name);
+                                            #region Humanoid
+                                            animator.Play(tmpClip.name);
                                             animator.Update(0f);
                                             for (int i = 0; i < frameTimes.Length; i++)
                                             {
-                                                clip.SampleAnimation(tmpObject, frameTimes[i]); //It is not essential. Workarounds for unknown bugs where hair etc. are not reflected correctly.
+                                                tmpClip.SampleAnimation(tmpObject, frameTimes[i]); //It is not essential. Workarounds for unknown bugs where hair etc. are not reflected correctly.
 
                                                 var currentAnimatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
                                                 var time = currentAnimatorStateInfo.length * currentAnimatorStateInfo.normalizedTime;
                                                 animator.Update(frameTimes[i] - time);
 
                                                 for (int j = 0; j < tmpTransforms.Length; j++)
-                                                    tmpTransformMatrixs[j, i] = Matrix4x4.TRS(tmpTransforms[j].localPosition, tmpTransforms[j].localRotation, tmpTransforms[j].localScale);
+                                                {
+                                                    var position = transformCurves[j].GetPosition(frameTimes[i]);
+                                                    var rotation = transformCurves[j].GetRotation(frameTimes[i]);
+                                                    var scale = transformCurves[j].GetScale(frameTimes[i]);
+                                                    tmpTransformMatrixs[j, i] = Matrix4x4.TRS(position.HasValue ? position.Value : tmpTransforms[j].localPosition,
+                                                                                                rotation.HasValue ? rotation.Value : tmpTransforms[j].localRotation,
+                                                                                                scale.HasValue ? scale.Value : tmpTransforms[j].localScale);
+                                                }
                                             }
+                                            #region BakeRootMotion
+                                            {
+                                                int bakeIndex = -1;
+                                                {
+                                                    var t = animator.GetBoneTransform(HumanBodyBones.Hips);
+                                                    while (t.parent != tmpObject.transform)
+                                                        t = t.parent;
+                                                    bakeIndex = ArrayUtility.IndexOf(tmpTransforms, t);
+                                                }
+                                                if (bakeIndex >= 0)
+                                                {
+                                                    for (int i = 0; i < frameTimes.Length; i++)
+                                                    {
+                                                        tmpTransformMatrixs[bakeIndex, i] = tmpTransformMatrixs[0, i] * tmpTransformMatrixs[bakeIndex, i];
+                                                    }
+                                                    for (int i = 0; i < frameTimes.Length; i++)
+                                                    {
+                                                        tmpTransformMatrixs[0, i] = Matrix4x4.identity;
+                                                    }
+                                                }
+                                            }
+                                            #endregion
+                                            #endregion
                                         }
                                         else
                                         {
+                                            #region Generic
                                             for (int i = 0; i < frameTimes.Length; i++)
                                             {
-                                                clip.SampleAnimation(tmpObject, frameTimes[i]);
+                                                tmpClip.SampleAnimation(tmpObject, frameTimes[i]);
 
                                                 for (int j = 0; j < tmpTransforms.Length; j++)
-                                                    tmpTransformMatrixs[j, i] = Matrix4x4.TRS(tmpTransforms[j].localPosition, tmpTransforms[j].localRotation, tmpTransforms[j].localScale);
-                                            }
-                                        }
-                                        //BakeRootMotion
-                                        {
-                                            for (int j = 0; j < tmpTransforms[0].childCount; j++)
-                                            {
-                                                var index = ArrayUtility.IndexOf(tmpTransforms, tmpTransforms[0].GetChild(j));
-                                                for (int i = 0; i < frameTimes.Length; i++)
                                                 {
-                                                    tmpTransformMatrixs[index, i] = tmpTransformMatrixs[0, i] * tmpTransformMatrixs[index, i];
+                                                    var position = transformCurves[j].GetPosition(frameTimes[i]);
+                                                    var rotation = transformCurves[j].GetRotation(frameTimes[i]);
+                                                    var scale = transformCurves[j].GetScale(frameTimes[i]);
+                                                    tmpTransformMatrixs[j, i] = Matrix4x4.TRS(position.HasValue ? position.Value : tmpTransforms[j].localPosition,
+                                                                                                rotation.HasValue ? rotation.Value : tmpTransforms[j].localRotation,
+                                                                                                scale.HasValue ? scale.Value : tmpTransforms[j].localScale);
                                                 }
                                             }
-                                            for (int i = 0; i < frameTimes.Length; i++)
-                                            {
-                                                tmpTransformMatrixs[0, i] = Matrix4x4.identity;
-                                            }
+                                            #endregion
                                         }
                                     }
                                     {
@@ -1573,12 +1721,22 @@ namespace VoxelImporter
                                 }
                                 else if (animation != null)
                                 {
+                                    #region Legacy
                                     for (int i = 0; i < frameTimes.Length; i++)
                                     {
-                                        clip.SampleAnimation(tmpObject, frameTimes[i]);
+                                        tmpClip.SampleAnimation(tmpObject, frameTimes[i]);
+
                                         for (int j = 0; j < tmpTransforms.Length; j++)
-                                            tmpTransformMatrixs[j, i] = Matrix4x4.TRS(tmpTransforms[j].localPosition, tmpTransforms[j].localRotation, tmpTransforms[j].localScale);
+                                        {
+                                            var position = transformCurves[j].GetPosition(frameTimes[i]);
+                                            var rotation = transformCurves[j].GetRotation(frameTimes[i]);
+                                            var scale = transformCurves[j].GetScale(frameTimes[i]);
+                                            tmpTransformMatrixs[j, i] = Matrix4x4.TRS(position.HasValue ? position.Value : tmpTransforms[j].localPosition,
+                                                                                        rotation.HasValue ? rotation.Value : tmpTransforms[j].localRotation,
+                                                                                        scale.HasValue ? scale.Value : tmpTransforms[j].localScale);
+                                        }
                                     }
+                                    #endregion
                                 }
                                 #endregion
 
@@ -1663,8 +1821,17 @@ namespace VoxelImporter
                                                         Matrix4x4 mat = tmpTransformMatrixs[j, i];
                                                         {
                                                             var position = mat.GetColumn(3);
-                                                            var rotation = Quaternion.LookRotation(mat.GetColumn(2), mat.GetColumn(1));
+                                                            var rotation = (mat.GetColumn(2).sqrMagnitude > 0f && mat.GetColumn(1).sqrMagnitude > 0f) ? Quaternion.LookRotation(mat.GetColumn(2), mat.GetColumn(1)) : Quaternion.identity;
                                                             var scale = new Vector3(mat.GetColumn(0).magnitude, mat.GetColumn(1).magnitude, mat.GetColumn(2).magnitude);
+                                                            #region Do not allow scale zero
+                                                            {
+                                                                for (int si = 0; si < 3; si++)
+                                                                {
+                                                                    if (scale[si] == 0f)
+                                                                        scale[si] = Mathf.Epsilon;
+                                                                }
+                                                            }
+                                                            #endregion
                                                             mat = Matrix4x4.TRS(matMirrorX.MultiplyPoint3x4(position),
                                                                                 new Quaternion(rotation.x, -rotation.y, -rotation.z, rotation.w), //mirrorX
                                                                                 scale);
@@ -1787,11 +1954,11 @@ namespace VoxelImporter
                                         }
                                         var ra = new Grendgine_Collada_Animation()
                                         {
-                                            ID = "Animation_" + MakeID(clip),
-                                            Name = "Animation_" + clip.name,
+                                            ID = "Animation_" + MakeID(tmpClip),
+                                            Name = "Animation_" + tmpClip.name,
                                             Animation = animations.ToArray(),
                                         };
-                                        animationsDic.Add(clip, ra);
+                                        animationsDic.Add(tmpClip, ra);
                                     }
                                     la.Animation = animationsDic.Values.ToArray();
                                 }
@@ -1808,19 +1975,19 @@ namespace VoxelImporter
                                     {
                                         var ac = new Grendgine_Collada_Animation_Clip()
                                         {
-                                            ID = "Animation_Clips_" + MakeID(clip),
-                                            Name = clip.name,
+                                            ID = "Animation_Clips_" + MakeID(tmpClip),
+                                            Name = tmpClip.name,
                                             Start = 0f,
                                             End = totalTime,
                                             Instance_Animation = new Grendgine_Collada_Instance_Animation[1]
                                             {
                                                 new Grendgine_Collada_Instance_Animation()
                                                 {
-                                                    URL = "#" + animationsDic[clip].ID,
+                                                    URL = "#" + animationsDic[tmpClip].ID,
                                                 },
                                             },
                                         };
-                                        animationClipsDic.Add(clip, ac);
+                                        animationClipsDic.Add(tmpClip, ac);
                                     }
                                     la.Animation_Clip = animationClipsDic.Values.ToArray();
                                 }
@@ -1831,7 +1998,7 @@ namespace VoxelImporter
                                     var Doc = new System.Xml.XmlDocument();
                                     var frame_rate = Doc.CreateElement("frame_rate");
                                     {
-                                        frame_rate.InnerText = clip.frameRate.ToString();
+                                        frame_rate.InnerText = tmpClip.frameRate.ToString();
                                     }
                                     var start_time = Doc.CreateElement("start_time");
                                     {
@@ -1878,18 +2045,30 @@ namespace VoxelImporter
                                 exportedFiles.Add(pathAnim);
                             }
                         }
+
+                        AnimationClip.DestroyImmediate(tmpClip);
+                        tmpClip = null;
                     }
                     finally
                     {
                         GameObject.DestroyImmediate(tmpObject);
                         if (tmpAvatar != null)
                             Avatar.DestroyImmediate(tmpAvatar);
+                        if (tmpClip != null)
+                            AnimationClip.DestroyImmediate(tmpClip);
                     }
                 }
                 #endregion
             }
             finally
             {
+                #region TransformSave
+                for (int i = 0; i < transforms.Count; i++)
+                {
+                    transformSaves[i].Load(transforms[i]);
+                }
+                #endregion
+
                 EditorUtility.ClearProgressBar();
             }
             return true;
@@ -1901,5 +2080,94 @@ namespace VoxelImporter
         #endregion
 
         public List<string> exportedFiles = new List<string>();
+
+        private class TransformSave
+        {
+            public Vector3 localPosition;
+            public Quaternion localRotation;
+            public Vector3 localScale;
+
+            public TransformSave(Transform t)
+            {
+                localPosition = t.localPosition;
+                localRotation = t.localRotation;
+                localScale = t.localScale;
+            }
+            public void Load(Transform t)
+            {
+                t.localPosition = localPosition;
+                t.localRotation = localRotation;
+                t.localScale = localScale;
+            }
+        }
+        private class TransformCurves
+        {
+            public AnimationCurve[] position;
+            public AnimationCurve[] rotation;
+            public AnimationCurve[] scale;
+
+            public Vector3? GetPosition(float time)
+            {
+                Vector3 result = Vector3.zero;
+                int count = 0;
+                for (int i = 0; i < position.Length; i++)
+                {
+                    if (position[i] == null) continue;
+                    result[i] = position[i].Evaluate(time);
+                    count++;
+                }
+                if (count == 3) return result;
+                else return null;
+            }
+            public Quaternion? GetRotation(float time)
+            {
+                if (rotation.Length == 3)
+                {
+                    Vector3 result = Vector3.zero;
+                    int count = 0;
+                    for (int i = 0; i < rotation.Length; i++)
+                    {
+                        if (rotation[i] == null) continue;
+                        result[i] = rotation[i].Evaluate(time);
+                        count++;
+                    }
+                    if (count == 3) return Quaternion.Euler(result);
+                    else return null;
+                }
+                else
+                {
+                    Vector4 result = new Vector4(0, 0, 0, 1);
+                    int count = 0;
+                    for (int i = 0; i < rotation.Length; i++)
+                    {
+                        if (rotation[i] == null) continue;
+                        result[i] = rotation[i].Evaluate(time);
+                        count++;
+                    }
+                    if (count == 4 && result.sqrMagnitude > 0)
+                    {
+                        result.Normalize();
+                        return new Quaternion(result[0], result[1], result[2], result[3]);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            public Vector3? GetScale(float time)
+            {
+                Vector3 result = Vector3.one;
+                int count = 0;
+                for (int i = 0; i < scale.Length; i++)
+                {
+                    if (scale[i] == null) continue;
+                    result[i] = scale[i].Evaluate(time);
+                    count++;
+                }
+                if (count == 3) return result;
+                else return null;
+            }
+        }
     }
 }

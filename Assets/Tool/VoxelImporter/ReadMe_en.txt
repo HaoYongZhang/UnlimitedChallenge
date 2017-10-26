@@ -37,6 +37,23 @@ twitter: @AlSoSupport
 
 
 [Update History] 
+Version 1.1.1
+- ADD : Supports more than 65k vertices (Only Unity 2017.3 or later)
+- FIX : Simple mode
+
+Version 1.1.0
+- ADD : Simple mode
+- ADD : Voxel Skinned Animation Object : Support for adding Animator and Animation components automatically by changing Animation Type
+- FIX : HiDPI / Macbook Retina screen resolution support - Problem of misalignment of brush
+
+Version 1.0.9p6
+- FIX : ColladaExporter : Animation and Specular color
+- FIX : Edit Bone Animation : Mirror side is not recorded in animation
+
+Version 1.0.9p5
+- FIX : ColladaExporter : Animation and Material Color
+- FIX : Gizmos : Fixed problem that Selection Wire disappeared
+
 Version 1.0.9p4
 - FIX : ColladaExporter
 

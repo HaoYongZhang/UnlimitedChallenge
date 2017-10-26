@@ -49,6 +49,11 @@ namespace VoxelImporter
             VoxelBase.Edit_MaterialTypeMode.Fill.ToString(),
             VoxelBase.Edit_MaterialTypeMode.Rect.ToString(),
         };
+        public static readonly string[] Edit_AdvancedModeStrings =
+        {
+            "Simple",
+            "Advanced",
+        };
         #endregion
 
         #region Prefab
@@ -173,6 +178,17 @@ namespace VoxelImporter
                 UpdateMaterialList();
                 voxleDataBefore = baseTarget.voxelData;
             }
+
+            #region Simple
+            {
+                EditorGUI.BeginChangeCheck();
+                var mode = GUILayout.Toolbar(baseTarget.advancedMode ? 1 : 0, Edit_AdvancedModeStrings);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    baseTarget.advancedMode = mode != 0 ? true : false;
+                }
+            }
+            #endregion
         }
 
         protected void InspectorGUI_Import()
@@ -299,6 +315,7 @@ namespace VoxelImporter
                                     }
                                 }
                             }
+                            if (baseTarget.advancedMode)
                             {
                                 EditorGUILayout.LabelField(baseTarget.voxelData != null ? "Loaded" : "Unloaded", GUILayout.Width(80));
                                 if (baseTarget.voxelData == null)
@@ -331,31 +348,38 @@ namespace VoxelImporter
                     EditorGUILayout.LabelField("Settings", EditorStyles.boldLabel);
                     EditorGUI.indentLevel++;
                     {
-                        #region Import Mode
+                        if (baseTarget.advancedMode)
                         {
-                            EditorGUI.BeginChangeCheck();
-                            var importMode = (VoxelObject.ImportMode)EditorGUILayout.EnumPopup("Import Mode", baseTarget.importMode);
-                            if (EditorGUI.EndChangeCheck())
+                            #region Import Mode
                             {
-                                UndoRecordObject("Inspector");
-                                baseTarget.importMode = importMode;
-                                Refresh();
+                                EditorGUI.BeginChangeCheck();
+                                var importMode = (VoxelObject.ImportMode)EditorGUILayout.EnumPopup("Import Mode", baseTarget.importMode);
+                                if (EditorGUI.EndChangeCheck())
+                                {
+                                    UndoRecordObject("Inspector");
+                                    baseTarget.importMode = importMode;
+                                    Refresh();
+                                }
                             }
-                        }
-                        #endregion
-                        #region Import Flag
-                        {
-                            EditorGUI.BeginChangeCheck();
-                            var importFlags = (VoxelObject.ImportFlag)EditorGUILayout.EnumMaskField("Import Flag", baseTarget.importFlags);
-                            if (EditorGUI.EndChangeCheck())
+                            #endregion
+                            #region Import Flag
                             {
-                                UndoRecordObject("Inspector", true);
-                                baseTarget.importFlags = importFlags;
-                                baseCore.ReadyVoxelData(true);
-                                Refresh();
+                                EditorGUI.BeginChangeCheck();
+#if UNITY_2017_3_OR_NEWER
+                                var importFlags = (VoxelObject.ImportFlag)EditorGUILayout.EnumFlagsField("Import Flag", baseTarget.importFlags);
+#else
+                                var importFlags = (VoxelObject.ImportFlag)EditorGUILayout.EnumMaskField("Import Flag", baseTarget.importFlags);
+#endif
+                                if (EditorGUI.EndChangeCheck())
+                                {
+                                    UndoRecordObject("Inspector", true);
+                                    baseTarget.importFlags = importFlags;
+                                    baseCore.ReadyVoxelData(true);
+                                    Refresh();
+                                }
                             }
+                            #endregion
                         }
-                        #endregion
                         #region Import Scale
                         {
                             InspectorGUI_ImportSettingsImportScale();
@@ -395,24 +419,32 @@ namespace VoxelImporter
                             EditorGUILayout.EndHorizontal();
                         }
                         #endregion
-                        #region Enable Face
+                        if (baseTarget.advancedMode)
                         {
-                            EditorGUI.BeginChangeCheck();
-                            var enableFaceFlags = (VoxelBase.Face)EditorGUILayout.EnumMaskField("Enable Face", baseTarget.enableFaceFlags);
-                            if (EditorGUI.EndChangeCheck())
+                            #region Enable Face
                             {
-                                UndoRecordObject("Inspector");
-                                baseTarget.enableFaceFlags = enableFaceFlags;
-                                Refresh();
+                                EditorGUI.BeginChangeCheck();
+#if UNITY_2017_3_OR_NEWER
+                                var enableFaceFlags = (VoxelBase.Face)EditorGUILayout.EnumFlagsField("Enable Face", baseTarget.enableFaceFlags);
+#else
+                                var enableFaceFlags = (VoxelBase.Face)EditorGUILayout.EnumMaskField("Enable Face", baseTarget.enableFaceFlags);
+#endif
+                                if (EditorGUI.EndChangeCheck())
+                                {
+                                    UndoRecordObject("Inspector");
+                                    baseTarget.enableFaceFlags = enableFaceFlags;
+                                    Refresh();
+                                }
                             }
+                            #endregion
                         }
-                        #endregion
                         InspectorGUI_ImportSettingsExtra();
                     }
                     EditorGUI.indentLevel--;
                 }
                 #endregion
                 #region Optimize
+                if (baseTarget.advancedMode)
                 {
                     EditorGUILayout.LabelField("Optimize", EditorStyles.boldLabel);
                     EditorGUI.indentLevel++;
@@ -1034,14 +1066,16 @@ namespace VoxelImporter
                         {
                             Rect r = rect;
                             r.xMin = 182;
-                            r.width = rect.width - r.xMin - 64;
-                            if (materials[index] != null && !IsMainAsset(materials[index]))
+                            r.width = rect.width - r.xMin;
+                            if (baseTarget.advancedMode)
+                                r.width -= 64;
+                            if (baseTarget.advancedMode && materials[index] != null && !IsMainAsset(materials[index]))
                                 r.width -= 48;
                             EditorGUI.BeginDisabledGroup(true);
                             EditorGUI.ObjectField(r, materials[index], typeof(Material), false);
                             EditorGUI.EndDisabledGroup();
                         }
-                        if (materials[index] != null)
+                        if (baseTarget.advancedMode && materials[index] != null)
                         {
                             Rect r = rect;
                             r.xMin += rect.width - 46;

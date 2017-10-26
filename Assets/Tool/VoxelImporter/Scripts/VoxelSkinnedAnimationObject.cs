@@ -53,11 +53,12 @@ namespace VoxelImporter
 
         public enum RigAnimationType
         {
+            None = -1,
             Legacy,
             Generic,
             Humanoid,
         }
-        public RigAnimationType rigAnimationType;
+        public RigAnimationType rigAnimationType = RigAnimationType.None;
         public Avatar avatar;
         public bool updateAnimatorAvatar = true;
 

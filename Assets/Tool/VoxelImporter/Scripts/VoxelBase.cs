@@ -9,7 +9,8 @@ namespace VoxelImporter
     [DisallowMultipleComponent]
     public abstract class VoxelBase : MonoBehaviour
     {
-#if UNITY_EDITOR        
+#if UNITY_EDITOR
+        public bool advancedMode;
         //Voxel
         public string voxelFilePath;
         public string voxelFileGUID;    
@@ -198,7 +199,6 @@ namespace VoxelImporter
 
         public bool edit_importFoldout = true;
         public bool edit_objectFoldout = true;
-        public bool edit_meshAdvancedFoldout = false;
 
         [NonSerialized]
         public bool edit_afterRefresh = false;

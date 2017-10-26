@@ -37,6 +37,23 @@ twitter: @AlSoSupport
 
 
 【更新履歴】
+Version 1.1.1
+- ADD : 65000以上の頂点数になる場合に正常に表示されるよう対応 (Unity 2017.3以降のみ)
+- FIX : Simple mode
+
+Version 1.1.0
+- ADD : Simple mode
+- ADD : Voxel Skinned Animation Object : Animation Typeの変更でAnimatorやAnimationコンポーネントを自動的に追加するように対応
+- FIX : HiDPI / Macbook Retina screen resolution support - ブラシ位置ずれ問題
+
+Version 1.0.9p6
+- FIX : ColladaExporter : Animation and Specular color
+- FIX : Edit Bone Animation : Mirror側がアニメーションに記録されない不具合
+
+Version 1.0.9p5
+- FIX : ColladaExporter : Animation and Material Color
+- FIX : Gizmos : Selection Wireが表示されなくなる問題の修正
+
 Version 1.0.9p4
 - FIX : ColladaExporter
 

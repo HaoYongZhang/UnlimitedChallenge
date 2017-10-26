@@ -1,2 +1,2 @@
 id,damageType,skillEffectType,skillDistance,skillRange,skillPrefab,knowledgePromote,weaponPromote,basicDamage,strength,agility,intellect
-510030,energy,line,80,10,BulletOrange,shot,,100,0.3,0,0.7
+310030,energy,line,80,10,BulletOrange,shot,,100,0.3,0,0.7

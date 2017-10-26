@@ -8,7 +8,7 @@ public class Normal
 	public Property property = new Property();
     public Knowledge knowledge = new Knowledge();
 
-    public string talentSkillID = "540001";
+    public string talentSkillID = "340001";
 
 	public Normal()
 	{

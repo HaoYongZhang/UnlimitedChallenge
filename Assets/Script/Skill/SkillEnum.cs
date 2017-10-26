@@ -30,18 +30,20 @@ namespace SkillClass
     {
         [Description("血统")]
         bloodline = 1,
-        [Description("职业")]
+        [Description("内功")]
         careers = 2,
-        [Description("武器")]
-        weapon = 3,
+        [Description("武学")]
+        martialArt = 3,
+        [Description("科技")]
+        science = 4,
+        [Description("装备")]
+        weapon = 5,
         [Description("物品")]
-        item = 4,
-        [Description("武术")]
-        martialArt = 5,
+        item = 6,
         [Description("任务")]
-        mission = 6,
+        mission = 7,
         [Description("成就")]
-        achievement = 7
+        achievement = 8
     }
 
     /// <summary>

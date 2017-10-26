@@ -22,12 +22,12 @@ public class HeroManager : MonoBehaviour {
 
         Global.skills.Add(new Skill(normal.talentSkillID));
         Global.skills.Add(new Skill("140001"));
-        Global.skills.Add(new Skill("510030"));
-        Global.skills.Add(new Skill("430001"));
+        Global.skills.Add(new Skill("310030"));
+        Global.skills.Add(new Skill("630001"));
 
         Global.shortcutsSkills.Add(new Skill(normal.talentSkillID));
-        Global.shortcutsSkills.Add(new Skill("510030"));
-        Global.shortcutsSkills.Add(new Skill("430001"));
+        Global.shortcutsSkills.Add(new Skill("310030"));
+        Global.shortcutsSkills.Add(new Skill("630001"));
 
 		InvokeRepeating ("RegenerationPerSecond", 0, 1f);
 	}

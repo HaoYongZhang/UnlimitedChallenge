@@ -84,7 +84,7 @@ public class HeroController : MonoBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
-            HeroManager hero = player.GetComponent<HeroManager> ();
+            UIScene.Instance.propertyView.SetActive(!UIScene.Instance.propertyView.activeSelf);
 		}
 	}
 

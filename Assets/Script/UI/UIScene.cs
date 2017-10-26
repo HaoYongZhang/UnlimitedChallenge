@@ -14,6 +14,8 @@ public class UIScene : MonoBehaviour
     public GameObject skillInfo;
     public GameObject skillsBar;
     public GameObject skillStatusBar;
+    public GameObject propertyView;
+
     public Slider hpBar;
     public Slider mpBar;
     public Text hpText;
@@ -75,6 +77,9 @@ public class UIScene : MonoBehaviour
         mpRegenerationText = Utility.Context.GetComponent<Text>(scene_ui_object, "MpRegenerationText");
 
         skillStatusBar = GameObject.Find("SkillStatusBar");
+
+        propertyView = GameObject.Find("PropertyView");
+        propertyView.SetActive(false);
 
         skillInfo = GameObject.Find("SkillInfo");
         skillInfo.SetActive(false);
@@ -249,6 +254,8 @@ public class UIScene : MonoBehaviour
             info += skill.description + "\n";
         }
 
+        info += "<size=6>" + "<color=#00ffffff>" + "来源于" + skill.data["origin"] + "</color>" + "</size>";
+
         float height = 100f;
 
         foreach(Text label in labels)
@@ -261,11 +268,11 @@ public class UIScene : MonoBehaviour
             {
                 label.text = info;
                 //
-                height = label.preferredHeight + 20 + 10 * 2;
+                height = label.preferredHeight + 20 + 10 * 2 + 5;
             }
         }
 
-        skillInfo.GetComponent<RectTransform>().sizeDelta = new Vector2(100f, height);
+        skillInfo.GetComponent<RectTransform>().sizeDelta = new Vector2(120f, height);
 
         skillInfo.SetActive(true);
     }

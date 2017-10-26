@@ -775,7 +775,7 @@ namespace VoxelImporter
                 if (renderer != null)
                 {
 #if UNITY_5_5_OR_NEWER
-                    EditorUtility.SetSelectedRenderState(renderer, hidden ? EditorSelectedRenderState.Hidden : EditorSelectedRenderState.Highlight);
+                    EditorUtility.SetSelectedRenderState(renderer, hidden ? EditorSelectedRenderState.Hidden : EditorSelectedRenderState.Wireframe | EditorSelectedRenderState.Highlight);
 #else
                     EditorUtility.SetSelectedWireframeHidden(renderer, hidden);
 #endif

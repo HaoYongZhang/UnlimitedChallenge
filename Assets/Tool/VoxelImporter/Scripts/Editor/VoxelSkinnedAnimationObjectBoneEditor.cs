@@ -147,8 +147,8 @@ namespace VoxelImporter
                 boneTarget.mirrorBone.transform.hasChanged = false;
 
             #region Texture
-            circleNormalTex = editorCommon.LoadAssetAtPath<Texture2D>("Assets/VoxelImporter/Textures/Editor/Circle_normal.psd");
-            circleActiveTex = editorCommon.LoadAssetAtPath<Texture2D>("Assets/VoxelImporter/Textures/Editor/Circle_active.psd");
+            circleNormalTex = editorCommon.LoadTexture2DAssetAtPath("Assets/VoxelImporter/Textures/Editor/Circle_normal.psd");
+            circleActiveTex = editorCommon.LoadTexture2DAssetAtPath("Assets/VoxelImporter/Textures/Editor/Circle_active.psd");
             #endregion
 
             editorBoneEditorWindowRect.width = editorBoneEditorWindowRect.height = 0;
@@ -226,12 +226,28 @@ namespace VoxelImporter
             editorCommon.GUIStyleReady();
             #endregion
 
-            var prefabType = PrefabUtility.GetPrefabType(objectTarget.gameObject);
+            #region Simple
+            {
+                EditorGUI.BeginChangeCheck();
+                var mode = GUILayout.Toolbar(objectTarget.advancedMode ? 1 : 0, VoxelBaseEditor.Edit_AdvancedModeStrings);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    objectTarget.advancedMode = mode != 0 ? true : false;
+                }
+            }
+            #endregion
 
+            EditorGUILayout.Space();
+
+            var prefabType = PrefabUtility.GetPrefabType(objectTarget.gameObject);
             EditorGUI.BeginDisabledGroup(prefabType == PrefabType.Prefab);
 
             //Edit
             {
+                if (AnimationMode.InAnimationMode())
+                {
+                    EditorGUILayout.HelpBox("You can not change while animation is being recorded.\nTo change, please stop recording.", MessageType.Warning);
+                }
                 #region BoneAnimation
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.Space();
@@ -423,25 +439,29 @@ namespace VoxelImporter
 
             EditorGUILayout.Separator();
 
-            //MirrorBone
-            boneTarget.edit_objectFoldout = EditorGUILayout.Foldout(boneTarget.edit_objectFoldout, "Object", guiStyleFoldoutBold);
-            if (boneTarget.edit_objectFoldout)
+            #region Object
+            if (objectTarget.advancedMode)
             {
-                EditorGUILayout.BeginVertical(GUI.skin.box);
+                boneTarget.edit_objectFoldout = EditorGUILayout.Foldout(boneTarget.edit_objectFoldout, "Object", guiStyleFoldoutBold);
+                if (boneTarget.edit_objectFoldout)
                 {
-                    EditorGUI.BeginChangeCheck();
-                    var mirrorBone = (VoxelSkinnedAnimationObjectBone)EditorGUILayout.ObjectField("Mirror Bone", boneTarget.mirrorBone, typeof(VoxelSkinnedAnimationObjectBone), true);
-                    if (EditorGUI.EndChangeCheck())
+                    EditorGUILayout.BeginVertical(GUI.skin.box);
                     {
-                        if (mirrorBone == null || boneTarget.voxelObject == mirrorBone.voxelObject)
+                        EditorGUI.BeginChangeCheck();
+                        var mirrorBone = (VoxelSkinnedAnimationObjectBone)EditorGUILayout.ObjectField("Mirror Bone", boneTarget.mirrorBone, typeof(VoxelSkinnedAnimationObjectBone), true);
+                        if (EditorGUI.EndChangeCheck())
                         {
-                            Undo.RecordObject(boneTarget, "Disable Animation");
-                            boneTarget.mirrorBone = mirrorBone;
+                            if (mirrorBone == null || boneTarget.voxelObject == mirrorBone.voxelObject)
+                            {
+                                Undo.RecordObject(boneTarget, "Disable Animation");
+                                boneTarget.mirrorBone = mirrorBone;
+                            }
                         }
                     }
+                    EditorGUILayout.EndVertical();
                 }
-                EditorGUILayout.EndVertical();
             }
+            #endregion
 
             if (GUILayout.Button("Refresh"))
             {

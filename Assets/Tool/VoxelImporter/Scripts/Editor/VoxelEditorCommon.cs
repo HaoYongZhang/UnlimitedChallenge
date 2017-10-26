@@ -141,21 +141,23 @@ namespace VoxelImporter
             return tex;
         }
 
-        public T LoadAssetAtPath<T>(string path) where T : UnityEngine.Object
+        public Texture2D LoadTexture2DAssetAtPath(string path)
         {
-            var result = AssetDatabase.LoadAssetAtPath<T>(path);
+            var result = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
             if (result == null)
             {
                 var fileName = Path.GetFileName(path);
-                var list = Resources.FindObjectsOfTypeAll<T>();
-                foreach (var item in list)
+                var guids = AssetDatabase.FindAssets("t:Texture2D");
+                for (int i = 0; i < guids.Length; i++)
                 {
-                    var assetPath = AssetDatabase.GetAssetPath(item);
-                    if (Path.GetFileName(assetPath) == fileName &&
-                        assetPath.IndexOf("VoxelImporter") >= 0)
+                    var assetPath = AssetDatabase.GUIDToAssetPath(guids[i]);
+                    if (Path.GetFileName(assetPath) == fileName)
                     {
-                        result = item;
-                        break;
+                        if (assetPath.IndexOf("VoxelImporter") >= 0)
+                        {
+                            result = AssetDatabase.LoadAssetAtPath<Texture2D>(assetPath);
+                            break;
+                        }
                     }
                 }
             }
@@ -364,12 +366,12 @@ namespace VoxelImporter
             var boundsList = new List<Bounds>();
             var vertexList = new List<VertexPower>();
             {
-                Ray ray = SceneView.currentDrawingSceneView.camera.ScreenPointToRay(new Vector3(Event.current.mousePosition.x, SceneView.currentDrawingSceneView.camera.pixelHeight - Event.current.mousePosition.y, SceneView.currentDrawingSceneView.camera.nearClipPlane));
+                Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
                 ray.origin = objectTarget.transform.worldToLocalMatrix.MultiplyPoint3x4(ray.origin);
                 ray.direction = objectTarget.transform.worldToLocalMatrix.MultiplyVector(ray.direction);
                 bool[,,] doneTable = new bool[objectTarget.voxelData.voxelSize.x + 1, objectTarget.voxelData.voxelSize.y + 1, objectTarget.voxelData.voxelSize.z + 1];
                 {
-                    Ray rayRadius = SceneView.currentDrawingSceneView.camera.ScreenPointToRay(new Vector3(Event.current.mousePosition.x + radius, SceneView.currentDrawingSceneView.camera.pixelHeight - Event.current.mousePosition.y, SceneView.currentDrawingSceneView.camera.nearClipPlane));
+                    Ray rayRadius = HandleUtility.GUIPointToWorldRay(new Vector2(Event.current.mousePosition.x + radius, Event.current.mousePosition.y));
                     rayRadius.origin = objectTarget.transform.worldToLocalMatrix.MultiplyPoint3x4(rayRadius.origin);
                     rayRadius.direction = objectTarget.transform.worldToLocalMatrix.MultiplyVector(rayRadius.direction);
 
@@ -434,7 +436,7 @@ namespace VoxelImporter
                 for (int i = 0; i < vertexList.Count; i++)
                 {
                     var pos = objectCore.GetVoxelRatePosition(vertexList[i].position, Vector3.zero);
-                    Ray ray = SceneView.currentDrawingSceneView.camera.ScreenPointToRay(SceneView.currentDrawingSceneView.camera.WorldToScreenPoint(objectTarget.transform.localToWorldMatrix.MultiplyPoint3x4(pos)));
+                    Ray ray = HandleUtility.GUIPointToWorldRay(HandleUtility.WorldToGUIPoint(objectTarget.transform.localToWorldMatrix.MultiplyPoint3x4(pos)));
                     ray.origin = objectTarget.transform.worldToLocalMatrix.MultiplyPoint3x4(ray.origin);
                     ray.direction = objectTarget.transform.worldToLocalMatrix.MultiplyVector(ray.direction);
                     float length = (pos - ray.origin).magnitude - 0.1f;

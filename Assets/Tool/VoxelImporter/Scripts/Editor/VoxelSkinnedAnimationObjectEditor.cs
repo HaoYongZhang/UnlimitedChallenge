@@ -193,6 +193,7 @@ namespace VoxelImporter
                             }
                         }
                         EditorGUILayout.EndHorizontal();
+                        if (baseTarget.advancedMode)
                         {
                             EditorGUI.indentLevel++;
                             if (animationTarget.rootBone != null)
@@ -340,14 +341,14 @@ namespace VoxelImporter
                                 }
                                 #endregion
                             }
-                            if (animationTarget.mesh != null)
-                            {
-                                if (animationTarget.rootBone == null)
-                                {
-                                    EditorGUILayout.HelpBox("Bone not found. Please create bone.", MessageType.Error);
-                                }
-                            }
                             EditorGUI.indentLevel--;
+                        }
+                        if (animationTarget.mesh != null)
+                        {
+                            if (animationTarget.rootBone == null)
+                            {
+                                EditorGUILayout.HelpBox("Bone not found. Please create bone.", MessageType.Error);
+                            }
                         }
                     }
                     if (animationTarget.rootBone != null)
@@ -357,6 +358,7 @@ namespace VoxelImporter
                             EditorGUI.indentLevel++;
                             {
                                 #region Update the Animator Avatar
+                                if (baseTarget.advancedMode)
                                 {
                                     EditorGUI.BeginChangeCheck();
                                     var updateAnimatorAvatar = EditorGUILayout.ToggleLeft("Update the Animator Avatar", animationTarget.updateAnimatorAvatar);
@@ -378,6 +380,62 @@ namespace VoxelImporter
                                     if (EditorGUI.EndChangeCheck())
                                     {
                                         UndoRecordObject("Inspector");
+                                        #region ChangeAnimationType
+                                        Action RemoveAnimation = () =>
+                                        {
+                                            EditorApplication.delayCall += () =>
+                                            {
+                                                if (animationTarget == null || animationTarget.gameObject == null) return;
+                                                var animation = animationTarget.gameObject.GetComponent<Animation>();
+                                                if (animation != null)
+                                                    Undo.DestroyObjectImmediate(animation);
+                                            };
+                                        };
+                                        Action RemoveAnimator = () =>
+                                        {
+                                            EditorApplication.delayCall += () =>
+                                            {
+                                                if (animationTarget == null || animationTarget.gameObject == null) return;
+                                                var animator = animationTarget.gameObject.GetComponent<Animator>();
+                                                if (animator != null)
+                                                    Undo.DestroyObjectImmediate(animator);
+                                            };
+                                        };
+                                        Action CreateAnimation = () =>
+                                        {
+                                            var animation = animationTarget.gameObject.GetComponent<Animation>();
+                                            if (animation == null)
+                                            {
+                                                animation = animationTarget.gameObject.AddComponent<Animation>();
+                                                Undo.RegisterCreatedObjectUndo(animation, "Inspector");
+                                            }
+                                        };
+                                        Action CreateAnimator = () =>
+                                        {
+                                            var animator = animationTarget.gameObject.GetComponent<Animator>();
+                                            if (animator == null)
+                                            {
+                                                animator = animationTarget.gameObject.AddComponent<Animator>();
+                                                Undo.RegisterCreatedObjectUndo(animator, "Inspector");
+                                            }
+                                        };
+                                        switch (rigAnimationType)
+                                        {
+                                        case VoxelSkinnedAnimationObject.RigAnimationType.None:
+                                            RemoveAnimation();
+                                            RemoveAnimator();
+                                            break;
+                                        case VoxelSkinnedAnimationObject.RigAnimationType.Legacy:
+                                            RemoveAnimator();
+                                            CreateAnimation();
+                                            break;
+                                        case VoxelSkinnedAnimationObject.RigAnimationType.Generic:
+                                        case VoxelSkinnedAnimationObject.RigAnimationType.Humanoid:
+                                            RemoveAnimation();
+                                            CreateAnimator();
+                                            break;
+                                        }
+                                        #endregion
                                         VoxelHumanoidConfigreAvatar.Destroy();
                                         animationTarget.rigAnimationType = rigAnimationType;
                                         animationTarget.humanDescription.firstAutomapDone = false;
@@ -386,6 +444,8 @@ namespace VoxelImporter
                                 }
                                 #endregion
                                 #region Avatar
+                                if (baseTarget.advancedMode &&
+                                    (animationTarget.rigAnimationType == VoxelSkinnedAnimationObject.RigAnimationType.Generic || animationTarget.rigAnimationType == VoxelSkinnedAnimationObject.RigAnimationType.Humanoid))
                                 {
                                     EditorGUILayout.BeginHorizontal();
                                     {
@@ -431,6 +491,9 @@ namespace VoxelImporter
                                         }
                                     }
                                     EditorGUILayout.EndHorizontal();
+                                }
+                                if ((animationTarget.rigAnimationType == VoxelSkinnedAnimationObject.RigAnimationType.Generic || animationTarget.rigAnimationType == VoxelSkinnedAnimationObject.RigAnimationType.Humanoid))
+                                {
                                     EditorGUI.indentLevel++;
                                     if (animationTarget.avatar != null && !animationTarget.avatar.isValid)
                                     {
@@ -458,20 +521,21 @@ namespace VoxelImporter
                                     if (GUILayout.Button("Configure Avatar", VoxelHumanoidConfigreAvatar.instance == null ? GUI.skin.button : guiStyleBoldActiveButton))
                                     {
                                         if (VoxelHumanoidConfigreAvatar.instance == null)
-                                            VoxelHumanoidConfigreAvatar.Create(animationTarget);
+                                            VoxelHumanoidConfigreAvatar.Create(animationTarget);    
                                         else
                                             VoxelHumanoidConfigreAvatar.instance.Close();
                                     }
                                     EditorGUILayout.Space();
                                     EditorGUILayout.EndHorizontal();
                                     EditorGUI.EndDisabledGroup();
+                                    EditorGUILayout.Space();
                                 }
                                 #endregion
                             }
                             EditorGUI.indentLevel--;
                         }
                     }
-                    if (animationTarget.rootBone != null)
+                    if (baseTarget.advancedMode && animationTarget.rootBone != null)
                     {
                         TypeTitle(animationTarget.mesh, "Mesh");
                         {

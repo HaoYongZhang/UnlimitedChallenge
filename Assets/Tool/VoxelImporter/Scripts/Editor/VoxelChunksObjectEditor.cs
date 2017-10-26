@@ -57,6 +57,7 @@ namespace VoxelImporter
                 {
                     EditorGUILayout.BeginVertical(GUI.skin.box);
                     #region Mesh
+                    if (baseTarget.advancedMode)
                     {
                         EditorGUILayout.LabelField("Mesh", EditorStyles.boldLabel);
                         EditorGUI.indentLevel++;
@@ -72,27 +73,15 @@ namespace VoxelImporter
                             }
                         }
                         #endregion
-                        #region meshAdvancedFoldout
+                        #region meshFaceVertexOffset
                         {
                             EditorGUI.BeginChangeCheck();
-                            var flag = EditorGUILayout.Foldout(baseTarget.edit_meshAdvancedFoldout, "Advanced");
+                            var value = EditorGUILayout.Slider(new GUIContent("Vertex Offset", "Increase this value if flickering of polygon gaps occurs at low resolution."), baseTarget.meshFaceVertexOffset, 0f, 0.01f);
                             if (EditorGUI.EndChangeCheck())
                             {
                                 UndoRecordObject("Inspector");
-                                baseTarget.edit_meshAdvancedFoldout = flag;
-                            }
-                            if (baseTarget.edit_meshAdvancedFoldout)
-                            {
-                                #region meshFaceVertexOffset
-                                EditorGUI.BeginChangeCheck();
-                                var value = EditorGUILayout.Slider(new GUIContent("Face Vertex Offset", "Increase this value if flickering of polygon gaps occurs at low resolution."), baseTarget.meshFaceVertexOffset, 0f, 0.01f);
-                                if (EditorGUI.EndChangeCheck())
-                                {
-                                    UndoRecordObject("Inspector");
-                                    baseTarget.meshFaceVertexOffset = value;
-                                    Refresh();
-                                }
-                                #endregion
+                                baseTarget.meshFaceVertexOffset = value;
+                                Refresh();
                             }
                         }
                         #endregion
@@ -127,6 +116,7 @@ namespace VoxelImporter
                         }
                         EditorGUI.indentLevel++;
                         #region updateMeshRendererMaterials
+                        if (baseTarget.advancedMode)
                         {
                             EditorGUI.BeginChangeCheck();
                             var updateMeshRendererMaterials = EditorGUILayout.ToggleLeft("Update the Mesh Renderer Materials", baseTarget.updateMeshRendererMaterials);
@@ -142,6 +132,7 @@ namespace VoxelImporter
                         }
                         #endregion
                         #region Material Mode
+                        if (baseTarget.advancedMode)
                         {
                             EditorGUI.BeginChangeCheck();
                             var materialMode = (VoxelChunksObject.MaterialMode)EditorGUILayout.EnumPopup("Material Mode", objectTarget.materialMode);
@@ -199,6 +190,7 @@ namespace VoxelImporter
                             EditorGUILayout.Space();
                             EditorGUILayout.EndHorizontal();
                             EditorGUI.EndDisabledGroup();
+                            EditorGUILayout.Space();
                         }
                         else
                         {
@@ -209,6 +201,7 @@ namespace VoxelImporter
                     }
                     #endregion
                     #region Texture
+                    if (baseTarget.advancedMode)
                     {
                         if (objectTarget.materialMode == VoxelChunksObject.MaterialMode.Combine)
                             TypeTitle(objectTarget.atlasTexture, "Texture");
@@ -393,7 +386,8 @@ namespace VoxelImporter
                 #endregion
                 EditorGUI.indentLevel--;
             }
-            #region Create contact faces of chunks
+            #region Create contact faces of chunks            
+            if (baseTarget.advancedMode)
             {
                 EditorGUI.BeginChangeCheck();
                 var createContactChunkFaces = EditorGUILayout.Toggle("Create contact faces of chunks", objectTarget.createContactChunkFaces);

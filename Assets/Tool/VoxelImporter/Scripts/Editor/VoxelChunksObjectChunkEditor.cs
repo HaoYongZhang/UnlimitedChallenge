@@ -68,6 +68,19 @@ namespace VoxelImporter
 
         protected void InspectorGUI()
         {
+            #region Simple
+            {
+                EditorGUI.BeginChangeCheck();
+                var mode = GUILayout.Toolbar(objectTarget.advancedMode ? 1 : 0, VoxelBaseEditor.Edit_AdvancedModeStrings);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    objectTarget.advancedMode = mode != 0 ? true : false;
+                }
+            }
+            #endregion
+
+            EditorGUILayout.Space();
+
             var prefabType = PrefabUtility.GetPrefabType(objectTarget.gameObject);
             var prefabEnable = prefabType == PrefabType.Prefab || prefabType == PrefabType.PrefabInstance || prefabType == PrefabType.DisconnectedPrefabInstance;
 
@@ -96,6 +109,7 @@ namespace VoxelImporter
             }
 
             #region Object
+            if (objectTarget.advancedMode)
             {
                 chunkTarget.edit_objectFoldout = EditorGUILayout.Foldout(chunkTarget.edit_objectFoldout, "Object", guiStyleFoldoutBold);
                 if (chunkTarget.edit_objectFoldout)
@@ -314,16 +328,18 @@ namespace VoxelImporter
                     EditorGUILayout.EndVertical();
                 }
             }
+            else
+            {
+                EditorGUILayout.Space();
+            }
             #endregion
 
             #region Refresh
+            if (GUILayout.Button("Refresh"))
             {
-                if (GUILayout.Button("Refresh"))
-                {
-                    Undo.RecordObject(objectTarget, "Inspector");
-                    Undo.RecordObject(chunkTarget, "Inspector");
-                    Refresh();
-                }
+                Undo.RecordObject(objectTarget, "Inspector");
+                Undo.RecordObject(chunkTarget, "Inspector");
+                Refresh();
             }
             #endregion
         }

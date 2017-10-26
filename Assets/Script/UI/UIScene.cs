@@ -221,32 +221,51 @@ public class UIScene : MonoBehaviour
         image.sprite = skill.imageSprite;
 
         List<Text> labels = new List<Text>(Instance.skillInfo.GetComponentsInChildren<Text>());
+        string info = "";
 
-        List<string> texts = new List<string>();
-
-        texts.Add(skill.data["name"]);
         if (skill.isActive)
         {
-            texts.Add("持续时间    " + skill.data["duration"]);
-            texts.Add("冷却时间    " + skill.data["cooldown"]);
-            texts.Add("能量消耗     " + skill.data["costEnergy"]);
-            texts.Add(skill.description);
+            info += skill.description + "\n";
+
+            if(skill.data["duration"] != "0")
+            {
+                info += "持续时间    " + skill.data["duration"] + "\n";
+            }
+
+            if (skill.data["cooldown"] != "0")
+            {
+                info += "冷却时间    " + skill.data["cooldown"] + "\n";
+            }
+
+            if (skill.data["costEnergy"] != "0")
+            {
+                info += "能量消耗    " + "<color=#37abe1>" + skill.data["costEnergy"] + "</color>" + "\n";
+            }
+
         }
         else
         {
-            texts.Add("被动技能");
-            texts.Add(skill.categoryName);
-            texts.Add(skill.typeName);
-            texts.Add(skill.description);
+            info += "被动技能" + "\n";
+            info += skill.description + "\n";
         }
 
-        for (int i = 0; i < labels.Count; i++)
+        float height = 100f;
+
+        foreach(Text label in labels)
         {
-            Text label = labels[i];
-            label.text = texts[i];
+            if(label.name == "SkillName")
+            {
+                label.text = skill.data["name"];
+            }
+            else if (label.name == "SkillDescription")
+            {
+                label.text = info;
+                //
+                height = label.preferredHeight + 20 + 10 * 2;
+            }
         }
 
-
+        skillInfo.GetComponent<RectTransform>().sizeDelta = new Vector2(100f, height);
 
         skillInfo.SetActive(true);
     }

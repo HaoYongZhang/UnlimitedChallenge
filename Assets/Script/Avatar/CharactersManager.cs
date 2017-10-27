@@ -8,6 +8,7 @@ public class CharactersManager : MonoBehaviour
     CharactersManager _instance;
 
     GameObject characters;
+    Animator animator;
     GameObject mainBone;
 
     GameObject head;
@@ -46,6 +47,9 @@ public class CharactersManager : MonoBehaviour
     void Start()
     {
         InstantiateSkeleton();
+        characters.transform.position = GameObject.Find("test").transform.position;
+
+
     }
 
     // Update is called once per frame
@@ -57,12 +61,25 @@ public class CharactersManager : MonoBehaviour
     //实例化骨架
     void InstantiateSkeleton()
     {
+        Debug.Log("执行");
+
         characters = new GameObject();
+
+        animator = characters.AddComponent<Animator>();
+        GameObject go = (GameObject)Instantiate(Resources.Load("Avatar/TPose"));
+        animator.avatar = go.GetComponent<Animator>().avatar;
+        Destroy(go);
 
         mainBone = (GameObject)Instantiate(Resources.Load("Avatar/MainBone"));
         mainBone.transform.SetParent(characters.transform);
 
         boneTransforms = new List<Transform>(mainBone.GetComponentsInChildren<Transform>());
+
+        head = (GameObject)Instantiate(Resources.Load(path + "head"));
+        head.transform.SetParent(characters.transform);
+
+        body = (GameObject)Instantiate(Resources.Load(path + "body"));
+        body.transform.SetParent(characters.transform);
 
         hand_left_arm = (GameObject)Instantiate(Resources.Load(path + "hand_left_arm"));
         hand_left_arm.transform.SetParent(characters.transform);
@@ -88,6 +105,8 @@ public class CharactersManager : MonoBehaviour
         leg_right_shin = (GameObject)Instantiate(Resources.Load(path + "leg_right_shin"));
         leg_right_shin.transform.SetParent(characters.transform);
 
+        combineSkinnedMeshRenderer(head, head_name);
+        combineSkinnedMeshRenderer(body, body_name);
         combineSkinnedMeshRenderer(hand_left_arm, hand_left_arm_name);
         combineSkinnedMeshRenderer(hand_left_forearm, hand_left_forearm_name);
         combineSkinnedMeshRenderer(hand_right_arm, hand_right_arm_name);
@@ -97,24 +116,35 @@ public class CharactersManager : MonoBehaviour
         combineSkinnedMeshRenderer(leg_right_thigh, leg_right_thigh_name);
         combineSkinnedMeshRenderer(leg_right_shin, leg_right_shin_name);
 
-        characters = Instantiate(characters);
-
+        //characters = Instantiate(characters);
+        //Destroy(characters);
     }
 
     void combineSkinnedMeshRenderer(GameObject obj, string rootBoneName)
     {
-        GameObject model = obj.GetComponentInChildren<GameObject>();
-        SkinnedMeshRenderer smr = model.AddComponent<SkinnedMeshRenderer>();
+        Debug.Log(rootBoneName);
+        //GameObject model = obj.GetComponentInChildren<GameObject>();
 
-        rootBoneName = prefixBoneName + rootBoneName;
+        Transform model = obj.transform.Find("Model");
 
-        foreach (Transform tf in boneTransforms)
+        //因为修改预制件会同步，所以未修改前才执行
+        if(model.gameObject.GetComponent<SkinnedMeshRenderer>() == null)
         {
-            if(tf.name == rootBoneName)
+            SkinnedMeshRenderer smr = model.gameObject.AddComponent<SkinnedMeshRenderer>();
+
+            rootBoneName = prefixBoneName + rootBoneName;
+
+            foreach (Transform tf in boneTransforms)
             {
-                smr.rootBone = tf;
+                if (tf.name == rootBoneName)
+                {
+                    smr.rootBone = tf;
+                }
             }
+
+            Debug.Log("执行" +  rootBoneName);
         }
+
 
     }
 }

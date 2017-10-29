@@ -24,11 +24,11 @@ public class CharactersManager : MonoBehaviour
 
     const string prefixBoneName = "mixamorig:";
     const string head_name = "Head";
-    const string body_name = "Spine";
-    const string hand_left_arm_name = "LeftShoulder";
-    const string hand_left_forearm_name = "LeftArm";
-    const string hand_right_arm_name = "RightShoulder";
-    const string hand_right_forearm_name = "RightArm";
+    const string body_name = "MainBone";
+    const string hand_left_arm_name = "LeftArm";
+    const string hand_left_forearm_name = "LeftForeArm";
+    const string hand_right_arm_name = "RightArm";
+    const string hand_right_forearm_name = "RightForeArm";
     const string leg_left_thigh_name = "LeftUpLeg";
     const string leg_left_shin_name = "LeftLeg";
     const string leg_right_thigh_name = "RightUpLeg";
@@ -68,12 +68,15 @@ public class CharactersManager : MonoBehaviour
         animator = characters.AddComponent<Animator>();
         GameObject go = (GameObject)Instantiate(Resources.Load("Avatar/TPose"));
         animator.avatar = go.GetComponent<Animator>().avatar;
+        //animator.runtimeAnimatorController = 
         Destroy(go);
 
         mainBone = (GameObject)Instantiate(Resources.Load("Avatar/MainBone"));
+        mainBone.name = "MainBone";
         mainBone.transform.SetParent(characters.transform);
 
         boneTransforms = new List<Transform>(mainBone.GetComponentsInChildren<Transform>());
+        boneTransforms.Insert(0, mainBone.transform);
 
         head = (GameObject)Instantiate(Resources.Load(path + "head"));
         head.transform.SetParent(characters.transform);
@@ -122,27 +125,27 @@ public class CharactersManager : MonoBehaviour
 
     void combineSkinnedMeshRenderer(GameObject obj, string rootBoneName)
     {
-        Debug.Log(rootBoneName);
-        //GameObject model = obj.GetComponentInChildren<GameObject>();
-
         Transform model = obj.transform.Find("Model");
 
+        SkinnedMeshRenderer smr = model.gameObject.GetComponent<SkinnedMeshRenderer>();
         //因为修改预制件会同步，所以未修改前才执行
-        if(model.gameObject.GetComponent<SkinnedMeshRenderer>() == null)
+        if(smr == null)
         {
-            SkinnedMeshRenderer smr = model.gameObject.AddComponent<SkinnedMeshRenderer>();
+            smr = model.gameObject.AddComponent<SkinnedMeshRenderer>();
+        }
 
+        if (rootBoneName != "MainBone")
+        {
             rootBoneName = prefixBoneName + rootBoneName;
+        }
 
-            foreach (Transform tf in boneTransforms)
+        foreach (Transform tf in boneTransforms)
+        {
+            if (tf.name == rootBoneName)
             {
-                if (tf.name == rootBoneName)
-                {
-                    smr.rootBone = tf;
-                }
+                smr.rootBone = tf;
+                Debug.Log("执行" + rootBoneName);
             }
-
-            Debug.Log("执行" +  rootBoneName);
         }
 
 

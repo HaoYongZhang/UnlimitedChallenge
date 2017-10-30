@@ -7,7 +7,6 @@ public class CharactersManager : MonoBehaviour
 
     CharactersManager _instance;
 
-    GameObject characters;
     Animator animator;
     GameObject mainBone;
 
@@ -24,7 +23,7 @@ public class CharactersManager : MonoBehaviour
 
     const string prefixBoneName = "mixamorig:";
     const string head_name = "Head";
-    const string body_name = "MainBone";
+    const string body_name = "Hips";
     const string hand_left_arm_name = "LeftArm";
     const string hand_left_forearm_name = "LeftForeArm";
     const string hand_right_arm_name = "RightArm";
@@ -47,9 +46,6 @@ public class CharactersManager : MonoBehaviour
     void Start()
     {
         InstantiateSkeleton();
-        characters.transform.position = GameObject.Find("test").transform.position;
-
-
     }
 
     // Update is called once per frame
@@ -61,52 +57,34 @@ public class CharactersManager : MonoBehaviour
     //实例化骨架
     void InstantiateSkeleton()
     {
-        Debug.Log("执行");
-
-        characters = new GameObject();
-
-        animator = characters.AddComponent<Animator>();
-        GameObject go = (GameObject)Instantiate(Resources.Load("Avatar/TPose"));
-        animator.avatar = go.GetComponent<Animator>().avatar;
-        //animator.runtimeAnimatorController = 
-        Destroy(go);
-
-        mainBone = (GameObject)Instantiate(Resources.Load("Avatar/MainBone"));
-        mainBone.name = "MainBone";
-        mainBone.transform.SetParent(characters.transform);
+        mainBone = (GameObject)Instantiate(Resources.Load("Avatar/Hero/MainBone"));
+        mainBone.name = "mixamorig:Hips";
+        mainBone.transform.SetParent(gameObject.transform);
 
         boneTransforms = new List<Transform>(mainBone.GetComponentsInChildren<Transform>());
         boneTransforms.Insert(0, mainBone.transform);
 
         head = (GameObject)Instantiate(Resources.Load(path + "head"));
-        head.transform.SetParent(characters.transform);
-
         body = (GameObject)Instantiate(Resources.Load(path + "body"));
-        body.transform.SetParent(characters.transform);
-
         hand_left_arm = (GameObject)Instantiate(Resources.Load(path + "hand_left_arm"));
-        hand_left_arm.transform.SetParent(characters.transform);
-
         hand_left_forearm = (GameObject)Instantiate(Resources.Load(path + "hand_left_forearm"));
-        hand_left_forearm.transform.SetParent(characters.transform);
-
         hand_right_arm = (GameObject)Instantiate(Resources.Load(path + "hand_right_arm"));
-        hand_right_arm.transform.SetParent(characters.transform);
-
         hand_right_forearm = (GameObject)Instantiate(Resources.Load(path + "hand_right_forearm"));
-        hand_right_forearm.transform.SetParent(characters.transform);
-
         leg_left_thigh = (GameObject)Instantiate(Resources.Load(path + "leg_left_thigh"));
-        leg_left_thigh.transform.SetParent(characters.transform);
-
         leg_left_shin = (GameObject)Instantiate(Resources.Load(path + "leg_left_shin"));
-        leg_left_shin.transform.SetParent(characters.transform);
-
         leg_right_thigh = (GameObject)Instantiate(Resources.Load(path + "leg_right_thigh"));
-        leg_right_thigh.transform.SetParent(characters.transform);
-
         leg_right_shin = (GameObject)Instantiate(Resources.Load(path + "leg_right_shin"));
-        leg_right_shin.transform.SetParent(characters.transform);
+
+        head.transform.SetParent(gameObject.transform);
+        body.transform.SetParent(gameObject.transform);
+        hand_left_arm.transform.SetParent(gameObject.transform);
+        hand_left_forearm.transform.SetParent(gameObject.transform);
+        hand_right_arm.transform.SetParent(gameObject.transform);
+        hand_right_forearm.transform.SetParent(gameObject.transform);
+        leg_left_thigh.transform.SetParent(gameObject.transform);
+        leg_left_shin.transform.SetParent(gameObject.transform);
+        leg_right_thigh.transform.SetParent(gameObject.transform);
+        leg_right_shin.transform.SetParent(gameObject.transform);
 
         combineSkinnedMeshRenderer(head, head_name);
         combineSkinnedMeshRenderer(body, body_name);
@@ -119,35 +97,46 @@ public class CharactersManager : MonoBehaviour
         combineSkinnedMeshRenderer(leg_right_thigh, leg_right_thigh_name);
         combineSkinnedMeshRenderer(leg_right_shin, leg_right_shin_name);
 
-        //characters = Instantiate(characters);
-        //Destroy(characters);
+        MeshFilter[] meshFilters = gameObject.GetComponentsInChildren<MeshFilter>();
+        CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+        int i = 0;
+        while (i < meshFilters.Length)
+        {
+            combine[i].mesh = meshFilters[i].sharedMesh;
+            combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+            //meshFilters[i].gameObject.SetActive(false);
+            i++;
+        }
+        MeshFilter charactersMesh = gameObject.transform.gameObject.AddComponent<MeshFilter>();
+        charactersMesh.mesh = new Mesh();
+        charactersMesh.mesh.CombineMeshes(combine);
     }
 
     void combineSkinnedMeshRenderer(GameObject obj, string rootBoneName)
     {
         Transform model = obj.transform.Find("Model");
 
-        SkinnedMeshRenderer smr = model.gameObject.GetComponent<SkinnedMeshRenderer>();
+        MeshRenderer oldMesh = model.GetComponent<MeshRenderer>();
+        oldMesh.enabled = false;
+
         //因为修改预制件会同步，所以未修改前才执行
-        if(smr == null)
-        {
-            smr = model.gameObject.AddComponent<SkinnedMeshRenderer>();
+        if(model.gameObject.GetComponent<SkinnedMeshRenderer>() != null)
+        { 
+            DestroyImmediate(model.gameObject.GetComponent<SkinnedMeshRenderer>());
+            Debug.Log("执行销毁" + rootBoneName);
         }
 
-        if (rootBoneName != "MainBone")
-        {
-            rootBoneName = prefixBoneName + rootBoneName;
-        }
+        SkinnedMeshRenderer smr = model.gameObject.AddComponent<SkinnedMeshRenderer>();
+
+        rootBoneName = prefixBoneName + rootBoneName;
 
         foreach (Transform tf in boneTransforms)
         {
             if (tf.name == rootBoneName)
             {
                 smr.rootBone = tf;
-                Debug.Log("执行" + rootBoneName);
+                break;
             }
         }
-
-
     }
 }

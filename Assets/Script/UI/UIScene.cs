@@ -60,8 +60,6 @@ public class UIScene : MonoBehaviour
     {
         gameObject.AddComponent<UICursor>();
 
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-
         scene_ui_object = (GameObject)Resources.Load("UI/UIScene");
         scene_ui_object = Instantiate(scene_ui_object);
         scene_ui_object.name = "UISceneObject";
@@ -124,7 +122,7 @@ public class UIScene : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     // Update is called once per frame

@@ -8,7 +8,7 @@ public class CharactersManager : MonoBehaviour
     CharactersManager _instance;
 
     Animator animator;
-    GameObject mainBone;
+    public GameObject mainBone;
 
     GameObject head;
     GameObject body;
@@ -97,19 +97,20 @@ public class CharactersManager : MonoBehaviour
         combineSkinnedMeshRenderer(leg_right_thigh, leg_right_thigh_name);
         combineSkinnedMeshRenderer(leg_right_shin, leg_right_shin_name);
 
-        MeshFilter[] meshFilters = gameObject.GetComponentsInChildren<MeshFilter>();
-        CombineInstance[] combine = new CombineInstance[meshFilters.Length];
-        int i = 0;
-        while (i < meshFilters.Length)
-        {
-            combine[i].mesh = meshFilters[i].sharedMesh;
-            combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
-            //meshFilters[i].gameObject.SetActive(false);
-            i++;
-        }
-        MeshFilter charactersMesh = gameObject.transform.gameObject.AddComponent<MeshFilter>();
-        charactersMesh.mesh = new Mesh();
-        charactersMesh.mesh.CombineMeshes(combine);
+        mainBone.transform.position = new Vector3(0, 0, 0);
+        //MeshFilter[] meshFilters = gameObject.GetComponentsInChildren<MeshFilter>();
+        //CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+        //int i = 0;
+        //while (i < meshFilters.Length)
+        //{
+        //    combine[i].mesh = meshFilters[i].sharedMesh;
+        //    combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+        //    //meshFilters[i].gameObject.SetActive(false);
+        //    i++;
+        //}
+        //MeshFilter charactersMesh = gameObject.AddComponent<MeshFilter>();
+        //charactersMesh.mesh = new Mesh();
+        //charactersMesh.mesh.CombineMeshes(combine);
     }
 
     void combineSkinnedMeshRenderer(GameObject obj, string rootBoneName)

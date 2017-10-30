@@ -38,7 +38,8 @@ namespace SkillClass
         //技能的默认设置
         void defaultSkillSetting()
         {
-            GameObject skillsBar = GameObject.Find("SkillsBar");
+            GameObject skillsBar = UIScene.Instance.skillsBar;
+
             UIScene.Instance.skillButtons = new List<Button>(skillsBar.GetComponentsInChildren<Button>());
             for (int i = 0; i < UIScene.Instance.skillButtons.Count; i++)
             {

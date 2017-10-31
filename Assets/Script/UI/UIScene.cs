@@ -14,7 +14,7 @@ public class UIScene : MonoBehaviour
     public GameObject skillInfo;
     public GameObject skillsBar;
     public GameObject skillStatusBar;
-    public GameObject propertyView;
+    public GameObject sceneProperty;
 
     public Slider hpBar;
     public Slider mpBar;
@@ -76,8 +76,8 @@ public class UIScene : MonoBehaviour
 
         skillStatusBar = GameObject.Find("SkillStatusBar");
 
-        propertyView = GameObject.Find("PropertyView");
-        propertyView.SetActive(false);
+        sceneProperty = GameObject.Find("UISceneProperty");
+        sceneProperty.SetActive(false);
 
         skillInfo = GameObject.Find("SkillInfo");
         skillInfo.SetActive(false);
@@ -150,8 +150,6 @@ public class UIScene : MonoBehaviour
         {
             mpRegenerationText.text = "-" + Math.Round(Global.hero.property.mpRegeneration, 1);
         }
-        //更新人物当前生命值和能量值
-        //Set(heroManager.property.hp, heroManager.property.hpMax, heroManager.property.mp, heroManager.property.mpMax);
     }
 
     void FixedUpdate()

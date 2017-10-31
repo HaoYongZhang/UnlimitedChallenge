@@ -7,7 +7,6 @@ public class CharactersManager : MonoBehaviour
 
     CharactersManager _instance;
 
-    Animator animator;
     public GameObject mainBone;
 
     GameObject head;
@@ -21,19 +20,20 @@ public class CharactersManager : MonoBehaviour
     GameObject leg_right_thigh;
     GameObject leg_right_shin;
 
-    const string prefixBoneName = "mixamorig:";
-    const string head_name = "Head";
-    const string body_name = "Hips";
-    const string hand_left_arm_name = "LeftArm";
-    const string hand_left_forearm_name = "LeftForeArm";
-    const string hand_right_arm_name = "RightArm";
-    const string hand_right_forearm_name = "RightForeArm";
-    const string leg_left_thigh_name = "LeftUpLeg";
-    const string leg_left_shin_name = "LeftLeg";
-    const string leg_right_thigh_name = "RightUpLeg";
-    const string leg_right_shin_name = "RightLeg";
+    public string prefixBoneName = "mixamorig:";
+    public string head_name = "Head";
+    public string body_name = "Hips";
+    public string hand_left_arm_name = "LeftArm";
+    public string hand_left_forearm_name = "LeftForeArm";
+    public string hand_right_arm_name = "RightArm";
+    public string hand_right_forearm_name = "RightForeArm";
+    public string leg_left_thigh_name = "LeftUpLeg";
+    public string leg_left_shin_name = "LeftLeg";
+    public string leg_right_thigh_name = "RightUpLeg";
+    public string leg_right_shin_name = "RightLeg";
 
     List<Transform> boneTransforms;
+    Dictionary<string, GameObject> boneDict = new Dictionary<string, GameObject>();
 
     string path = "Material/Role/Hero/";
 
@@ -59,7 +59,7 @@ public class CharactersManager : MonoBehaviour
     {
         mainBone = (GameObject)Instantiate(Resources.Load("Avatar/Hero/MainBone"));
         mainBone.name = "mixamorig:Hips";
-        mainBone.transform.SetParent(gameObject.transform);
+        mainBone.transform.SetParent(gameObject.transform, false);
 
         boneTransforms = new List<Transform>(mainBone.GetComponentsInChildren<Transform>());
         boneTransforms.Insert(0, mainBone.transform);
@@ -75,45 +75,26 @@ public class CharactersManager : MonoBehaviour
         leg_right_thigh = (GameObject)Instantiate(Resources.Load(path + "leg_right_thigh"));
         leg_right_shin = (GameObject)Instantiate(Resources.Load(path + "leg_right_shin"));
 
-        head.transform.SetParent(gameObject.transform);
-        body.transform.SetParent(gameObject.transform);
-        hand_left_arm.transform.SetParent(gameObject.transform);
-        hand_left_forearm.transform.SetParent(gameObject.transform);
-        hand_right_arm.transform.SetParent(gameObject.transform);
-        hand_right_forearm.transform.SetParent(gameObject.transform);
-        leg_left_thigh.transform.SetParent(gameObject.transform);
-        leg_left_shin.transform.SetParent(gameObject.transform);
-        leg_right_thigh.transform.SetParent(gameObject.transform);
-        leg_right_shin.transform.SetParent(gameObject.transform);
+        boneDict.Add(head_name, head);
+        boneDict.Add(body_name, body);
+        boneDict.Add(hand_left_arm_name, hand_left_arm);
+        boneDict.Add(hand_left_forearm_name, hand_left_forearm);
+        boneDict.Add(hand_right_arm_name, hand_right_arm);
+        boneDict.Add(hand_right_forearm_name, hand_right_forearm);
+        boneDict.Add(leg_left_thigh_name, leg_left_thigh);
+        boneDict.Add(leg_left_shin_name, leg_left_shin);
+        boneDict.Add(leg_right_thigh_name, leg_right_thigh);
+        boneDict.Add(leg_right_shin_name, leg_right_shin);
 
-        combineSkinnedMeshRenderer(head, head_name);
-        combineSkinnedMeshRenderer(body, body_name);
-        combineSkinnedMeshRenderer(hand_left_arm, hand_left_arm_name);
-        combineSkinnedMeshRenderer(hand_left_forearm, hand_left_forearm_name);
-        combineSkinnedMeshRenderer(hand_right_arm, hand_right_arm_name);
-        combineSkinnedMeshRenderer(hand_right_forearm, hand_right_forearm_name);
-        combineSkinnedMeshRenderer(leg_left_thigh, leg_left_thigh_name);
-        combineSkinnedMeshRenderer(leg_left_shin, leg_left_shin_name);
-        combineSkinnedMeshRenderer(leg_right_thigh, leg_right_thigh_name);
-        combineSkinnedMeshRenderer(leg_right_shin, leg_right_shin_name);
-
-        mainBone.transform.position = new Vector3(0, 0, 0);
-        //MeshFilter[] meshFilters = gameObject.GetComponentsInChildren<MeshFilter>();
-        //CombineInstance[] combine = new CombineInstance[meshFilters.Length];
-        //int i = 0;
-        //while (i < meshFilters.Length)
-        //{
-        //    combine[i].mesh = meshFilters[i].sharedMesh;
-        //    combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
-        //    //meshFilters[i].gameObject.SetActive(false);
-        //    i++;
-        //}
-        //MeshFilter charactersMesh = gameObject.AddComponent<MeshFilter>();
-        //charactersMesh.mesh = new Mesh();
-        //charactersMesh.mesh.CombineMeshes(combine);
+        foreach (KeyValuePair<string, GameObject> dict in boneDict)
+        {
+            dict.Value.name = dict.Key;
+            dict.Value.transform.SetParent(gameObject.transform, false);
+            combineSkinnedMeshRenderer(dict.Key, dict.Value);
+        }
     }
 
-    void combineSkinnedMeshRenderer(GameObject obj, string rootBoneName)
+    void combineSkinnedMeshRenderer(string rootBoneName, GameObject obj)
     {
         Transform model = obj.transform.Find("Model");
 
@@ -139,5 +120,18 @@ public class CharactersManager : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void replaceAvator(string rootBoneName, GameObject source){
+        
+        GameObject targer = boneDict[rootBoneName];
+        targer.SetActive(false);
+        Destroy(targer);
+
+        source.transform.SetParent(gameObject.transform, false);
+        combineSkinnedMeshRenderer(rootBoneName, source);
+        source.name = rootBoneName;
+
+        boneDict[rootBoneName] = source;
     }
 }

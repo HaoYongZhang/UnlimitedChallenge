@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: cfd4c4d3d6b4b4841af927746480426a
-timeCreated: 1509345699
+guid: 0efc50cf33f5542cb906fdcea70391c4
+timeCreated: 1509435470
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -60,7 +60,7 @@ ModelImporter:
     400050: mixamorig:Spine2
     400052: unamed
     4300000: unamed
-    7400000: Running
+    7400000: Idle
     9500000: //RootNode
     13700000: unamed
   externalObjects:
@@ -68,7 +68,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: palettemat
-    second: {fileID: 2100000, guid: aa27e5d9fc85f49fd873092d4347b35e, type: 2}
+    second: {fileID: 2100000, guid: d2c69e5f9893f48f3b0ba13d38e2bf38, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -96,17 +96,17 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Running
+      name: Idle
       takeName: mixamo.com
       firstFrame: 0
-      lastFrame: 19
+      lastFrame: 120
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0

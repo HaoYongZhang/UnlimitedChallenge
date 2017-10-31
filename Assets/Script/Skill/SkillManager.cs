@@ -246,10 +246,8 @@ namespace SkillClass
                 return false;
             }
 
-            HeroManager heroManager = GetComponent<HeroManager>();
-
             // 如果蓝量不足，返回
-            if (heroManager.property.mp < float.Parse(skill.data["costEnergy"]))
+            if (Global.hero.property.mp < float.Parse(skill.data["costEnergy"]))
             {
                 Debug.Log("能量不足");
                 return false;
@@ -262,8 +260,7 @@ namespace SkillClass
         {
             skill.isCooldown = true;
 
-            HeroManager heroManager = GetComponent<HeroManager>();
-            heroManager.property.mp -= float.Parse(skill.data["costEnergy"]);
+            Global.hero.property.mp -= float.Parse(skill.data["costEnergy"]);
 
             Image maskImage = UIScene.Instance.skillButtons[Global.shortcutsSkills.IndexOf(skill)].transform.Find("MaskImage").GetComponent<Image>();
             Image cooldownImage = maskImage.transform.Find("CooldownImage").GetComponent<Image>();
@@ -320,14 +317,13 @@ namespace SkillClass
         /// <param name="skill">Skill.</param>
         void treatment(Skill skill)
         {
-            HeroManager heroManager = GetComponent<HeroManager>();
             string increateHp = skill.addlData["increateHp"];
             if (increateHp != null)
             {
                 //截取字符串，获得属性增加的值
                 float createValue = float.Parse(increateHp);
                 //使用治疗技能后，加上的血量
-                heroManager.property.hp += createValue;
+                Global.hero.property.hp += createValue;
 
                 intensify(skill);
             }
@@ -345,10 +341,8 @@ namespace SkillClass
             skill.isInDuration = true;
             //获取英雄对象
             Transform player = GameObject.FindGameObjectWithTag("Player").transform;
-            //获取英雄对象下面的HeroManager
-            HeroManager heroManager = player.GetComponent<HeroManager>();
             //获取HeroManager的属性
-            Property property = heroManager.property;
+            Property property = Global.hero.property;
 
             foreach (KeyValuePair<string, string> dict in skill.addlData)
             {
@@ -376,10 +370,8 @@ namespace SkillClass
             skill.isInDuration = false;
             //获取英雄对象
             Transform player = GameObject.FindGameObjectWithTag("Player").transform;
-            //获取英雄对象下面的HeroManager
-            HeroManager heroManager = player.GetComponent<HeroManager>();
             //获取HeroManager的属性
-            Property property = heroManager.property;
+            Property property = Global.hero.property;
 
             foreach (KeyValuePair<string, string> dict in skill.addlData)
             {

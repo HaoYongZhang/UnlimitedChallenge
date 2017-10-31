@@ -128,30 +128,27 @@ public class UIScene : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        hpBar.value = Global.hero.property.hp / Global.hero.property.hpMax;
+        mpBar.value = Global.hero.property.mp / Global.hero.property.mpMax;
+        hpText.text = Global.hero.property.hp + "/" + Global.hero.property.hpMax;
+        mpText.text = Global.hero.property.mp + "/" + Global.hero.property.mpMax;
 
-        HeroManager heroManager = player.GetComponent<HeroManager>();
-
-        hpBar.value = heroManager.property.hp / heroManager.property.hpMax;
-        mpBar.value = heroManager.property.mp / heroManager.property.mpMax;
-        hpText.text = heroManager.property.hp + "/" + heroManager.property.hpMax;
-        mpText.text = heroManager.property.mp + "/" + heroManager.property.mpMax;
-
-        if (heroManager.property.hpRegeneration > 0)
+        if (Global.hero.property.hpRegeneration > 0)
         {
-            hpRegenerationText.text = "+" + Math.Round(heroManager.property.hpRegeneration, 1);
+            hpRegenerationText.text = "+" + Math.Round(Global.hero.property.hpRegeneration, 1);
         }
         else
         {
-            hpRegenerationText.text = "-" + Math.Round(heroManager.property.hpRegeneration, 1);
+            hpRegenerationText.text = "-" + Math.Round(Global.hero.property.hpRegeneration, 1);
         }
 
-        if (heroManager.property.mpRegeneration > 0)
+        if (Global.hero.property.mpRegeneration > 0)
         {
-            mpRegenerationText.text = "+" + Math.Round(heroManager.property.mpRegeneration, 1);
+            mpRegenerationText.text = "+" + Math.Round(Global.hero.property.mpRegeneration, 1);
         }
         else
         {
-            mpRegenerationText.text = "-" + Math.Round(heroManager.property.mpRegeneration, 1);
+            mpRegenerationText.text = "-" + Math.Round(Global.hero.property.mpRegeneration, 1);
         }
         //更新人物当前生命值和能量值
         //Set(heroManager.property.hp, heroManager.property.hpMax, heroManager.property.mp, heroManager.property.mpMax);

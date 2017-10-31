@@ -8,15 +8,14 @@ using SkillClass;
 
 public class HeroController : MonoBehaviour {
 
-	private Rigidbody _rigidbody;
+	Rigidbody _rigidbody;
+    Animator _animator;
 	public float rotationSpeed = 20;
 
-	private Transform player;
 	// Use this for initialization
 	void Start () {
-		DontDestroyOnLoad (this);
-		_rigidbody = this.GetComponent<Rigidbody>();
-		player = GameObject.FindGameObjectWithTag("Player").transform;
+		_rigidbody = GetComponent<Rigidbody>();
+        _animator = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -54,31 +53,31 @@ public class HeroController : MonoBehaviour {
         //------技能栏快捷键
         if (Input.GetKeyDown(KeyCode.Alpha1))
 		{
-            SkillManager skillManager = player.GetComponent<SkillManager>();
+            SkillManager skillManager = GetComponent<SkillManager>();
             skillManager.useSkill(Global.shortcutsSkills[0]);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SkillManager skillManager = player.GetComponent<SkillManager>();
+            SkillManager skillManager = GetComponent<SkillManager>();
             skillManager.useSkill(Global.shortcutsSkills[1]);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            SkillManager skillManager = player.GetComponent<SkillManager>();
+            SkillManager skillManager = GetComponent<SkillManager>();
             skillManager.useSkill(Global.shortcutsSkills[2]);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            SkillManager skillManager = player.GetComponent<SkillManager>();
+            SkillManager skillManager = GetComponent<SkillManager>();
             skillManager.useSkill(Global.shortcutsSkills[3]);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            SkillManager skillManager = player.GetComponent<SkillManager>();
+            SkillManager skillManager = GetComponent<SkillManager>();
             skillManager.useSkill(Global.shortcutsSkills[4]);
         }
 
@@ -86,6 +85,12 @@ public class HeroController : MonoBehaviour {
 		{
             UIScene.Instance.propertyView.SetActive(!UIScene.Instance.propertyView.activeSelf);
 		}
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            GameObject body = (GameObject)Instantiate(Resources.Load("Material/Role/body"));
+            Global.hero.charactersManager.replaceAvator(Global.hero.charactersManager.body_name, body);
+        }
 	}
 
 	void FixedUpdate()
@@ -94,17 +99,21 @@ public class HeroController : MonoBehaviour {
 	}
 
 	//Translate移动控制函数
-	void MoveControlByTranslateGetAxis()
+	void MoveControlByTranslateGetAxis() 
 	{
-        HeroManager heroManager = player.GetComponent<HeroManager> ();
         float horizontal = Input.GetAxis("Horizontal"); //A D 左右
 		float vertical = Input.GetAxis("Vertical"); //W S 上 下
+        float speed = Global.hero.property == null ? 10 : Global.hero.property.moveSpeed;
 
-        _rigidbody.MovePosition(transform.position + new Vector3(horizontal, 0, vertical) * heroManager.property.moveSpeed * Time.deltaTime);
+        _rigidbody.MovePosition(transform.position + new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime);
 		if(horizontal != 0f || vertical != 0f)
 		{
+            _animator.SetBool("Running", true);
 			Rotating(horizontal, vertical);
 		}
+        else{
+            _animator.SetBool("Running", false);
+        }
 	}
 
 	void Rotating(float horizontal, float vertical)

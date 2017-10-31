@@ -4,6 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using SkillClass;
 public class Global{
+    public static Hero hero{
+        get
+        {
+            return Hero.Instance;
+        }
+    }
+
     /// <summary>
     /// 拥有的技能列表
     /// </summary>

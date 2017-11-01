@@ -88,8 +88,13 @@ public class HeroController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            GameObject body = (GameObject)Instantiate(Resources.Load("Material/Role/body"));
-            Global.hero.charactersManager.replaceAvator(Global.hero.charactersManager.body_name, body);
+            
+        }
+
+        //当没有技能释放，点击鼠标左键
+        if (Input.GetMouseButton(0) && Global.skillRelease == SkillRelease.none)
+        {
+            _animator.SetInteger("Fight", 1);
         }
 	}
 

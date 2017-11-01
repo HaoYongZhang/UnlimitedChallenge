@@ -20,6 +20,9 @@ public class CharactersManager : MonoBehaviour
     GameObject leg_right_thigh;
     GameObject leg_right_shin;
 
+    GameObject leftWeapon;
+    GameObject rightWeapon;
+
     public string prefixBoneName = "mixamorig:";
     public string head_name = "Head";
     public string body_name = "Hips";
@@ -31,6 +34,9 @@ public class CharactersManager : MonoBehaviour
     public string leg_left_shin_name = "LeftLeg";
     public string leg_right_thigh_name = "RightUpLeg";
     public string leg_right_shin_name = "RightLeg";
+
+    public string left_weapon_name = "LeftWeapon";
+    public string right_weapon_name = "RightWeapon";
 
     List<Transform> boneTransforms;
     Dictionary<string, GameObject> boneDict = new Dictionary<string, GameObject>();
@@ -75,6 +81,9 @@ public class CharactersManager : MonoBehaviour
         leg_right_thigh = (GameObject)Instantiate(Resources.Load(path + "leg_right_thigh"));
         leg_right_shin = (GameObject)Instantiate(Resources.Load(path + "leg_right_shin"));
 
+        leftWeapon = (GameObject)Instantiate(Resources.Load("Material/Weapon/Sword/" + "sword_001"));
+        rightWeapon = (GameObject)Instantiate(Resources.Load("Material/Weapon/Sword/" + "sword_001"));
+
         boneDict.Add(head_name, head);
         boneDict.Add(body_name, body);
         boneDict.Add(hand_left_arm_name, hand_left_arm);
@@ -85,6 +94,8 @@ public class CharactersManager : MonoBehaviour
         boneDict.Add(leg_left_shin_name, leg_left_shin);
         boneDict.Add(leg_right_thigh_name, leg_right_thigh);
         boneDict.Add(leg_right_shin_name, leg_right_shin);
+        boneDict.Add(left_weapon_name, leftWeapon);
+        boneDict.Add(right_weapon_name, rightWeapon);
 
         foreach (KeyValuePair<string, GameObject> dict in boneDict)
         {

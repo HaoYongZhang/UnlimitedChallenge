@@ -55,8 +55,7 @@ namespace SkillClass
 
             for (int i = 0; i < Global.shortcutsSkills.Count; i++)
             {
-                Image maskImage = UIScene.Instance.skillButtons[i].transform.Find("MaskImage").GetComponent<Image>();
-                Image icon = maskImage.transform.Find("Icon").GetComponent<Image>();
+                Image icon = UIScene.Instance.skillButtons[i].transform.Find("Icon").GetComponent<Image>();
                 icon.sprite = Global.shortcutsSkills[i].imageSprite;
             }
         }
@@ -97,8 +96,7 @@ namespace SkillClass
                 Skill skill = Global.shortcutsSkills[i];
                 if (skill.isCooldown)
                 {
-                    Image maskImage = UIScene.Instance.skillButtons[i].transform.Find("MaskImage").GetComponent<Image>();
-                    Image cooldownImage = maskImage.transform.Find("CooldownImage").GetComponent<Image>();
+                    Image cooldownImage = UIScene.Instance.skillButtons[i].transform.Find("CooldownImage").GetComponent<Image>();
 
                     Text cooldownText = UIScene.Instance.skillButtons[i].transform.Find("CooldownText").GetComponent<Text>();
                     if (skill.currentCoolDown < float.Parse(skill.data["cooldown"]))

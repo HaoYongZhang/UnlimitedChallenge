@@ -247,7 +247,7 @@ public class UIScene : MonoBehaviour
             info += skill.description + "\n";
         }
 
-        info += "<size=6>" + "<color=#00ffffff>" + "来源于" + skill.data["origin"] + "</color>" + "</size>";
+        info += "<size=30>" + "<color=#00ffffff>" + "来源于" + skill.data["origin"] + "</color>" + "</size>";
 
         float height = 100f;
 
@@ -260,12 +260,12 @@ public class UIScene : MonoBehaviour
             else if (label.name == "SkillDescription")
             {
                 label.text = info;
-                //
-                height = label.preferredHeight + 20 + 10 * 2 + 5;
+                //技能描述的实际高度 + 图标高度 + top&bottom的边距 + 间隔
+                height = label.preferredHeight + 120 + 20 * 2 + 20;
             }
         }
 
-        skillInfo.GetComponent<RectTransform>().sizeDelta = new Vector2(120f, height);
+        skillInfo.GetComponent<RectTransform>().sizeDelta = new Vector2(skillInfo.GetComponent<RectTransform>().sizeDelta.x, height);
 
         skillInfo.SetActive(true);
     }
@@ -287,7 +287,7 @@ public class UIScene : MonoBehaviour
         GameObject skillStatusIcon = (GameObject)Resources.Load("UI/SkillStatusIcon");
         skillStatusIcon = Instantiate(skillStatusIcon);
         skillStatusIcon.name = skill.id;
-        skillStatusIcon.transform.SetParent(skillStatusBar.transform);
+        skillStatusIcon.transform.SetParent(skillStatusBar.transform, false);
 
         Image icon = skillStatusIcon.transform.Find("Icon").GetComponent<Image>();
         icon.sprite = skill.imageSprite;

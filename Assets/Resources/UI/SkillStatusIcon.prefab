@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114467345675378674}
   - component: {fileID: 114166220252255376}
   m_Layer: 5
-  m_Name: SkillStatusIcon 1
+  m_Name: SkillStatusIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

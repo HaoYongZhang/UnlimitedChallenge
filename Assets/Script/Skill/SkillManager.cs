@@ -260,8 +260,7 @@ namespace SkillClass
 
             Global.hero.property.mp -= float.Parse(skill.data["costEnergy"]);
 
-            Image maskImage = UIScene.Instance.skillButtons[Global.shortcutsSkills.IndexOf(skill)].transform.Find("MaskImage").GetComponent<Image>();
-            Image cooldownImage = maskImage.transform.Find("CooldownImage").GetComponent<Image>();
+            Image cooldownImage = UIScene.Instance.skillButtons[Global.shortcutsSkills.IndexOf(skill)].transform.Find("CooldownImage").GetComponent<Image>();
             cooldownImage.fillAmount = 1;
         }
 

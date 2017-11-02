@@ -60,10 +60,9 @@ public class UIScene : MonoBehaviour
     {
         gameObject.AddComponent<UICursor>();
 
-        scene_ui_object = (GameObject)Resources.Load("UI/UIScene");
-        scene_ui_object = Instantiate(scene_ui_object);
-        scene_ui_object.name = "UISceneObject";
-        scene_ui_object.transform.SetParent(_instance.transform);
+        scene_ui_object = Instantiate((GameObject)Resources.Load("UI/UISceneCanvas"));
+        scene_ui_object.name = "UISceneCanvas";
+        scene_ui_object.transform.SetParent(_instance.transform, false);
 
         hpBar = Utility.Context.GetComponent<Slider>(scene_ui_object, "HpBar");
         mpBar = Utility.Context.GetComponent<Slider>(scene_ui_object, "MpBar");
@@ -76,7 +75,9 @@ public class UIScene : MonoBehaviour
 
         skillStatusBar = GameObject.Find("SkillStatusBar");
 
-        sceneProperty = GameObject.Find("UISceneProperty");
+        sceneProperty = Instantiate((GameObject)Resources.Load("UI/UISceneProperty"));
+        sceneProperty.name = "UISceneProperty";
+        sceneProperty.transform.SetParent(scene_ui_object.transform, false);
         sceneProperty.SetActive(false);
 
         skillInfo = GameObject.Find("SkillInfo");

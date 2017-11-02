@@ -22,35 +22,37 @@ public class UISceneProperty : MonoBehaviour {
     public GameObject mainView;
     public GameObject skillsView;
     public GameObject itemsView;
+    public GameObject tabbar;
 
-    List<Button> propertyTabbar;
     List<GameObject> views = new List<GameObject>();
+    List<Button> tabbarButtons = new List<Button>();
+    List<string> tabbarTexts = new List<string>();
 
+    Sprite selectedBtnBG;
+    Sprite unselectedBtnBG;
     //bool hasLoad;
 
     // Use this for initialization
     void Start () {
+        selectedBtnBG = Resources.Load("Sprites/Buttons/Basic/Filled/PNG/" + "White-Button", typeof(Sprite)) as Sprite;
+        unselectedBtnBG = Resources.Load("Sprites/Buttons/Basic/Filled/PNG/" + "BlueDark-Button", typeof(Sprite)) as Sprite;
+
         views.Add(mainView);
-        views.Add(skillsView);
+        views.Add(skillsView);  
         views.Add(itemsView);
 
-        propertyTabbar = new List<Button>(GameObject.Find("PropertyTabbar").GetComponentsInChildren<Button>());
+        tabbarButtons = new List<Button>(tabbar.GetComponentsInChildren<Button>());
 
-        propertyTabbar[0].onClick.AddListener(delegate ()
+        for (int i = 0; i < tabbarButtons.Count; i++)
         {
-            onTabBar(propertyTabbar[0]);
-        });
+            int j = i;
+            tabbarButtons[i].onClick.AddListener(delegate ()
+            {
+                onTabBar(j);
+            });
 
-        propertyTabbar[1].onClick.AddListener(delegate ()
-        {
-            onTabBar(propertyTabbar[1]);
-        });
-
-        propertyTabbar[2].onClick.AddListener(delegate ()
-        {
-            onTabBar(propertyTabbar[2]);
-        });
-
+            tabbarTexts.Add(tabbarButtons[j].GetComponentInChildren<Text>().text);
+        }
 	}
 	
 	// Update is called once per frame
@@ -80,28 +82,36 @@ public class UISceneProperty : MonoBehaviour {
             mpRegenerationText.text = "-" + Math.Round(property.mpRegeneration, 1);
         }
 
-        strengthText.text = "    力量：" + "<color=#98FF67>" + property.strength.ToString() + "</color>";
-        agilityText.text = "    敏捷：" + "<color=#98FF67>" + property.agility.ToString() + "</color>";
-        intellectText.text = "    能量：" + "<color=#98FF67>" + property.intellect.ToString() + "</color>";
+        strengthText.text = "力量：" + "<color=#98FF67>" + property.strength.ToString() + "</color>";
+        agilityText.text = "敏捷：" + "<color=#98FF67>" + property.agility.ToString() + "</color>";
+        intellectText.text = "能量：" + "<color=#98FF67>" + property.intellect.ToString() + "</color>";
 
-        attackText.text = "    攻击力：" + "<color=#98FF67>" + property.attack.ToString() + "</color>";
-        armorText.text = "    护甲：" + "<color=#98FF67>" + property.armor.ToString() + "</color>";
-        moveSpeedText.text = "    移动速度：" + "<color=#98FF67>" + property.moveSpeed.ToString() + "</color>";
+        attackText.text = "攻击力：" + "<color=#98FF67>" + property.attack.ToString() + "</color>";
+        armorText.text = "护甲：" + "<color=#98FF67>" + property.armor.ToString() + "</color>";
+        moveSpeedText.text = "移动速度：" + "<color=#98FF67>" + property.moveSpeed.ToString() + "</color>";
          
             
 	}       
 
-    void onTabBar(Button clickBtn)
+    void onTabBar(int i)
     {
+        
         for (int j = 0; j < views.Count; j++)
         {
-            if(clickBtn == propertyTabbar[j])
+            Image image = tabbarButtons[j].GetComponent<Image>();
+            Text label = tabbarButtons[j].GetComponentInChildren<Text>();
+            //当前选中的
+            if(i == j)
             {
                 views[j].SetActive(true);
+                image.sprite = selectedBtnBG;
+                label.text = "<color=#333333>" + tabbarTexts[j] + "</color>";
             }
             else
             {
                 views[j].SetActive(false);
+                image.sprite = unselectedBtnBG;
+                label.text = "<color=#ffffff>" + tabbarTexts[j] + "</color>";
             }
         }
     }

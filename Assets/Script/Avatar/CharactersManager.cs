@@ -81,9 +81,10 @@ public class CharactersManager : MonoBehaviour
         leg_right_thigh = (GameObject)Instantiate(Resources.Load(path + "leg_right_thigh"));
         leg_right_shin = (GameObject)Instantiate(Resources.Load(path + "leg_right_shin"));
 
-        leftWeapon = (GameObject)Instantiate(Resources.Load("Material/Weapon/Sword/" + "sword_001"));
+        //leftWeapon = (GameObject)Instantiate(Resources.Load("Material/Weapon/Sword/" + "sword_001"));
+        leftWeapon = new GameObject();
         rightWeapon = (GameObject)Instantiate(Resources.Load("Material/Weapon/Sword/" + "sword_001"));
-
+            
         boneDict.Add(head_name, head);
         boneDict.Add(body_name, body);
         boneDict.Add(hand_left_arm_name, hand_left_arm);
@@ -101,7 +102,12 @@ public class CharactersManager : MonoBehaviour
         {
             dict.Value.name = dict.Key;
             dict.Value.transform.SetParent(gameObject.transform, false);
-            combineSkinnedMeshRenderer(dict.Key, dict.Value);
+
+            //不对武器进行绑定
+            if (dict.Key != left_weapon_name)
+            {
+                combineSkinnedMeshRenderer(dict.Key, dict.Value);
+            }
         }
     }
 

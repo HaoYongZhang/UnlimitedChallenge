@@ -18,6 +18,9 @@ public class Hero : MonoBehaviour {
     public CharactersManager charactersManager;
     public SkillManager skillManager;
     public ShootManager shootManager;
+    public FightManager fightManager;
+    public RangeManager rangeManager;
+    public EquipmentManager equipmentManager;
 
     bool hasLoadController;
 
@@ -41,10 +44,12 @@ public class Hero : MonoBehaviour {
                 _instance.charactersManager = gameObject.AddComponent<CharactersManager>();
                 _instance.skillManager = gameObject.AddComponent<SkillManager>();
                 _instance.shootManager = gameObject.AddComponent<ShootManager>();
+                _instance.fightManager = gameObject.AddComponent<FightManager>();
+                _instance.equipmentManager = gameObject.AddComponent<EquipmentManager>();
 
                 _instance.rigid = gameObject.GetComponent<Rigidbody>();
                 _instance.animator = gameObject.GetComponent<Animator>();
-
+                _instance.rangeManager = gameObject.GetComponent<RangeManager>();
             }
             return _instance;
         }
@@ -81,7 +86,7 @@ public class Hero : MonoBehaviour {
         if (hasLoadController == false)
         {
             RuntimeAnimatorController _c = (RuntimeAnimatorController)Resources.Load("Avatar/Hero/HeroController");
-            Global.hero.GetComponent<Animator>().runtimeAnimatorController = RuntimeAnimatorController.Instantiate(_c);
+            Global.hero.GetComponent<Animator>().runtimeAnimatorController = Instantiate(_c);
             hasLoadController = true;
         }
 	}

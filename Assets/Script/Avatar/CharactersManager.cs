@@ -81,10 +81,9 @@ public class CharactersManager : MonoBehaviour
         leg_right_thigh = (GameObject)Instantiate(Resources.Load(path + "leg_right_thigh"));
         leg_right_shin = (GameObject)Instantiate(Resources.Load(path + "leg_right_shin"));
 
-        //leftWeapon = (GameObject)Instantiate(Resources.Load("Material/Weapon/Sword/" + "sword_001"));
         leftWeapon = new GameObject();
-        rightWeapon = (GameObject)Instantiate(Resources.Load("Material/Weapon/Sword/" + "sword_001"));
-            
+        rightWeapon = new GameObject();
+
         boneDict.Add(head_name, head);
         boneDict.Add(body_name, body);
         boneDict.Add(hand_left_arm_name, hand_left_arm);
@@ -104,7 +103,7 @@ public class CharactersManager : MonoBehaviour
             dict.Value.transform.SetParent(gameObject.transform, false);
 
             //不对武器进行绑定
-            if (dict.Key != left_weapon_name)
+            if (dict.Key != left_weapon_name && dict.Key != right_weapon_name)
             {
                 combineSkinnedMeshRenderer(dict.Key, dict.Value);
             }
@@ -137,6 +136,9 @@ public class CharactersManager : MonoBehaviour
                 break;
             }
         }
+
+        obj.layer = 8;
+        model.gameObject.layer = 8;
     }
 
     public void replaceAvator(string rootBoneName, GameObject source){

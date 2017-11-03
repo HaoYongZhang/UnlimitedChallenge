@@ -60,6 +60,10 @@ public class UIScene : MonoBehaviour
     {
         gameObject.AddComponent<UICursor>();
 
+        //Camera heroRenderTextureCamera = Instantiate((GameObject)Resources.Load("UI/HeroRenderTextureCamera")).GetComponent<Camera>();
+        //heroRenderTextureCamera.name = "HeroRenderTextureCamera";
+        //heroRenderTextureCamera.transform.SetParent(_instance.transform, false);
+
         scene_ui_object = Instantiate((GameObject)Resources.Load("UI/UISceneCanvas"));
         scene_ui_object.name = "UISceneCanvas";
         scene_ui_object.transform.SetParent(_instance.transform, false);

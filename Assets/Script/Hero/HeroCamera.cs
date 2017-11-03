@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections;
 
-//添加脚本到component菜单
-[AddComponentMenu ("CameraControl/Follow")]
 public class HeroCamera : MonoBehaviour {
 
 	//摄像机固定在猪脚上方10米高度

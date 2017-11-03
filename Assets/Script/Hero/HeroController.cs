@@ -88,13 +88,13 @@ public class HeroController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            
+            Global.hero.fightManager.type = CombatType.remote_short;
         }
 
         //当没有技能释放，点击鼠标左键
         if (Input.GetMouseButton(0) && Global.skillRelease == SkillRelease.none)
         {
-            _animator.SetInteger("Fight", 1);
+            Global.hero.fightManager.fight();
         }
 	}
 
@@ -106,6 +106,11 @@ public class HeroController : MonoBehaviour {
 	//Translate移动控制函数
 	void MoveControlByTranslateGetAxis() 
 	{
+        if(Global.hero.fightManager.isFight)
+        {
+            return;
+        }
+
         float horizontal = Input.GetAxis("Horizontal"); //A D 左右
 		float vertical = Input.GetAxis("Vertical"); //W S 上 下
         float speed = Global.hero.property == null ? 10 : Global.hero.property.moveSpeed;

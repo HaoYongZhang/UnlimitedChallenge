@@ -5,7 +5,8 @@ using System.ComponentModel;
 
 public class EquipmentManager : MonoBehaviour
 {
-    public Equipment weapon;
+    public Weapon leftWeapon;
+    public Weapon rightWeapon;
     public Equipment head;
     public Equipment body;
     public Equipment legs;
@@ -15,7 +16,10 @@ public class EquipmentManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        leftWeapon = new Weapon("20001");
 
+        GameObject leftWeaponObj = (GameObject)Instantiate(Resources.Load("Material/Weapon/weapon_" + leftWeapon.id));
+        Global.hero.charactersManager.replaceAvator(Global.hero.charactersManager.left_weapon_name, leftWeaponObj);
     }
 
     // Update is called once per frame
@@ -47,6 +51,8 @@ public enum EquipmentPart
 /// </summary>
 public enum WeaponType
 {
+    [Description("不存在")]
+    nothing,
     [Description("非武器")]
     none,
     [Description("剑")]

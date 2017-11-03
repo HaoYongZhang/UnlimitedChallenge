@@ -273,8 +273,8 @@ namespace SkillClass
 
         void beforeAttack(Skill skill)
         {
-            Range range = GetComponent<Range>();
-            range.setSkillRange(skill);
+            RangeManager rangeManager = GetComponent<RangeManager>();
+            rangeManager.setSkillRange(skill);
 
             Global.skillRelease = SkillRelease.selecting;
         }

@@ -1173,8 +1173,14 @@ Prefab:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23769753269136796, guid: c24109954d5b549358e60776c60257c8,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 23213750399358386, guid: c24109954d5b549358e60776c60257c8, type: 2}
+    - {fileID: 23769753269136796, guid: c24109954d5b549358e60776c60257c8, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: c24109954d5b549358e60776c60257c8, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &842701034 stripped
@@ -1794,6 +1800,57 @@ SkinnedMeshRenderer:
   m_AABB:
     m_Center: {x: 0, y: 0.90000004, z: 0}
     m_Extent: {x: 0.4, y: 0.90000004, z: 0.55}
+  m_DirtyAABB: 0
+--- !u!1 &1673003637 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1090859111836560, guid: c24109954d5b549358e60776c60257c8,
+    type: 2}
+  m_PrefabInternal: {fileID: 842701033}
+--- !u!137 &1673003641
+SkinnedMeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1673003637}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 21117461304706672, guid: c24109954d5b549358e60776c60257c8, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  serializedVersion: 2
+  m_Quality: 0
+  m_UpdateWhenOffscreen: 0
+  m_SkinnedMotionVectors: 1
+  m_Mesh: {fileID: 43570162537430780, guid: c24109954d5b549358e60776c60257c8, type: 2}
+  m_Bones: []
+  m_BlendShapeWeights: []
+  m_RootBone: {fileID: 1526352220}
+  m_AABB:
+    m_Center: {x: 0, y: 2, z: 0.20000002}
+    m_Extent: {x: 1, y: 2, z: 0.9}
   m_DirtyAABB: 0
 --- !u!1 &1683856778 stripped
 GameObject:

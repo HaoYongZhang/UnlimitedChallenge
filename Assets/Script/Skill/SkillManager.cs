@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
+using UnityEngine.EventSystems;
 
 namespace SkillClass
 {
@@ -38,38 +39,33 @@ namespace SkillClass
         //技能的默认设置
         void defaultSkillSetting()
         {
-            GameObject skillsBar = UIScene.Instance.skillsBar;
-
-            UIScene.Instance.skillButtons = new List<Button>(skillsBar.GetComponentsInChildren<Button>());
             for (int i = 0; i < UIScene.Instance.skillButtons.Count; i++)
             {
-                int j = i;
+                //int j = i;
 
-                Button btn = UIScene.Instance.skillButtons[i];
+                SkillButton btn = UIScene.Instance.skillButtons[i];
 
-                btn.onClick.AddListener(delegate ()
-                {
-                    onSkillBarButtion(j);
-                });
+                btn.gameObject.GetComponent<UIMouseDelegate>().onPointerClickDelegate = onClickSkillButton;
             }
 
+            //初始化时装载拥有的技能
             for (int i = 0; i < Global.shortcutsSkills.Count; i++)
             {
-                Image icon = UIScene.Instance.skillButtons[i].transform.Find("Icon").GetComponent<Image>();
-                icon.sprite = Global.shortcutsSkills[i].imageSprite;
+                SkillButton btn = UIScene.Instance.skillButtons[i];
+                btn.setSkill(Global.shortcutsSkills[i]);
             }
         }
 
-        void onSkillBarButtion(int i)
+        void onClickSkillButton(GameObject obj, PointerEventData ed)
         {
-            if (i > (Global.shortcutsSkills.Count - 1))
+            SkillButton skillBtn = obj.GetComponent<SkillButton>();
+
+            if(skillBtn.skill == null)
             {
                 return;
             }
-            else
-            {
-                useSkill(Global.shortcutsSkills[i]);
-            }
+
+            useSkill(skillBtn.skill);
         }
 
         /// <summary>
@@ -96,9 +92,6 @@ namespace SkillClass
                 Skill skill = Global.shortcutsSkills[i];
                 if (skill.isCooldown)
                 {
-                    Image cooldownImage = UIScene.Instance.skillButtons[i].transform.Find("CooldownImage").GetComponent<Image>();
-
-                    Text cooldownText = UIScene.Instance.skillButtons[i].transform.Find("CooldownText").GetComponent<Text>();
                     if (skill.currentCoolDown < float.Parse(skill.data["cooldown"]))
                     {
                         // 更新冷却
@@ -108,11 +101,7 @@ namespace SkillClass
                         if (Time.time - skill.second >= 1.0f)
                         {
                             skill.second = Time.time;
-                            //cooldownText.text = Utility.Math.Round((float.Parse (skill.data ["cooldown"]) - skill.currentCoolDown), 0).ToString();
                         }
-
-                        // 显示冷却动画
-                        cooldownImage.fillAmount = 1 - (skill.currentCoolDown / float.Parse(skill.data["cooldown"]));
 
                         //当技能持续时间结束时
                         if (skill.isInDuration && skill.currentCoolDown >= float.Parse(skill.data["duration"]))
@@ -124,8 +113,6 @@ namespace SkillClass
                     {
                         skill.currentCoolDown = 0;
                         skill.isCooldown = false;
-                        cooldownImage.fillAmount = 0;
-                        //cooldownText.text = "";
                     }
                 }
 
@@ -260,8 +247,8 @@ namespace SkillClass
 
             Global.hero.property.mp -= float.Parse(skill.data["costEnergy"]);
 
-            Image cooldownImage = UIScene.Instance.skillButtons[Global.shortcutsSkills.IndexOf(skill)].transform.Find("CooldownImage").GetComponent<Image>();
-            cooldownImage.fillAmount = 1;
+            //Image cooldownImage = UIScene.Instance.skillButtons[Global.shortcutsSkills.IndexOf(skill)].transform.Find("CooldownImage").GetComponent<Image>();
+            //cooldownImage.fillAmount = 1;
         }
 
         void attack(Skill skill)

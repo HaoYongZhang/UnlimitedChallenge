@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 222355747245664642}
   - component: {fileID: 114951996468978894}
   - component: {fileID: 114467345675378674}
-  - component: {fileID: 114166220252255376}
+  - component: {fileID: 114067072786601244}
   m_Layer: 5
   m_Name: SkillStatusIcon
   m_TagString: Untagged
@@ -47,7 +47,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114166220252255376
+--- !u!114 &114067072786601244
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -55,7 +55,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1836463886190502}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97bc5f24fee924090983262541273ef0, type: 3}
+  m_Script: {fileID: 11500000, guid: c8899b5beda544f3f9b07b9e2297d639, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114405590185048422

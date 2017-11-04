@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utility;
 
-public class UISceneProperty : MonoBehaviour {
-
+public class UIHeroMainView : MonoBehaviour {
+    
     public Slider hpBar;
     public Slider mpBar;
     public Text hpText;
@@ -18,45 +18,19 @@ public class UISceneProperty : MonoBehaviour {
     public Text attackText;
     public Text armorText;
     public Text moveSpeedText;
-        
-    public GameObject mainView;
-    public GameObject skillsView;
-    public GameObject itemsView;
-    public GameObject tabbar;
 
-    List<GameObject> views = new List<GameObject>();
-    List<Button> tabbarButtons = new List<Button>();
-    List<string> tabbarTexts = new List<string>();
-
-    Sprite selectedBtnBG;
-    Sprite unselectedBtnBG;
-    //bool hasLoad;
-
-    // Use this for initialization
-    void Start () {
-        selectedBtnBG = Resources.Load("Sprites/Buttons/Basic/Filled/PNG/" + "White-Button", typeof(Sprite)) as Sprite;
-        unselectedBtnBG = Resources.Load("Sprites/Buttons/Basic/Filled/PNG/" + "BlueDark-Button", typeof(Sprite)) as Sprite;
-
-        views.Add(mainView);
-        views.Add(skillsView);  
-        views.Add(itemsView);
-
-        tabbarButtons = new List<Button>(tabbar.GetComponentsInChildren<Button>());
-
-        for (int i = 0; i < tabbarButtons.Count; i++)
-        {
-            int j = i;
-            tabbarButtons[i].onClick.AddListener(delegate ()
-            {
-                onTabBar(j);
-            });
-
-            tabbarTexts.Add(tabbarButtons[j].GetComponentInChildren<Text>().text);
-        }
+	// Use this for initialization
+	void Start () {
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		
+	}
+
+    void FixedUpdate()
+    {
         Property property = Global.hero.property;
 
         hpBar.value = property.hp / property.hpMax;
@@ -91,29 +65,5 @@ public class UISceneProperty : MonoBehaviour {
         moveSpeedText.text = "移动速度：" + "<color=#98FF67>" + property.moveSpeed.ToString() + "</color>";
          
             
-	}       
-
-    void onTabBar(int i)
-    {
-        
-        for (int j = 0; j < views.Count; j++)
-        {
-            Image image = tabbarButtons[j].GetComponent<Image>();
-            Text label = tabbarButtons[j].GetComponentInChildren<Text>();
-            //当前选中的
-            if(i == j)
-            {
-                views[j].SetActive(true);
-                image.sprite = selectedBtnBG;
-                label.text = "<color=#333333>" + tabbarTexts[j] + "</color>";
-            }
-            else
-            {
-                views[j].SetActive(false);
-                image.sprite = unselectedBtnBG;
-                label.text = "<color=#ffffff>" + tabbarTexts[j] + "</color>";
-            }
-        }
     }
-}           
-            
+}

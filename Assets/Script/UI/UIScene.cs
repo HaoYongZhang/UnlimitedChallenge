@@ -24,7 +24,7 @@ public class UIScene : MonoBehaviour
     public Text mpRegenerationText;
 
     //技能按钮集合
-    public List<Button> skillButtons = new List<Button>();
+    public List<SkillButton> skillButtons = new List<SkillButton>();
 
     Transform player;
     //当前显示详细信息的技能
@@ -60,10 +60,6 @@ public class UIScene : MonoBehaviour
     {
         gameObject.AddComponent<UICursor>();
 
-        //Camera heroRenderTextureCamera = Instantiate((GameObject)Resources.Load("UI/HeroRenderTextureCamera")).GetComponent<Camera>();
-        //heroRenderTextureCamera.name = "HeroRenderTextureCamera";
-        //heroRenderTextureCamera.transform.SetParent(_instance.transform, false);
-
         scene_ui_object = Instantiate((GameObject)Resources.Load("UI/UISceneCanvas"));
         scene_ui_object.name = "UISceneCanvas";
         scene_ui_object.transform.SetParent(_instance.transform, false);
@@ -79,8 +75,8 @@ public class UIScene : MonoBehaviour
 
         skillStatusBar = GameObject.Find("SkillStatusBar");
 
-        sceneProperty = Instantiate((GameObject)Resources.Load("UI/UISceneProperty"));
-        sceneProperty.name = "UISceneProperty";
+        sceneProperty = Instantiate((GameObject)Resources.Load("UI/UIHeroView"));
+        sceneProperty.name = "UIHeroView";
         sceneProperty.transform.SetParent(scene_ui_object.transform, false);
         sceneProperty.SetActive(false);
 
@@ -88,17 +84,20 @@ public class UIScene : MonoBehaviour
         skillInfo.SetActive(false);
 
         skillsBar = GameObject.Find("SkillsBar");
-        skillButtons = new List<Button>(skillsBar.GetComponentsInChildren<Button>());
-        for (int i = 0; i < skillButtons.Count; i++)
+
+        for (int i = 0; i < 5; i++)
         {
             int j = i;
 
-            Button btn = skillButtons[i];
+            SkillButton skillButton = SkillButton.NewInstantiate();
+            skillButton.transform.SetParent(skillsBar.transform, false);
 
-            UIInfo uiInfo = btn.gameObject.GetComponent<UIInfo>();
+            UIMouseDelegate mouseDelegate = skillButton.gameObject.GetComponent<UIMouseDelegate>();
 
-            uiInfo.onPointerEnterDelegate = onPointerEnterSkillButton;
-            uiInfo.onPointerExitDelegate = onPointerExitSkillButton;
+            mouseDelegate.onPointerEnterDelegate = onPointerEnterSkillButton;
+            mouseDelegate.onPointerExitDelegate = onPointerExitSkillButton;
+
+            skillButtons.Add(skillButton);
         }
     }
 
@@ -165,24 +164,28 @@ public class UIScene : MonoBehaviour
     /// <summary>
     /// 鼠标移动到技能栏的按钮
     /// </summary>
-    /// <param name="objectName">Object name.</param>
-    void onPointerEnterSkillButton(string objectName, PointerEventData eventData)
+    /// <param name="obj">Object.</param>
+    public void onPointerEnterSkillButton(GameObject obj, PointerEventData eventData)
     {
-        int number = int.Parse(objectName.Split('_')[1]);
-
-        if (number <= (Global.activeSkills.Count - 1))
+        foreach(Skill skill in Global.skills)
         {
-            Skill skill = Global.activeSkills[number];
-            showSkillInfo(skill);
-        }
+            SkillButton skillButton = obj.GetComponent<SkillButton>();
 
+            if (skillButton.skill != null)
+            {
+                if (skillButton.skill.id == skill.id)
+                {
+                    showSkillInfo(skill);
+                }
+            }
+        }
     }
 
     /// <summary>
     /// 鼠标移出技能栏的按钮
     /// </summary>
-    /// <param name="objectName">Object name.</param>
-    void onPointerExitSkillButton(string objectName, PointerEventData eventData)
+    /// <param name="obj">Object.</param>
+    public void onPointerExitSkillButton(GameObject obj, PointerEventData eventData)
     {
         hideSkillInfo();
     }
@@ -190,12 +193,12 @@ public class UIScene : MonoBehaviour
     /// <summary>
     /// 鼠标移动到技能状态
     /// </summary>
-    /// <param name="objectName">Object name.</param>
-    public void onPointerEnterSkillStatus(string objectName, PointerEventData eventData)
+    /// <param name="obj">Object name.</param>
+    public void onPointerEnterSkillStatus(GameObject obj, PointerEventData eventData)
     {
         foreach (Skill skill in Global.skills)
         {
-            if (skill.id == objectName)
+            if (skill.id == obj.name)
             {
                 showSkillInfo(skill);
             }
@@ -205,8 +208,8 @@ public class UIScene : MonoBehaviour
     /// <summary>
     /// 鼠标移出技能状态
     /// </summary>
-    /// <param name="objectName">Object name.</param>
-    public void onPointerExitSkillStatus(string objectName, PointerEventData eventData)
+    /// <param name="obj">Object name.</param>
+    public void onPointerExitSkillStatus(GameObject obj, PointerEventData eventData)
     {
         hideSkillInfo();
     }
@@ -216,7 +219,7 @@ public class UIScene : MonoBehaviour
     /// 显示技能的详细信息
     /// </summary>
     /// <param name="skill">Skill.</param>
-    void showSkillInfo(Skill skill)
+    public void showSkillInfo(Skill skill)
     {
         currentShowInfoSkill = skill;
 
@@ -266,7 +269,7 @@ public class UIScene : MonoBehaviour
             {
                 label.text = info;
                 //技能描述的实际高度 + 图标高度 + top&bottom的边距 + 间隔
-                height = label.preferredHeight + 120 + 20 * 2 + 20;
+                height = label.preferredHeight + 120 + 30 * 2 + 20;
             }
         }
 
@@ -278,7 +281,7 @@ public class UIScene : MonoBehaviour
     /// <summary>
     /// 隐藏技能的详细信息
     /// </summary>
-    void hideSkillInfo()
+    public void hideSkillInfo()
     {
         skillInfo.SetActive(false);
     }
@@ -289,17 +292,16 @@ public class UIScene : MonoBehaviour
     /// <param name="skill">Skill.</param>
     public void addSkillStatusIcon(Skill skill)
     {
-        GameObject skillStatusIcon = (GameObject)Resources.Load("UI/SkillStatusIcon");
-        skillStatusIcon = Instantiate(skillStatusIcon);
+        GameObject skillStatusIcon = Instantiate((GameObject)Resources.Load("UI/SkillStatusIcon"));
         skillStatusIcon.name = skill.id;
         skillStatusIcon.transform.SetParent(skillStatusBar.transform, false);
 
         Image icon = skillStatusIcon.transform.Find("Icon").GetComponent<Image>();
         icon.sprite = skill.imageSprite;
 
-        UIInfo uiInfo = skillStatusIcon.GetComponent<UIInfo>();
-        uiInfo.onPointerEnterDelegate = onPointerEnterSkillStatus;
-        uiInfo.onPointerExitDelegate = onPointerExitSkillStatus;
+        UIMouseDelegate mouseDelegate = skillStatusIcon.GetComponent<UIMouseDelegate>();
+        mouseDelegate.onPointerEnterDelegate = onPointerEnterSkillStatus;
+        mouseDelegate.onPointerExitDelegate = onPointerExitSkillStatus;
     }
 
     /// <summary>

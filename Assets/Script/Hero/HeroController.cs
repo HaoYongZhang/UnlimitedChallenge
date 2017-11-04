@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine.EventSystems;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -53,32 +52,32 @@ public class HeroController : MonoBehaviour {
         //------技能栏快捷键
         if (Input.GetKeyDown(KeyCode.Alpha1))
 		{
-            SkillManager skillManager = GetComponent<SkillManager>();
-            skillManager.useSkill(Global.shortcutsSkills[0]);
+            SkillButton skillBtn = UIScene.Instance.skillButtons[0];
+            Global.hero.skillManager.useSkill(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SkillManager skillManager = GetComponent<SkillManager>();
-            skillManager.useSkill(Global.shortcutsSkills[1]);
+            SkillButton skillBtn = UIScene.Instance.skillButtons[1];
+            Global.hero.skillManager.useSkill(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            SkillManager skillManager = GetComponent<SkillManager>();
-            skillManager.useSkill(Global.shortcutsSkills[2]);
+            SkillButton skillBtn = UIScene.Instance.skillButtons[2];
+            Global.hero.skillManager.useSkill(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            SkillManager skillManager = GetComponent<SkillManager>();
-            skillManager.useSkill(Global.shortcutsSkills[3]);
+            SkillButton skillBtn = UIScene.Instance.skillButtons[3];
+            Global.hero.skillManager.useSkill(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            SkillManager skillManager = GetComponent<SkillManager>();
-            skillManager.useSkill(Global.shortcutsSkills[4]);
+            SkillButton skillBtn = UIScene.Instance.skillButtons[4];
+            Global.hero.skillManager.useSkill(skillBtn.skill);
         }
 
 		if (Input.GetKeyDown(KeyCode.Q))
@@ -94,7 +93,18 @@ public class HeroController : MonoBehaviour {
         //当没有技能释放，点击鼠标左键
         if (Input.GetMouseButton(0) && Global.skillRelease == SkillRelease.none)
         {
-            Global.hero.fightManager.fight();
+            //当前触摸在UI上
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                
+            }
+            //当前没有触摸在UI上
+            else
+            {
+                Global.hero.fightManager.fight();
+            }
+            
+
         }
 	}
 

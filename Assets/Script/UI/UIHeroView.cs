@@ -9,6 +9,8 @@ public class UIHeroView : MonoBehaviour {
     public GameObject mainView;
     public GameObject skillsView;
     public GameObject itemsView;
+    public GameObject shortcutSkillView;
+
     public GameObject tabbar;
 
     List<GameObject> views = new List<GameObject>();
@@ -75,6 +77,20 @@ public class UIHeroView : MonoBehaviour {
                 label.text = "<color=#ffffff>" + tabbarTexts[j] + "</color>";
             }
         }
+
+        //如果当前选项卡是技能栏目时
+        shortcutSkillView.SetActive(i == 1);
+    }
+
+    public void show()
+    {
+        UIScene.Instance.sceneProperty.SetActive(true);
+    }
+
+    public void hide()
+    {
+        UIScene.Instance.sceneProperty.SetActive(false);
+        UIScene.Instance.hideSkillInfo();
     }
 }           
             

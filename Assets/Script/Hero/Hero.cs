@@ -74,9 +74,17 @@ public class Hero : MonoBehaviour {
         Global.skills.Add(new Skill("310030"));
         Global.skills.Add(new Skill("630001"));
 
-        Global.shortcutsSkills.Add(new Skill(normal.talentSkillID));
-        Global.shortcutsSkills.Add(new Skill("310030"));
-        Global.shortcutsSkills.Add(new Skill("630001"));
+        Global.shortcutSkills_1[0] = SkillManager.GetOneSkillByID(normal.talentSkillID);
+        Global.shortcutSkills_1[1] = SkillManager.GetOneSkillByID("310030");
+        Global.shortcutSkills_1[2] = SkillManager.GetOneSkillByID("630001");
+
+        //UIScene.Instance.skillButtons[0].setSkill(SkillManager.GetOneSkillByID(normal.talentSkillID));
+        //UIScene.Instance.skillButtons[1].setSkill(SkillManager.GetOneSkillByID("310030"));
+        //UIScene.Instance.skillButtons[2].setSkill(SkillManager.GetOneSkillByID("630001"));
+
+        //Weapon leftWeapon = new Weapon("20001");
+        //GameObject leftWeaponObj = (GameObject)Instantiate(Resources.Load("Material/Weapon/weapon_" + leftWeapon.id));
+        //Global.hero.charactersManager.replaceAvator(CharactersManager.left_weapon_name, leftWeaponObj);
 
         InvokeRepeating("RegenerationPerSecond", 0, 1f);
 	}

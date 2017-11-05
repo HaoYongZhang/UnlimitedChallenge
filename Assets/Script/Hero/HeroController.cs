@@ -82,7 +82,14 @@ public class HeroController : MonoBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
-            UIScene.Instance.sceneProperty.SetActive(!UIScene.Instance.sceneProperty.activeSelf);
+            if(UIScene.Instance.sceneProperty.activeSelf)
+            {
+                UIScene.Instance.sceneProperty.GetComponent<UIHeroView>().hide();
+            }
+            else
+            {
+                UIScene.Instance.sceneProperty.GetComponent<UIHeroView>().show();
+            }
 		}
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -103,8 +110,6 @@ public class HeroController : MonoBehaviour {
             {
                 Global.hero.fightManager.fight();
             }
-            
-
         }
 	}
 
@@ -126,7 +131,7 @@ public class HeroController : MonoBehaviour {
         float speed = Global.hero.property == null ? 10 : Global.hero.property.moveSpeed;
 
         _rigidbody.MovePosition(transform.position + new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime);
-		if(horizontal != 0f || vertical != 0f)
+        if(horizontal != 0f || vertical != 0f)
 		{
             _animator.SetBool("Running", true);
 			Rotating(horizontal, vertical);

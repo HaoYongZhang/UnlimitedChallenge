@@ -17,6 +17,7 @@ namespace SkillClass
         public static SkillButton NewInstantiate()
         {
             SkillButton skillButton = Instantiate((GameObject)Resources.Load("UI/SkillButton")).GetComponent<SkillButton>();
+            skillButton.defaultSprite = skillButton.skillImage.sprite;
 
             return skillButton;
         }
@@ -31,8 +32,7 @@ namespace SkillClass
 
         void Start()
         {
-            //defaultSprite = Resources.Load("Sprites/Icons-HighResolution/GameController/PS4/Dark_PNG/X-Button-Dark", typeof(Sprite)) as Sprite;
-            defaultSprite = skillImage.sprite;
+            
         }
 
         void Update()
@@ -43,8 +43,8 @@ namespace SkillClass
 
         void FixedUpdate()
         {
-            //当技能移除，而且技能图片不是默认图片时
-            if (skill == null && skillImage.sprite != defaultSprite)
+            //当技能移除时
+            if (skill == null)
             {
                 skillImage.sprite = defaultSprite;
                 cooldownImage.fillAmount = 0;
@@ -53,11 +53,12 @@ namespace SkillClass
 
             if (skill != null)
             {
+                Skill oneSkill = SkillManager.GetOneSkillByID(skill.id);
                 //当技能开始冷却时
-                if (skill.isCooldown)
+                if (oneSkill.isCooldown)
                 {
                     //执行冷却动画
-                    cooldownImage.fillAmount = 1 - (skill.currentCoolDown / float.Parse(skill.data["cooldown"]));
+                    cooldownImage.fillAmount = 1 - (oneSkill.currentCoolDown / float.Parse(oneSkill.data["cooldown"]));
                 }
                 else
                 {
@@ -70,7 +71,15 @@ namespace SkillClass
 
         public void setSkill(Skill _skill){
             skill = _skill;
-            skillImage.sprite = _skill.imageSprite;
+
+            if(_skill != null)
+            {
+                skillImage.sprite = _skill.imageSprite;
+            }
+            else
+            {
+                skillImage.sprite = defaultSprite;
+            }
         }
     }
 }

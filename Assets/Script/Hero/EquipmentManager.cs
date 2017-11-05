@@ -16,10 +16,8 @@ public class EquipmentManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        leftWeapon = new Weapon("20001");
+        
 
-        GameObject leftWeaponObj = (GameObject)Instantiate(Resources.Load("Material/Weapon/weapon_" + leftWeapon.id));
-        Global.hero.charactersManager.replaceAvator(Global.hero.charactersManager.left_weapon_name, leftWeaponObj);
     }
 
     // Update is called once per frame
@@ -55,6 +53,27 @@ public enum WeaponType
     nothing,
     [Description("非武器")]
     none,
+    [Description("刀剑")]
+    sword,
+    [Description("枪棍")]
+    stick,
+    [Description("锤")]
+    hammer,
+    [Description("轻型手枪")]
+    pistol,
+    [Description("中型步枪")]
+    gun
+}
+
+/// <summary>
+/// 伤害修正
+/// </summary>
+public enum DamageCorrect
+{
+    [Description("不存在")]
+    nothing,
+    [Description("非武器")]
+    none,
     [Description("剑")]
     sword,
     [Description("刀")]
@@ -80,7 +99,7 @@ public enum DamageType
     Force,
     [Description("魔法")]
     Magic,
-    [Description("魔法")]
+    [Description("能量")]
     other
 }
 

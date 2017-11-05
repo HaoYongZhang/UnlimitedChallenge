@@ -15,6 +15,9 @@ public class UIHeroSkillView : MonoBehaviour {
     public List<Button> skillTypeButtonList = new List<Button>();
     List<string> skillTypeButtonTexts = new List<string>();
 
+    //拖动物品时的临时创建对象
+    GameObject dragTempObject;
+
     int currentTag = 0;
 
 	void Start () {
@@ -97,17 +100,54 @@ public class UIHeroSkillView : MonoBehaviour {
                 mouseDelegate.onPointerClickDelegate = onClickSkillButton;
                 mouseDelegate.onPointerEnterDelegate = UIScene.Instance.onPointerEnterSkillButton;
                 mouseDelegate.onPointerExitDelegate = UIScene.Instance.onPointerExitSkillButton;
+                mouseDelegate.onBeginDragDelegate = onBeginDragSkillButton;
+                mouseDelegate.onDragDelegate = onDragSkillButton;
+                mouseDelegate.onEndDragDelegate = onEndDragSkillButton;
             }
         }
     }
 
-    void onClickSkillButton(GameObject obj, PointerEventData ed)
+    void onClickSkillButton(GameObject obj, PointerEventData eventData)
     {
-        UIScene.Instance.sceneProperty.SetActive(false);
+        //UIScene.Instance.sceneProperty.SetActive(false);
         UIScene.Instance.hideSkillInfo();
 
         SkillButton skillBtn = obj.GetComponent<SkillButton>();
 
         Global.hero.skillManager.useSkill(skillBtn.skill);
+    }
+
+    void onBeginDragSkillButton(GameObject obj, PointerEventData eventData)
+    {
+        //代替品实例化
+        dragTempObject = new GameObject("DragTempObject");
+        dragTempObject.transform.SetParent(UIScene.Instance.sceneProperty.transform, false);
+        dragTempObject.AddComponent<RectTransform>();
+
+        SkillButton tempskillButton = SkillButton.NewInstantiate();
+        tempskillButton.transform.SetParent(dragTempObject.transform, false);
+        tempskillButton.setSkill(obj.GetComponentInChildren<SkillButton>().skill);
+
+        //防止拖拽结束时，代替品挡住了准备覆盖的对象而使得 OnDrop（） 无效
+        CanvasGroup group = dragTempObject.AddComponent<CanvasGroup>();
+        group.blocksRaycasts = false;   
+    }
+
+    void onDragSkillButton(GameObject obj, PointerEventData eventData)
+    {
+        //并将拖拽时的坐标给予被拖拽对象的代替品
+
+        Vector3 movePosition = new Vector3(Input.mousePosition.x + 20, Input.mousePosition.y - 20);
+
+        dragTempObject.transform.position = movePosition;
+    }
+
+    void onEndDragSkillButton(GameObject obj, PointerEventData eventData)
+    {
+        //拖拽结束，销毁代替品
+        if (dragTempObject)
+        {
+            Destroy(dragTempObject);
+        }
     }
 }

@@ -47,13 +47,6 @@ namespace SkillClass
 
                 btn.gameObject.GetComponent<UIMouseDelegate>().onPointerClickDelegate = onClickSkillButton;
             }
-
-            //初始化时装载拥有的技能
-            for (int i = 0; i < Global.shortcutsSkills.Count; i++)
-            {
-                SkillButton btn = UIScene.Instance.skillButtons[i];
-                btn.setSkill(Global.shortcutsSkills[i]);
-            }
         }
 
         void onClickSkillButton(GameObject obj, PointerEventData ed)
@@ -87,32 +80,32 @@ namespace SkillClass
         /// </summary>
         void cooldown()
         {
-            for (int i = 0; i < Global.shortcutsSkills.Count; i++)
+            for (int i = 0; i < Global.skills.Count; i++)
             {
-                Skill skill = Global.shortcutsSkills[i];
-                if (skill.isCooldown)
+                Skill oneSkill = SkillManager.GetOneSkillByID(Global.skills[i].id);
+                if (oneSkill.isCooldown)
                 {
-                    if (skill.currentCoolDown < float.Parse(skill.data["cooldown"]))
+                    if (oneSkill.currentCoolDown < float.Parse(oneSkill.data["cooldown"]))
                     {
                         // 更新冷却
-                        skill.currentCoolDown += Time.deltaTime;
+                        oneSkill.currentCoolDown += Time.deltaTime;
 
                         //每秒显示技能冷却时间
-                        if (Time.time - skill.second >= 1.0f)
+                        if (Time.time - oneSkill.second >= 1.0f)
                         {
-                            skill.second = Time.time;
+                            oneSkill.second = Time.time;
                         }
 
                         //当技能持续时间结束时
-                        if (skill.isInDuration && skill.currentCoolDown >= float.Parse(skill.data["duration"]))
+                        if (oneSkill.isInDuration && oneSkill.currentCoolDown >= float.Parse(oneSkill.data["duration"]))
                         {
-                            afterCooldown(skill);
+                            afterCooldown(oneSkill);
                         }
                     }
                     else
                     {
-                        skill.currentCoolDown = 0;
-                        skill.isCooldown = false;
+                        oneSkill.currentCoolDown = 0;
+                        oneSkill.isCooldown = false;
                     }
                 }
 
@@ -165,16 +158,17 @@ namespace SkillClass
         /// <param name="skill">Skill.</param>
         public void useSkill(Skill skill)
         {
-            if (beforeUseSkill(skill) == false)
+            Skill oneSkill = GetOneSkillByID(skill.id);
+            if (beforeUseSkill(oneSkill) == false)
             {
                 return;
             }
 
-            switch (skill.type)
+            switch (oneSkill.type)
             {
                 case SkillType.attack:
                     {
-                        attack(skill);
+                        attack(oneSkill);
                     }
                     break;
                 case SkillType.defense:
@@ -183,14 +177,14 @@ namespace SkillClass
                     break;
                 case SkillType.treatment:
                     {
-                        inUseSkill(skill);
-                        treatment(skill);
+                        inUseSkill(oneSkill);
+                        treatment(oneSkill);
                     }
                     break;
                 case SkillType.intensify:
                     {
-                        inUseSkill(skill);
-                        intensify(skill);
+                        inUseSkill(oneSkill);
+                        intensify(oneSkill);
                     }
                     break;
                 case SkillType.complex:
@@ -207,14 +201,14 @@ namespace SkillClass
 
         bool beforeUseSkill(Skill skill)
         {
-            //如果当前有技能正在释放时，不能同时点其他技能
-            if (Global.skillRelease != SkillRelease.none)
+            // 如果技能不存在，返回
+            if (skill == null)
             {
                 return false;
             }
 
-            // 如果技能不存在，返回
-            if (skill == null)
+            //如果当前有技能正在释放时，不能同时点其他技能
+            if (Global.skillRelease != SkillRelease.none)
             {
                 return false;
             }
@@ -246,9 +240,6 @@ namespace SkillClass
             skill.isCooldown = true;
 
             Global.hero.property.mp -= float.Parse(skill.data["costEnergy"]);
-
-            //Image cooldownImage = UIScene.Instance.skillButtons[Global.shortcutsSkills.IndexOf(skill)].transform.Find("CooldownImage").GetComponent<Image>();
-            //cooldownImage.fillAmount = 1;
         }
 
         void attack(Skill skill)
@@ -369,6 +360,23 @@ namespace SkillClass
                     PropertyUtil.ReflectSetter(property, dict.Key, propertyValue - createValue);
                 }
             }
+        }
+
+        /// <summary>
+        /// 返回同一个技能，共用这个技能的所有状态，否则会有深拷贝造成技能数据不一致
+        /// </summary>
+        /// <returns>The one skill by identifier.</returns>
+        /// <param name="_id">Identifier.</param>
+        public static Skill GetOneSkillByID(string _id){
+            foreach(Skill skill in Global.skills)
+            {
+                if(skill.id == _id)
+                {
+                    return skill;
+                }
+            }
+
+            return null;
         }
     }
 }

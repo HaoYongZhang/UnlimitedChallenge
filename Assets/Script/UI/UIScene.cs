@@ -26,7 +26,6 @@ public class UIScene : MonoBehaviour
     //技能按钮集合
     public List<SkillButton> skillButtons = new List<SkillButton>();
 
-    Transform player;
     //当前显示详细信息的技能
     Skill currentShowInfoSkill;
 
@@ -87,8 +86,6 @@ public class UIScene : MonoBehaviour
 
         for (int i = 0; i < 5; i++)
         {
-            int j = i;
-
             SkillButton skillButton = SkillButton.NewInstantiate();
             skillButton.transform.SetParent(skillsBar.transform, false);
 
@@ -126,7 +123,7 @@ public class UIScene : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        
     }
 
     // Update is called once per frame
@@ -158,7 +155,20 @@ public class UIScene : MonoBehaviour
 
     void FixedUpdate()
     {
-
+        for (int i = 0; i < Global.shortcutSkills_1.Count; i++)
+        {
+            if (Global.shortcutSkills_1[i] != null)
+            {
+                if (skillButtons[i].skill == null || Global.shortcutSkills_1[i].id != skillButtons[i].skill.id)
+                {
+                    skillButtons[i].setSkill(SkillManager.GetOneSkillByID(Global.shortcutSkills_1[i].id));
+                }
+            }
+            else
+            {
+                skillButtons[i].setSkill(null);
+            }
+        }
     }
 
     /// <summary>

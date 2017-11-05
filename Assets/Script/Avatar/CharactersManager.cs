@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class CharactersManager : MonoBehaviour
 {
-
-    CharactersManager _instance;
-
     public GameObject mainBone;
 
     GameObject head;
@@ -23,30 +20,25 @@ public class CharactersManager : MonoBehaviour
     GameObject leftWeapon;
     GameObject rightWeapon;
 
-    public string prefixBoneName = "mixamorig:";
-    public string head_name = "Head";
-    public string body_name = "Hips";
-    public string hand_left_arm_name = "LeftArm";
-    public string hand_left_forearm_name = "LeftForeArm";
-    public string hand_right_arm_name = "RightArm";
-    public string hand_right_forearm_name = "RightForeArm";
-    public string leg_left_thigh_name = "LeftUpLeg";
-    public string leg_left_shin_name = "LeftLeg";
-    public string leg_right_thigh_name = "RightUpLeg";
-    public string leg_right_shin_name = "RightLeg";
+    public static string prefixBoneName = "mixamorig:";
+    public static string head_name = "Head";
+    public static string body_name = "Hips";
+    public static string hand_left_arm_name = "LeftArm";
+    public static string hand_left_forearm_name = "LeftForeArm";
+    public static string hand_right_arm_name = "RightArm";
+    public static string hand_right_forearm_name = "RightForeArm";
+    public static string leg_left_thigh_name = "LeftUpLeg";
+    public static string leg_left_shin_name = "LeftLeg";
+    public static string leg_right_thigh_name = "RightUpLeg";
+    public static string leg_right_shin_name = "RightLeg";
 
-    public string left_weapon_name = "LeftWeapon";
-    public string right_weapon_name = "RightWeapon";
+    public static string left_weapon_name = "LeftWeapon";
+    public static string right_weapon_name = "RightWeapon";
 
     List<Transform> boneTransforms;
     Dictionary<string, GameObject> boneDict = new Dictionary<string, GameObject>();
 
     string path = "Material/Role/Hero/";
-
-    void Awake()
-    {
-        _instance = this;
-    }
 
     // Use this for initialization
     void Start()

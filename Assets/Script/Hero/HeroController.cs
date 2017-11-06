@@ -80,7 +80,7 @@ public class HeroController : MonoBehaviour {
             Global.hero.skillManager.useSkill(skillBtn.skill);
         }
 
-		if (Input.GetKeyDown(KeyCode.Q))
+		if (Input.GetKeyDown(KeyCode.R))
 		{
             if(UIScene.Instance.sceneProperty.activeSelf)
             {
@@ -94,7 +94,7 @@ public class HeroController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Global.hero.fightManager.type = CombatType.remote_short;
+            UIScene.Instance.switchSkillBar();
         }
 
         //当没有技能释放，点击鼠标左键

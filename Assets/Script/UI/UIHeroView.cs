@@ -77,9 +77,6 @@ public class UIHeroView : MonoBehaviour {
                 label.text = "<color=#ffffff>" + tabbarTexts[j] + "</color>";
             }
         }
-
-        //如果当前选项卡是技能栏目时
-        shortcutSkillView.SetActive(i == 1);
     }
 
     public void show()

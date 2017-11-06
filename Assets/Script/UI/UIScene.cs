@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Utility;
 using SkillClass;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class UIScene : MonoBehaviour
 {
@@ -25,6 +26,9 @@ public class UIScene : MonoBehaviour
 
     //技能按钮集合
     public List<SkillButton> skillButtons = new List<SkillButton>();
+
+    //当前的技能栏
+    int currentSkillBar;
 
     //当前显示详细信息的技能
     Skill currentShowInfoSkill;
@@ -111,8 +115,6 @@ public class UIScene : MonoBehaviour
         mpBar.value = mp / mpMax;
         hpText.text = hp + "/" + hpMax;
         mpText.text = mp + "/" + mpMax;
-
-
     }
 
     void Awake()
@@ -155,20 +157,74 @@ public class UIScene : MonoBehaviour
 
     void FixedUpdate()
     {
-        for (int i = 0; i < Global.shortcutSkills_1.Count; i++)
+        if(currentSkillBar == 0)
         {
-            if (Global.shortcutSkills_1[i] != null)
+            for (int i = 0; i < Global.shortcutSkills_1.Count; i++)
             {
-                if (skillButtons[i].skill == null || Global.shortcutSkills_1[i].id != skillButtons[i].skill.id)
+                if (Global.shortcutSkills_1[i] != null)
                 {
-                    skillButtons[i].setSkill(SkillManager.GetOneSkillByID(Global.shortcutSkills_1[i].id));
+                    if (skillButtons[i].skill == null || Global.shortcutSkills_1[i].id != skillButtons[i].skill.id)
+                    {
+                        skillButtons[i].setSkill(SkillManager.GetOneSkillByID(Global.shortcutSkills_1[i].id));
+                    }
                 }
+                else
+                {
+                    skillButtons[i].setSkill(null);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < Global.shortcutSkills_2.Count; i++)
+            {
+                if (Global.shortcutSkills_2[i] != null)
+                {
+                    if (skillButtons[i].skill == null || Global.shortcutSkills_2[i].id != skillButtons[i].skill.id)
+                    {
+                        skillButtons[i].setSkill(SkillManager.GetOneSkillByID(Global.shortcutSkills_2[i].id));
+                    }
+                }
+                else
+                {
+                    skillButtons[i].setSkill(null);
+                }
+            }
+        }
+
+    }
+
+    public void switchSkillBar()
+    {
+        Vector3 skillsBarPosition = skillsBar.GetComponent<RectTransform>().position;
+        Vector3 oldPosition = skillsBarPosition;
+        Vector3 newPosition = new Vector3(skillsBarPosition.x, skillsBarPosition.y - 150);
+
+        skillsBar.GetComponent<RectTransform>()
+                 .DOMove(newPosition, 0.15f)
+                 .SetDelay(0)
+                 .SetEase(Ease.Linear)
+                 .OnComplete(delegate () 
+        {
+            if (currentSkillBar == 0)
+            {
+                currentSkillBar = 1;
             }
             else
             {
-                skillButtons[i].setSkill(null);
+                currentSkillBar = 0;
             }
-        }
+
+            skillsBar.GetComponent<RectTransform>()
+                     .DOMove(oldPosition, 0.15f)
+                    .SetDelay(0)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(delegate () 
+            {
+                
+            });
+        });
+
     }
 
     /// <summary>
@@ -261,19 +317,19 @@ public class UIScene : MonoBehaviour
         }
         else
         {
-            info += "被动技能" + "\n";
             info += skill.description + "\n";
         }
 
         info += "<size=30>" + "<color=#00ffffff>" + "来源于" + skill.data["origin"] + "</color>" + "</size>";
 
-        float height = 100f;
+        string isActiveStr = skill.isActive ? "主动技能" : "被动技能";
+        float height = 0;
 
         foreach(Text label in labels)
         {
             if(label.name == "SkillName")
             {
-                label.text = skill.data["name"];
+                label.text = skill.data["name"] + "\n" + "<size=34>" + isActiveStr + "</size>";
             }
             else if (label.name == "SkillDescription")
             {

@@ -49,7 +49,7 @@ namespace SkillClass
             }
         }
 
-        void onClickSkillButton(GameObject obj, PointerEventData ed)
+        public void onClickSkillButton(GameObject obj, PointerEventData ed)
         {
             SkillButton skillBtn = obj.GetComponent<SkillButton>();
 

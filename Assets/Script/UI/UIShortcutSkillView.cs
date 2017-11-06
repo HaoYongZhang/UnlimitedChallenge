@@ -30,7 +30,6 @@ public class UIShortcutSkillView : MonoBehaviour {
             skillButton.transform.SetParent(shortcutSkillBar_2.transform, false);
 
             UIMouseDelegate mouseDelegate = skillButton.gameObject.GetComponent<UIMouseDelegate>();
-
             mouseDelegate.onDropDelegate = onDropSkill;
 
             skillBtns_2.Add(skillButton);
@@ -80,6 +79,12 @@ public class UIShortcutSkillView : MonoBehaviour {
         GameObject dropObj = eventData.pointerDrag;
         Skill replaceSkill = dropObj.GetComponent<SkillButton>().skill;
         Skill oldSkill = obj.GetComponent<SkillButton>().skill;
+
+        if(replaceSkill == null)
+        {
+            return;
+        }
+
 
         if(obj.transform.parent.name == "ShortcutSkillBar_1")
         {

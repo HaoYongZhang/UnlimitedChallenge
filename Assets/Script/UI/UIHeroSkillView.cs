@@ -97,7 +97,7 @@ public class UIHeroSkillView : MonoBehaviour {
                 skillButton.transform.SetParent(skillSet.transform, false);
 
                 UIMouseDelegate mouseDelegate = skillButton.gameObject.GetComponent<UIMouseDelegate>();
-                mouseDelegate.onPointerClickDelegate = onClickSkillButton;
+                mouseDelegate.onPointerClickDelegate = Global.hero.skillManager.onClickSkillButton;
                 mouseDelegate.onPointerEnterDelegate = UIScene.Instance.onPointerEnterSkillButton;
                 mouseDelegate.onPointerExitDelegate = UIScene.Instance.onPointerExitSkillButton;
                 mouseDelegate.onBeginDragDelegate = onBeginDragSkillButton;
@@ -109,7 +109,6 @@ public class UIHeroSkillView : MonoBehaviour {
 
     void onClickSkillButton(GameObject obj, PointerEventData eventData)
     {
-        //UIScene.Instance.sceneProperty.SetActive(false);
         UIScene.Instance.hideSkillInfo();
 
         SkillButton skillBtn = obj.GetComponent<SkillButton>();

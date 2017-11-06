@@ -10,7 +10,7 @@ public class EquipmentManager : MonoBehaviour
     public Equipment head;
     public Equipment body;
     public Equipment legs;
-    public Equipment shoes;
+    //public Equipment shoes;
     public Equipment treasure;
 
     // Use this for initialization
@@ -38,8 +38,8 @@ public enum EquipmentPart
     body,
     [Description("下身")]
     legs,
-    [Description("鞋子")]
-    shoes,
+    //[Description("鞋子")]
+    //shoes,
     [Description("宝物")]
     treasure
 }

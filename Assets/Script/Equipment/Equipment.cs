@@ -5,50 +5,93 @@ using System;
 using Utility;
 using SkillClass;
 
-public class Equipment {
-    //装备id
-    public string id;
-    //装备类型
-    public EquipmentPart part;
-    //装备类型名称
-    public string partName;
-    //武器属性
-    public Property property;
-    //装备图片
-    public Sprite imageSprite;
-    //装备技能
-    public Skill skill;
-
-    public Equipment(string _id)
+namespace EquipmentClass
+{
+    public class Equipment
     {
-        id = _id;
+        //装备id
+        public string id;
+        //装备类型
+        public EquipmentPart part;
+        //装备类型名称
+        public string partName;
+        //武器属性
+        public Property property;
+        //装备图片
+        public Sprite imageSprite;
+        //装备技能
+        public Skill skill;
+        //装备数据
+        public Dictionary<string, string> data = new Dictionary<string, string>();
 
-        part = getEnum<EquipmentPart>(id.Substring(0, 1));
+        public Equipment(string _id)
+        {
+            id = _id;
 
-        partName = PropertyUtil.GetEnumDescription(part);
+            part = getEnum<EquipmentPart>(id.Substring(0, 1));
 
-        loadPart();
-        loadWeaponType();
+            partName = PropertyUtil.GetEnumDescription(part);
 
-        imageSprite = Resources.Load("Image/Equipment/equipment_" + id, typeof(Sprite)) as Sprite;
-    }
+            loadPart();
 
-    T getEnum<T>(string enumValue)
-    {
-        T enumObj = (T)Enum.Parse(typeof(T), enumValue);
+            imageSprite = Resources.Load("Image/Equipment/equipment_" + id, typeof(Sprite)) as Sprite;
+        }
 
-        return enumObj;
-    }
+        T getEnum<T>(string enumValue)
+        {
+            T enumObj = (T)Enum.Parse(typeof(T), enumValue);
 
-    void loadPart()
-    {
-        //查找技能的csv文件
-        string fileName = "equipment_" + part.ToString() + ".csv";
+            return enumObj;
+        }
 
-    }
+        void loadPart()
+        {
+            //查找技能的csv文件
+            string fileName = "equipment_" + part.ToString() + ".csv";
 
-    void loadWeaponType()
-    {
-        
+            //csv文件的第一行数据为属性数据
+            List<string> keyList = new List<string>();
+            //csv文件的列表数据
+            List<string> valueList = new List<string>();
+
+            List<List<string>> csvData = CSV.Instance.loadFile(Application.dataPath + "/Resources/Data/Skill/Category", fileName);
+            for (int i = 0; i < csvData.Count; i++)
+            {
+                if (i == 0)
+                {
+                    keyList = csvData[i];
+                }
+                else
+                {
+                    if (csvData[i][0] == id)
+                    {
+                        valueList = csvData[i];
+                        break;
+                    }
+                }
+            }
+
+            Dictionary<string, string> dataDict = new Dictionary<string, string>();
+
+            //把类别数据装载到skill类的data里面
+            for (int i = 0; i < keyList.Count; i++)
+            {
+                dataDict.Add(keyList[i], valueList[i]);
+            }
+
+            foreach (KeyValuePair<string, string> dict in dataDict)
+            {
+                if (PropertyUtil.isExist(property, dict.Key))
+                {
+                    PropertyUtil.ReflectSetter(property, dict.Key, dict.Value);
+                }
+                else
+                {
+                    data.Add(dict.Key, dict.Value);
+                }
+            }
+        }
+
     }
 }
+

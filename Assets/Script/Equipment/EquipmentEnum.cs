@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.ComponentModel;
 
-public class EquipmentEnum {
-
+namespace EquipmentClass
+{
     /// <summary>
     /// 装备部位
     /// </summary>
     public enum EquipmentPart
     {
+        [Description("不存在")]
+        nothing,
+        [Description("武器")]
+        weapon,
         [Description("头")]
         head,
         [Description("上身")]
         body,
         [Description("下身")]
         legs,
-        //[Description("鞋子")]
-        //shoes,
         [Description("宝物")]
         treasure
     }
@@ -27,8 +29,6 @@ public class EquipmentEnum {
     /// </summary>
     public enum WeaponType
     {
-        [Description("不存在")]
-        nothing,
         [Description("非武器")]
         none,
         [Description("刀剑")]
@@ -80,4 +80,5 @@ public class EquipmentEnum {
         [Description("能量")]
         other
     }
+
 }

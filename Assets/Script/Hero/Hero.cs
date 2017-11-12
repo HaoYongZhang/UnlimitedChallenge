@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SkillClass;
+using EquipmentClass;
 using Utility;
 
 public class Hero : MonoBehaviour {

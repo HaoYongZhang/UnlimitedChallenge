@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 114469099887193308}
   - component: {fileID: 114965168309554274}
   m_Layer: 5
-  m_Name: EquipmentButton (1)
+  m_Name: EquipmentButton_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: 222190320302354004}
   - component: {fileID: 114553693237301330}
   m_Layer: 5
-  m_Name: Text (2)
+  m_Name: EquipmentText_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 114785713809855858}
   - component: {fileID: 114902479321957262}
   m_Layer: 5
-  m_Name: EquipmentButton
+  m_Name: EquipmentButton_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -529,7 +529,7 @@ GameObject:
   - component: {fileID: 114194307436385648}
   - component: {fileID: 114393070016299292}
   m_Layer: 5
-  m_Name: EquipmentButton (2)
+  m_Name: EquipmentButton_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -546,7 +546,7 @@ GameObject:
   - component: {fileID: 222339357626253298}
   - component: {fileID: 114755549374943940}
   m_Layer: 5
-  m_Name: Text
+  m_Name: EquipmentText_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -648,7 +648,7 @@ GameObject:
   - component: {fileID: 222204892485223296}
   - component: {fileID: 114662368932037474}
   m_Layer: 5
-  m_Name: Text (1)
+  m_Name: EquipmentText_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -732,6 +732,7 @@ GameObject:
   - component: {fileID: 224340086969316770}
   - component: {fileID: 222894896098127314}
   - component: {fileID: 114621309028019804}
+  - component: {fileID: 114050735902625822}
   m_Layer: 5
   m_Name: ItemsView
   m_TagString: Untagged
@@ -1106,7 +1107,7 @@ GameObject:
   - component: {fileID: 222188127976540348}
   - component: {fileID: 114036970657774502}
   m_Layer: 5
-  m_Name: Text
+  m_Name: EquipmentText_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1126,7 +1127,7 @@ GameObject:
   - component: {fileID: 114610645258235104}
   - component: {fileID: 114297121096446988}
   m_Layer: 5
-  m_Name: EquipmentButton
+  m_Name: EquipmentButton_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1210,7 +1211,7 @@ GameObject:
   - component: {fileID: 222724255469374574}
   - component: {fileID: 114512629395015038}
   m_Layer: 5
-  m_Name: Text (2)
+  m_Name: EquipmentText_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1434,7 +1435,7 @@ GameObject:
   - component: {fileID: 114426704723702058}
   - component: {fileID: 114130825679653526}
   m_Layer: 5
-  m_Name: EquipmentButton (2)
+  m_Name: EquipmentButton_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1881,7 +1882,7 @@ GameObject:
   - component: {fileID: 114966270629348878}
   - component: {fileID: 114272058612008626}
   m_Layer: 5
-  m_Name: EquipmentButton (1)
+  m_Name: EquipmentButton_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1967,7 +1968,7 @@ GameObject:
   - component: {fileID: 222528411089546730}
   - component: {fileID: 114978822192408116}
   m_Layer: 5
-  m_Name: Text (1)
+  m_Name: EquipmentText_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2454,6 +2455,29 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114050735902625822
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1376996428742810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b35bda9d87454678a404751a69dcf00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftWeapon: {fileID: 114235466523657146}
+  rightWeapon: {fileID: 114445919034064992}
+  head: {fileID: 114218587882003174}
+  body: {fileID: 114284699154981378}
+  legs: {fileID: 114143153031763858}
+  treasure: {fileID: 114562783095188910}
+  leftWeaponText: {fileID: 114553693237301330}
+  rightWeaponText: {fileID: 114036970657774502}
+  headText: {fileID: 114755549374943940}
+  bodyText: {fileID: 114662368932037474}
+  legsText: {fileID: 114512629395015038}
+  treasureText: {fileID: 114978822192408116}
 --- !u!114 &114051040594422578
 MonoBehaviour:
   m_ObjectHideFlags: 1

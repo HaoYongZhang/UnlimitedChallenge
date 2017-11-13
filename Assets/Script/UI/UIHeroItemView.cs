@@ -7,6 +7,7 @@ using EquipmentClass;
 public class UIHeroItemView : MonoBehaviour {
     public GameObject equipmentLeftView;
     public GameObject equipmentRightView;
+    public GameObject itemsSet;
 
     public EquipmentButton leftWeapon;
     public EquipmentButton rightWeapon;
@@ -78,22 +79,28 @@ public class UIHeroItemView : MonoBehaviour {
         legs.transform.SetParent(equipmentRightView.transform, false);
         legsText.transform.SetParent(equipmentRightView.transform, false);
 
+        setItemsSet();
     }   
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
-}
 
-public struct EquipmentButtonStruct
-{
-    public Button btn;
-    public Text txt;
-
-    public EquipmentButtonStruct(Button _btn,Text _txt)
+    void setItemsSet()
     {
-        btn = _btn;
-        txt = _txt;
+        foreach (Equipment equipment in Global.equipments)
+        {
+            EquipmentButton equipmentButton = EquipmentButton.NewInstantiate(equipment);
+            equipmentButton.transform.SetParent(itemsSet.transform, false);
+
+            //UIMouseDelegate mouseDelegate = equipmentButton.gameObject.GetComponent<UIMouseDelegate>();
+            //mouseDelegate.onPointerClickDelegate = Global.hero.skillManager.onClickSkillButton;
+            //mouseDelegate.onPointerEnterDelegate = UIScene.Instance.onPointerEnterSkillButton;
+            //mouseDelegate.onPointerExitDelegate = UIScene.Instance.onPointerExitSkillButton;
+            //mouseDelegate.onBeginDragDelegate = onBeginDragSkillButton;
+            //mouseDelegate.onDragDelegate = onDragSkillButton;
+            //mouseDelegate.onEndDragDelegate = onEndDragSkillButton;
+        }
     }
 }

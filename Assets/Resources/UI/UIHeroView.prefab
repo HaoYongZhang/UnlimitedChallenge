@@ -882,7 +882,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1625560871883290
 GameObject:
   m_ObjectHideFlags: 1
@@ -1185,8 +1185,9 @@ GameObject:
   - component: {fileID: 224184063316534870}
   - component: {fileID: 222738181378700900}
   - component: {fileID: 114987043170631976}
+  - component: {fileID: 114457113592573372}
   m_Layer: 5
-  m_Name: Panel_2
+  m_Name: ItemsSet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1622,6 +1623,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equipmentLeftView: {fileID: 1968932222096206}
   equipmentRightView: {fileID: 1612714619855006}
+  itemsSet: {fileID: 1833011454754812}
   leftWeapon: {fileID: 0}
   rightWeapon: {fileID: 0}
   head: {fileID: 0}
@@ -2838,6 +2840,29 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114457113592573372
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1833011454754812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -2095666955, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 40
+    m_Right: 40
+    m_Top: 40
+    m_Bottom: 40
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 80, y: 80}
+  m_Spacing: {x: 0, y: 0}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!114 &114457202689528230
 MonoBehaviour:
   m_ObjectHideFlags: 1

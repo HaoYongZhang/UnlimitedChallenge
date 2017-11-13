@@ -23,6 +23,7 @@ public class EquipmentButton : MonoBehaviour {
     {
         EquipmentButton equipmentButton = NewInstantiate();
         equipmentButton.equipment = _equipment;
+        equipmentButton.icon.sprite = _equipment.imageSprite;
 
         return equipmentButton;
     }
@@ -32,6 +33,7 @@ public class EquipmentButton : MonoBehaviour {
         EquipmentButton equipmentButton = NewInstantiate();
         equipmentButton.part = _part;
         equipmentButton.defaultIcon = equipmentButton.getPartDefaultImage(_part);
+        equipmentButton.icon.sprite = equipmentButton.defaultIcon;
 
         return equipmentButton;
     }
@@ -46,6 +48,20 @@ public class EquipmentButton : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    void FixedUpdate()
+    {
+        //当技能移除时
+        if (equipment == null)
+        {
+            icon.sprite = defaultIcon;
+        }
+
+        //if (equipment != null)
+        //{
+        //    Equipment oneEquipment = EquipmentManager.GetOneSkillByID(equipment.id);
+        //}
+    }
 
     Sprite getPartDefaultImage(EquipmentPart _part){
         string equipmentPath = "";
@@ -78,7 +94,7 @@ public class EquipmentButton : MonoBehaviour {
                 break;
         }
 
-        Sprite imageSprite = Resources.Load("Equipment/" + equipmentPath, typeof(Sprite)) as Sprite;
+        Sprite imageSprite = Resources.Load("Image/Equipment/" + equipmentPath, typeof(Sprite)) as Sprite;
         return imageSprite;
     }
 }

@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using SkillClass;
+using EquipmentClass;
+
 public class Global{
     public static Hero hero{
         get
@@ -16,8 +19,14 @@ public class Global{
     /// </summary>
     public static List<Skill> skills = new List<Skill>();
 
+    /// <summary>
+    /// 快捷技能栏1
+    /// </summary>
     public static List<Skill> shortcutSkills_1 = new List<Skill>(5){null, null, null, null, null};
 
+    /// <summary>
+    /// 快捷技能栏2
+    /// </summary>
     public static List<Skill> shortcutSkills_2 = new List<Skill>(5){null, null, null, null, null};
 
     /// <summary>
@@ -61,7 +70,9 @@ public class Global{
         }
     }
 
-
+    /// <summary>
+    /// 技能释放状态
+    /// </summary>
     public static SkillRelease skillRelease = SkillRelease.none;
 
     public static Skill FindSkillInSkills(string _id)
@@ -76,6 +87,30 @@ public class Global{
 
         return null;
     }
+
+    /// <summary>
+    /// 所有物品
+    /// </summary>
+    public static List<System.Object> items = new List<System.Object>();
+
+    public static List<Equipment> equipments
+    {
+        get{
+            
+            List <Equipment> list = new List<Equipment>();
+
+            foreach(System.Object o in items)
+            {
+                if(o.GetType().ToString() == "EquipmentClass.Equipment")
+                {
+                    list.Add((Equipment)o);
+                }
+            }
+
+            return list;
+        }
+    }
+
 
     // 记录人物进入场景前的位置数组
 	public static List<Vector3> enterSceneBeforPositions = new List<Vector3>();
@@ -98,7 +133,7 @@ public class Global{
         
         GameObject gameObject = new GameObject();
         gameObject.name = "SceneCommonComponent";
-        Object.DontDestroyOnLoad(gameObject);
+        UnityEngine.Object.DontDestroyOnLoad(gameObject);
 
         //设置主摄像头
         Camera _mainCamera = gameObject.AddComponent<Camera> ();

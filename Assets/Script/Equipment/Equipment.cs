@@ -16,13 +16,15 @@ namespace EquipmentClass
         //装备类型名称
         public string partName;
         //武器属性
-        public Property property;
+        public Property property = new Property();
         //装备图片
         public Sprite imageSprite;
         //装备技能
         public Skill skill;
         //装备数据
         public Dictionary<string, string> data = new Dictionary<string, string>();
+        //是否穿着
+        public bool isWear;
 
         public Equipment(string _id)
         {
@@ -54,7 +56,7 @@ namespace EquipmentClass
             //csv文件的列表数据
             List<string> valueList = new List<string>();
 
-            List<List<string>> csvData = CSV.Instance.loadFile(Application.dataPath + "/Resources/Data/Skill/Category", fileName);
+            List<List<string>> csvData = CSV.Instance.loadFile(Application.dataPath + "/Resources/Data/Equipment", fileName);
             for (int i = 0; i < csvData.Count; i++)
             {
                 if (i == 0)
@@ -83,7 +85,11 @@ namespace EquipmentClass
             {
                 if (PropertyUtil.isExist(property, dict.Key))
                 {
-                    PropertyUtil.ReflectSetter(property, dict.Key, dict.Value);
+                    if(dict.Value !=  "")
+                    {
+                        PropertyUtil.ReflectSetter(property, dict.Key, float.Parse(dict.Value));
+                    }
+
                 }
                 else
                 {

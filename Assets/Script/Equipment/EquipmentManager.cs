@@ -26,6 +26,24 @@ namespace EquipmentClass
         {
 
         }
+
+        /// <summary>
+        /// 返回同一个技能，共用这个技能的所有状态，否则会有深拷贝造成技能数据不一致
+        /// </summary>
+        /// <returns>The one skill by identifier.</returns>
+        /// <param name="_id">Identifier.</param>
+        public static Equipment GetOneSkillByID(string _id)
+        {
+            foreach (Equipment equipment in Global.equipments)
+            {
+                if (equipment.id == _id)
+                {
+                    return equipment;
+                }
+            }
+
+            return null;
+        }
     }
 }
 

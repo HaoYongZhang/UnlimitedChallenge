@@ -97,4 +97,9 @@ public class EquipmentButton : MonoBehaviour {
         Sprite imageSprite = Resources.Load("Image/Equipment/" + equipmentPath, typeof(Sprite)) as Sprite;
         return imageSprite;
     }
+
+    public void setEquipment(Equipment _equipment){
+        equipment = _equipment;
+        icon.sprite = _equipment.imageSprite;
+    }
 }

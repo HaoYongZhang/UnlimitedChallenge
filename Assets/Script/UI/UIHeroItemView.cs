@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using EquipmentClass;
+using UnityEngine.EventSystems;
 
 public class UIHeroItemView : MonoBehaviour {
     public GameObject equipmentLeftView;
@@ -26,6 +27,9 @@ public class UIHeroItemView : MonoBehaviour {
     List<string> equipmentNameList = new List<string>{"主武器", "副武器", "头部", "上半身", "下半身", "宝物"};
     List<Text> equipmentTextList = new List<Text>();
 
+    //拖动物品时的临时创建对象
+    GameObject dragTempObject;
+
 	// Use this for initialization
 	void Start () {
         leftWeapon = EquipmentButton.NewInstantiate(EquipmentPart.weapon);
@@ -34,6 +38,8 @@ public class UIHeroItemView : MonoBehaviour {
         body = EquipmentButton.NewInstantiate(EquipmentPart.body);
         legs = EquipmentButton.NewInstantiate(EquipmentPart.legs);
         treasure = EquipmentButton.NewInstantiate(EquipmentPart.treasure);
+
+        leftWeapon.gameObject.GetComponent<UIMouseDelegate>().onDropDelegate = onDropSkill;
 
         leftWeaponText = new GameObject().AddComponent<Text>();
         rightWeaponText = new GameObject().AddComponent<Text>();
@@ -94,13 +100,58 @@ public class UIHeroItemView : MonoBehaviour {
             EquipmentButton equipmentButton = EquipmentButton.NewInstantiate(equipment);
             equipmentButton.transform.SetParent(itemsSet.transform, false);
 
-            //UIMouseDelegate mouseDelegate = equipmentButton.gameObject.GetComponent<UIMouseDelegate>();
+            UIMouseDelegate mouseDelegate = equipmentButton.gameObject.GetComponent<UIMouseDelegate>();
             //mouseDelegate.onPointerClickDelegate = Global.hero.skillManager.onClickSkillButton;
             //mouseDelegate.onPointerEnterDelegate = UIScene.Instance.onPointerEnterSkillButton;
             //mouseDelegate.onPointerExitDelegate = UIScene.Instance.onPointerExitSkillButton;
-            //mouseDelegate.onBeginDragDelegate = onBeginDragSkillButton;
-            //mouseDelegate.onDragDelegate = onDragSkillButton;
-            //mouseDelegate.onEndDragDelegate = onEndDragSkillButton;
+            mouseDelegate.onBeginDragDelegate = onBeginDragSkillButton;
+            mouseDelegate.onDragDelegate = onDragSkillButton;
+            mouseDelegate.onEndDragDelegate = onEndDragSkillButton;
         }
+    }
+
+    void onBeginDragSkillButton(GameObject obj, PointerEventData eventData)
+    {
+        //代替品实例化
+        dragTempObject = new GameObject("DragTempObject");
+        dragTempObject.transform.SetParent(UIScene.Instance.sceneProperty.transform, false);
+        dragTempObject.AddComponent<RectTransform>();
+
+        EquipmentButton temp = EquipmentButton.NewInstantiate();
+        temp.transform.SetParent(dragTempObject.transform, false);
+        temp.setEquipment(obj.GetComponentInChildren<EquipmentButton>().equipment);
+
+        //防止拖拽结束时，代替品挡住了准备覆盖的对象而使得 OnDrop（） 无效
+        CanvasGroup group = dragTempObject.AddComponent<CanvasGroup>();
+        group.blocksRaycasts = false;
+    }
+
+    void onDragSkillButton(GameObject obj, PointerEventData eventData)
+    {
+        //并将拖拽时的坐标给予被拖拽对象的代替品
+
+        Vector3 movePosition = new Vector3(Input.mousePosition.x + 20, Input.mousePosition.y - 20);
+
+        dragTempObject.transform.position = movePosition;
+    }
+
+    void onEndDragSkillButton(GameObject obj, PointerEventData eventData)
+    {
+        //拖拽结束，销毁代替品
+        if (dragTempObject)
+        {
+            Destroy(dragTempObject);
+        }
+    }
+
+
+    /////////////
+    void onDropSkill(GameObject obj, PointerEventData eventData)
+    {
+        GameObject dropObj = eventData.pointerDrag;
+        Equipment replaceObj = dropObj.GetComponent<EquipmentButton>().equipment;
+        Equipment oldObj = obj.GetComponent<EquipmentButton>().equipment;
+
+        obj.GetComponent<EquipmentButton>().setEquipment(replaceObj);
     }
 }

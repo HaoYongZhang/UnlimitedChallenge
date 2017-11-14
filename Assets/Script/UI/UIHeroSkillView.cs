@@ -100,6 +100,7 @@ public class UIHeroSkillView : MonoBehaviour {
                 mouseDelegate.onPointerClickDelegate = Global.hero.skillManager.onClickSkillButton;
                 mouseDelegate.onPointerEnterDelegate = UIScene.Instance.onPointerEnterSkillButton;
                 mouseDelegate.onPointerExitDelegate = UIScene.Instance.onPointerExitSkillButton;
+
                 mouseDelegate.onBeginDragDelegate = onBeginDragSkillButton;
                 mouseDelegate.onDragDelegate = onDragSkillButton;
                 mouseDelegate.onEndDragDelegate = onEndDragSkillButton;

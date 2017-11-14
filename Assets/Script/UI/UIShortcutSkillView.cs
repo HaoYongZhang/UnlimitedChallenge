@@ -112,8 +112,5 @@ public class UIShortcutSkillView : MonoBehaviour {
             int objIndex = skillBtns_2.IndexOf(obj.GetComponent<SkillButton>());
             Global.shortcutSkills_2[objIndex] = SkillManager.GetOneSkillByID(replaceSkill.id);
         }
-
-
-
     }
 }

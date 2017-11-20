@@ -32,6 +32,7 @@ public class UIHeroItemView : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        //创建装备按钮
         leftWeapon = EquipmentButton.NewInstantiate(EquipmentPart.weapon);
         rightWeapon = EquipmentButton.NewInstantiate(EquipmentPart.weapon);
         head = EquipmentButton.NewInstantiate(EquipmentPart.head);
@@ -39,8 +40,15 @@ public class UIHeroItemView : MonoBehaviour {
         legs = EquipmentButton.NewInstantiate(EquipmentPart.legs);
         treasure = EquipmentButton.NewInstantiate(EquipmentPart.treasure);
 
+        //设置装备拖拽的代理
         leftWeapon.gameObject.GetComponent<UIMouseDelegate>().onDropDelegate = onDropSkill;
+        rightWeapon.gameObject.GetComponent<UIMouseDelegate>().onDropDelegate = onDropSkill;
+        head.gameObject.GetComponent<UIMouseDelegate>().onDropDelegate = onDropSkill;
+        body.gameObject.GetComponent<UIMouseDelegate>().onDropDelegate = onDropSkill;
+        legs.gameObject.GetComponent<UIMouseDelegate>().onDropDelegate = onDropSkill;
+        treasure.gameObject.GetComponent<UIMouseDelegate>().onDropDelegate = onDropSkill;
 
+        //添加装备文本
         leftWeaponText = new GameObject().AddComponent<Text>();
         rightWeaponText = new GameObject().AddComponent<Text>();
         headText = new GameObject().AddComponent<Text>();
@@ -145,13 +153,18 @@ public class UIHeroItemView : MonoBehaviour {
     }
 
 
-    /////////////
     void onDropSkill(GameObject obj, PointerEventData eventData)
     {
         GameObject dropObj = eventData.pointerDrag;
-        Equipment replaceObj = dropObj.GetComponent<EquipmentButton>().equipment;
-        Equipment oldObj = obj.GetComponent<EquipmentButton>().equipment;
 
-        obj.GetComponent<EquipmentButton>().setEquipment(replaceObj);
+        Equipment replaceEquipment = dropObj.GetComponent<EquipmentButton>().equipment;
+        Equipment oldEquipment = obj.GetComponent<EquipmentButton>().equipment;
+
+        if(replaceEquipment.part != obj.GetComponent<EquipmentButton>().part)
+        {
+            return;
+        }
+
+        obj.GetComponent<EquipmentButton>().setEquipment(replaceEquipment);
     }
 }

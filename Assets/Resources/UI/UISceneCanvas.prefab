@@ -461,7 +461,7 @@ GameObject:
   - component: {fileID: 222682125529640610}
   - component: {fileID: 114968758851818930}
   m_Layer: 5
-  m_Name: Background
+  m_Name: WeaponBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -493,6 +493,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224210865391760780}
   - component: {fileID: 222530598313613418}
+  - component: {fileID: 114960628482333058}
   m_Layer: 5
   m_Name: FightBar
   m_TagString: Untagged
@@ -1633,6 +1634,20 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
+--- !u!114 &114960628482333058
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1813985970808244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d290ad9fc3256421d824a750f379103d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponImage: {fileID: 114351320076119746}
+  weaponBG: {fileID: 114968758851818930}
+  weaponType: 0
 --- !u!114 &114968758851818930
 MonoBehaviour:
   m_ObjectHideFlags: 1

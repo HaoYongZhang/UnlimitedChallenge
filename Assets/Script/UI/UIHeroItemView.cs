@@ -10,12 +10,12 @@ public class UIHeroItemView : MonoBehaviour {
     public GameObject equipmentRightView;
     public GameObject itemsSet;
 
-    public EquipmentButton leftWeapon;
-    public EquipmentButton rightWeapon;
-    public EquipmentButton head;
-    public EquipmentButton body;
-    public EquipmentButton legs;
-    public EquipmentButton treasure;
+    public EquipmentClass.UIButton leftWeapon;
+    public EquipmentClass.UIButton rightWeapon;
+    public EquipmentClass.UIButton head;
+    public EquipmentClass.UIButton body;
+    public EquipmentClass.UIButton legs;
+    public EquipmentClass.UIButton treasure;
 
     public Text leftWeaponText;
     public Text rightWeaponText;
@@ -33,12 +33,12 @@ public class UIHeroItemView : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         //创建装备按钮
-        leftWeapon = EquipmentButton.NewInstantiate(EquipmentPart.weapon);
-        rightWeapon = EquipmentButton.NewInstantiate(EquipmentPart.weapon);
-        head = EquipmentButton.NewInstantiate(EquipmentPart.head);
-        body = EquipmentButton.NewInstantiate(EquipmentPart.body);
-        legs = EquipmentButton.NewInstantiate(EquipmentPart.legs);
-        treasure = EquipmentButton.NewInstantiate(EquipmentPart.treasure);
+        leftWeapon = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.weapon);
+        rightWeapon = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.weapon);
+        head = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.head);
+        body = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.body);
+        legs = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.legs);
+        treasure = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.treasure);
 
         //设置装备拖拽的代理
         leftWeapon.gameObject.GetComponent<UIMouseDelegate>().onDropDelegate = onDropSkill;
@@ -105,7 +105,7 @@ public class UIHeroItemView : MonoBehaviour {
     {
         foreach (Equipment equipment in Global.equipments)
         {
-            EquipmentButton equipmentButton = EquipmentButton.NewInstantiate(equipment);
+            EquipmentClass.UIButton equipmentButton = EquipmentClass.UIButton.NewInstantiate(equipment);
             equipmentButton.transform.SetParent(itemsSet.transform, false);
 
             UIMouseDelegate mouseDelegate = equipmentButton.gameObject.GetComponent<UIMouseDelegate>();
@@ -125,9 +125,9 @@ public class UIHeroItemView : MonoBehaviour {
         dragTempObject.transform.SetParent(UIScene.Instance.sceneProperty.transform, false);
         dragTempObject.AddComponent<RectTransform>();
 
-        EquipmentButton temp = EquipmentButton.NewInstantiate();
+        EquipmentClass.UIButton temp = EquipmentClass.UIButton.NewInstantiate();
         temp.transform.SetParent(dragTempObject.transform, false);
-        temp.setEquipment(obj.GetComponentInChildren<EquipmentButton>().equipment);
+        temp.setEquipment(obj.GetComponentInChildren<EquipmentClass.UIButton>().equipment);
 
         //防止拖拽结束时，代替品挡住了准备覆盖的对象而使得 OnDrop（） 无效
         CanvasGroup group = dragTempObject.AddComponent<CanvasGroup>();
@@ -157,14 +157,15 @@ public class UIHeroItemView : MonoBehaviour {
     {
         GameObject dropObj = eventData.pointerDrag;
 
-        Equipment replaceEquipment = dropObj.GetComponent<EquipmentButton>().equipment;
-        Equipment oldEquipment = obj.GetComponent<EquipmentButton>().equipment;
+        Equipment replaceEquipment = dropObj.GetComponent<EquipmentClass.UIButton>().equipment;
+        Equipment oldEquipment = obj.GetComponent<EquipmentClass.UIButton>().equipment;
 
-        if(replaceEquipment.part != obj.GetComponent<EquipmentButton>().part)
+        if(replaceEquipment.part != obj.GetComponent<EquipmentClass.UIButton>().part)
         {
             return;
         }
 
-        obj.GetComponent<EquipmentButton>().setEquipment(replaceEquipment);
+        Global.hero.equipmentManager.replaceEquipmentPart(replaceEquipment);
+        obj.GetComponent<EquipmentClass.UIButton>().setEquipment(replaceEquipment);
     }
 }

@@ -7,10 +7,13 @@ using UnityEngine.EventSystems;
 
 namespace SkillClass
 {
-    public class SkillManager : MonoBehaviour
+    /// <summary>
+    /// 技能管理中心
+    /// </summary>
+    public class Manager : MonoBehaviour
     {
         // SkillManager单例
-        public static SkillManager _instance;
+        public static Manager _instance;
 
         public Skill hasSelectedSkill;
 
@@ -43,7 +46,7 @@ namespace SkillClass
             {
                 //int j = i;
 
-                SkillButton btn = UIScene.Instance.skillButtons[i];
+                SkillClass.UIButton btn = UIScene.Instance.skillButtons[i];
 
                 btn.gameObject.GetComponent<UIMouseDelegate>().onPointerClickDelegate = onClickSkillButton;
             }
@@ -51,7 +54,7 @@ namespace SkillClass
 
         public void onClickSkillButton(GameObject obj, PointerEventData ed)
         {
-            SkillButton skillBtn = obj.GetComponent<SkillButton>();
+            SkillClass.UIButton skillBtn = obj.GetComponent<SkillClass.UIButton>();
 
             if(skillBtn.skill == null)
             {
@@ -82,7 +85,7 @@ namespace SkillClass
         {
             for (int i = 0; i < Global.skills.Count; i++)
             {
-                Skill oneSkill = SkillManager.GetOneSkillByID(Global.skills[i].id);
+                Skill oneSkill = Manager.GetOneSkillByID(Global.skills[i].id);
                 if (oneSkill.isCooldown)
                 {
                     if (oneSkill.currentCoolDown < float.Parse(oneSkill.data["cooldown"]))

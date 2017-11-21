@@ -17,11 +17,11 @@ public class Hero : MonoBehaviour {
     public Animator animator;
     public HeroController heroController;
     public CharactersManager charactersManager;
-    public SkillManager skillManager;
+    public SkillClass.Manager skillManager;
     public ShootManager shootManager;
     public FightManager fightManager;
     public RangeManager rangeManager;
-    public EquipmentManager equipmentManager;
+    public EquipmentClass.Manager equipmentManager;
 
     bool hasLoadController;
 
@@ -43,10 +43,10 @@ public class Hero : MonoBehaviour {
 
                 _instance.heroController = gameObject.AddComponent<HeroController>();
                 _instance.charactersManager = gameObject.AddComponent<CharactersManager>();
-                _instance.skillManager = gameObject.AddComponent<SkillManager>();
+                _instance.skillManager = gameObject.AddComponent<SkillClass.Manager>();
                 _instance.shootManager = gameObject.AddComponent<ShootManager>();
                 _instance.fightManager = gameObject.AddComponent<FightManager>();
-                _instance.equipmentManager = gameObject.AddComponent<EquipmentManager>();
+                _instance.equipmentManager = gameObject.AddComponent<EquipmentClass.Manager>();
 
                 _instance.rigid = gameObject.GetComponent<Rigidbody>();
                 _instance.animator = gameObject.GetComponent<Animator>();
@@ -77,9 +77,9 @@ public class Hero : MonoBehaviour {
 
         Global.items.Add(new Equipment("10010"));
 
-        Global.shortcutSkills_1[0] = SkillManager.GetOneSkillByID(normal.talentSkillID);
-        Global.shortcutSkills_1[1] = SkillManager.GetOneSkillByID("310030");
-        Global.shortcutSkills_1[2] = SkillManager.GetOneSkillByID("630001");
+        Global.shortcutSkills_1[0] = SkillClass.Manager.GetOneSkillByID(normal.talentSkillID);
+        Global.shortcutSkills_1[1] = SkillClass.Manager.GetOneSkillByID("310030");
+        Global.shortcutSkills_1[2] = SkillClass.Manager.GetOneSkillByID("630001");
 
         List<Equipment> e = Global.equipments;
         Debug.Log("测试" + e[0].partName);

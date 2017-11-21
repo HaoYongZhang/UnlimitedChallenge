@@ -25,7 +25,7 @@ public class UIScene : MonoBehaviour
     public Text mpRegenerationText;
 
     //技能按钮集合
-    public List<SkillButton> skillButtons = new List<SkillButton>();
+    public List<SkillClass.UIButton> skillButtons = new List<SkillClass.UIButton>();
 
     //当前的技能栏
     int currentSkillBar;
@@ -90,7 +90,7 @@ public class UIScene : MonoBehaviour
 
         for (int i = 0; i < 5; i++)
         {
-            SkillButton skillButton = SkillButton.NewInstantiate();
+            SkillClass.UIButton skillButton = SkillClass.UIButton.NewInstantiate();
             skillButton.transform.SetParent(skillsBar.transform, false);
 
             UIMouseDelegate mouseDelegate = skillButton.gameObject.GetComponent<UIMouseDelegate>();
@@ -165,7 +165,7 @@ public class UIScene : MonoBehaviour
                 {
                     if (skillButtons[i].skill == null || Global.shortcutSkills_1[i].id != skillButtons[i].skill.id)
                     {
-                        skillButtons[i].setSkill(SkillManager.GetOneSkillByID(Global.shortcutSkills_1[i].id));
+                        skillButtons[i].setSkill(SkillClass.Manager.GetOneSkillByID(Global.shortcutSkills_1[i].id));
                     }
                 }
                 else
@@ -182,7 +182,7 @@ public class UIScene : MonoBehaviour
                 {
                     if (skillButtons[i].skill == null || Global.shortcutSkills_2[i].id != skillButtons[i].skill.id)
                     {
-                        skillButtons[i].setSkill(SkillManager.GetOneSkillByID(Global.shortcutSkills_2[i].id));
+                        skillButtons[i].setSkill(SkillClass.Manager.GetOneSkillByID(Global.shortcutSkills_2[i].id));
                     }
                 }
                 else
@@ -235,7 +235,7 @@ public class UIScene : MonoBehaviour
     {
         foreach(Skill skill in Global.skills)
         {
-            SkillButton skillButton = obj.GetComponent<SkillButton>();
+            SkillClass.UIButton skillButton = obj.GetComponent<SkillClass.UIButton>();
 
             if (skillButton.skill != null)
             {

@@ -93,7 +93,7 @@ public class UIHeroSkillView : MonoBehaviour {
         {
             if(skill.type == type)
             {
-                SkillButton skillButton = SkillButton.NewInstantiate(skill);
+                SkillClass.UIButton skillButton = SkillClass.UIButton.NewInstantiate(skill);
                 skillButton.transform.SetParent(skillSet.transform, false);
 
                 UIMouseDelegate mouseDelegate = skillButton.gameObject.GetComponent<UIMouseDelegate>();
@@ -112,7 +112,7 @@ public class UIHeroSkillView : MonoBehaviour {
     {
         UIScene.Instance.hideSkillInfo();
 
-        SkillButton skillBtn = obj.GetComponent<SkillButton>();
+        SkillClass.UIButton skillBtn = obj.GetComponent<SkillClass.UIButton>();
 
         Global.hero.skillManager.useSkill(skillBtn.skill);
     }
@@ -124,9 +124,9 @@ public class UIHeroSkillView : MonoBehaviour {
         dragTempObject.transform.SetParent(UIScene.Instance.sceneProperty.transform, false);
         dragTempObject.AddComponent<RectTransform>();
 
-        SkillButton tempskillButton = SkillButton.NewInstantiate();
+        SkillClass.UIButton tempskillButton = SkillClass.UIButton.NewInstantiate();
         tempskillButton.transform.SetParent(dragTempObject.transform, false);
-        tempskillButton.setSkill(obj.GetComponentInChildren<SkillButton>().skill);
+        tempskillButton.setSkill(obj.GetComponentInChildren<SkillClass.UIButton>().skill);
 
         //防止拖拽结束时，代替品挡住了准备覆盖的对象而使得 OnDrop（） 无效
         CanvasGroup group = dragTempObject.AddComponent<CanvasGroup>();

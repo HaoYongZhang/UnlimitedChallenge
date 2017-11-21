@@ -26,7 +26,7 @@ namespace SkillClass
         public string description
         {
             get{
-                return SkillDescription.GetDescription(this);
+                return Description.GetDescription(this);
             }
         }
         //通用技能数据
@@ -48,8 +48,8 @@ namespace SkillClass
         {
             id = _id;
 
-            category = SkillEnum.getEnum<SkillCategory>(id.Substring(0, 1));
-            type = SkillEnum.getEnum<SkillType>(id.Substring(1, 1));
+            category = PropertyUtil.GetEnum<SkillCategory>(id.Substring(0, 1));
+            type = PropertyUtil.GetEnum<SkillType>(id.Substring(1, 1));
 
             categoryName = PropertyUtil.GetEnumDescription(category);
             typeName = PropertyUtil.GetEnumDescription(type);

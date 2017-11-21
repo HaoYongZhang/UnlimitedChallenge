@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace SkillClass
 {
-    public class SkillButton : MonoBehaviour
+    public class UIButton : MonoBehaviour
     {
         public Skill skill;
         public Image skillImage;
@@ -14,17 +14,17 @@ namespace SkillClass
 
         Sprite defaultSprite;
 
-        public static SkillButton NewInstantiate()
+        public static UIButton NewInstantiate()
         {
-            SkillButton skillButton = Instantiate((GameObject)Resources.Load("UI/SkillButton")).GetComponent<SkillButton>();
+            UIButton skillButton = Instantiate((GameObject)Resources.Load("UI/SkillButton")).GetComponent<UIButton>();
             skillButton.defaultSprite = skillButton.skillImage.sprite;
 
             return skillButton;
         }
 
-        public static SkillButton NewInstantiate(Skill skill)
+        public static UIButton NewInstantiate(Skill skill)
         {
-            SkillButton skillButton = NewInstantiate();
+            UIButton skillButton = NewInstantiate();
             skillButton.setSkill(skill);
 
             return skillButton;
@@ -53,7 +53,7 @@ namespace SkillClass
 
             if (skill != null)
             {
-                Skill oneSkill = SkillManager.GetOneSkillByID(skill.id);
+                Skill oneSkill = SkillClass.Manager.GetOneSkillByID(skill.id);
                 //当技能开始冷却时
                 if (oneSkill.isCooldown)
                 {

@@ -52,31 +52,31 @@ public class HeroController : MonoBehaviour {
         //------技能栏快捷键
         if (Input.GetKeyDown(KeyCode.Alpha1))
 		{
-            SkillButton skillBtn = UIScene.Instance.skillButtons[0];
+            SkillClass.UIButton skillBtn = UIScene.Instance.skillButtons[0];
             Global.hero.skillManager.useSkill(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SkillButton skillBtn = UIScene.Instance.skillButtons[1];
+            SkillClass.UIButton skillBtn = UIScene.Instance.skillButtons[1];
             Global.hero.skillManager.useSkill(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            SkillButton skillBtn = UIScene.Instance.skillButtons[2];
+            SkillClass.UIButton skillBtn = UIScene.Instance.skillButtons[2];
             Global.hero.skillManager.useSkill(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            SkillButton skillBtn = UIScene.Instance.skillButtons[3];
+            SkillClass.UIButton skillBtn = UIScene.Instance.skillButtons[3];
             Global.hero.skillManager.useSkill(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            SkillButton skillBtn = UIScene.Instance.skillButtons[4];
+            SkillClass.UIButton skillBtn = UIScene.Instance.skillButtons[4];
             Global.hero.skillManager.useSkill(skillBtn.skill);
         }
 

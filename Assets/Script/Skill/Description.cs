@@ -6,7 +6,10 @@ using Utility;
 
 namespace SkillClass
 {
-    public class SkillDescription
+    /// <summary>
+    /// 技能描述
+    /// </summary>
+    public class Description
     {
 
         /// <summary>

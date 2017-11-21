@@ -3,16 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 namespace SkillClass
 {
-    public class SkillEnum
-    {
-        public static T getEnum<T>(string enumValue)
-        {
-            T enumObj = (T)Enum.Parse(typeof(T), enumValue);
-
-            return enumObj;
-        }
-    }
-
     public enum SkillRelease
     {
         //未释放

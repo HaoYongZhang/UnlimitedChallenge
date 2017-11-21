@@ -8,14 +8,14 @@ public class UIShortcutSkillView : MonoBehaviour {
     public GameObject shortcutSkillBar_1;
     public GameObject shortcutSkillBar_2;
 
-    public List<SkillButton> skillBtns_1;
-    public List<SkillButton> skillBtns_2;
+    public List<SkillClass.UIButton> skillBtns_1;
+    public List<SkillClass.UIButton> skillBtns_2;
 
 	// Use this for initialization
 	void Start () {
         for (int i = 0; i < 5; i++)
         {
-            SkillButton skillButton = SkillButton.NewInstantiate();
+            SkillClass.UIButton skillButton = SkillClass.UIButton.NewInstantiate();
             skillButton.transform.SetParent(shortcutSkillBar_1.transform, false);
 
             UIMouseDelegate mouseDelegate = skillButton.gameObject.GetComponent<UIMouseDelegate>();
@@ -26,7 +26,7 @@ public class UIShortcutSkillView : MonoBehaviour {
 
         for (int i = 0; i < 5; i++)
         {
-            SkillButton skillButton = SkillButton.NewInstantiate();
+            SkillClass.UIButton skillButton = SkillClass.UIButton.NewInstantiate();
             skillButton.transform.SetParent(shortcutSkillBar_2.transform, false);
 
             UIMouseDelegate mouseDelegate = skillButton.gameObject.GetComponent<UIMouseDelegate>();
@@ -49,7 +49,7 @@ public class UIShortcutSkillView : MonoBehaviour {
             {
                 if(skillBtns_1[i].skill == null || Global.shortcutSkills_1[i].id != skillBtns_1[i].skill.id)
                 {
-                    skillBtns_1[i].setSkill(SkillManager.GetOneSkillByID(Global.shortcutSkills_1[i].id));
+                    skillBtns_1[i].setSkill(SkillClass.Manager.GetOneSkillByID(Global.shortcutSkills_1[i].id));
                 }
             }
             else
@@ -64,7 +64,7 @@ public class UIShortcutSkillView : MonoBehaviour {
             {
                 if (skillBtns_2[i].skill == null || Global.shortcutSkills_2[i].id != skillBtns_2[i].skill.id)
                 {
-                    skillBtns_2[i].setSkill(SkillManager.GetOneSkillByID(Global.shortcutSkills_2[i].id));
+                    skillBtns_2[i].setSkill(SkillClass.Manager.GetOneSkillByID(Global.shortcutSkills_2[i].id));
                 }
             }
             else
@@ -77,8 +77,8 @@ public class UIShortcutSkillView : MonoBehaviour {
     void onDropSkill(GameObject obj, PointerEventData eventData)
     {
         GameObject dropObj = eventData.pointerDrag;
-        Skill replaceSkill = dropObj.GetComponent<SkillButton>().skill;
-        Skill oldSkill = obj.GetComponent<SkillButton>().skill;
+        Skill replaceSkill = dropObj.GetComponent<SkillClass.UIButton>().skill;
+        Skill oldSkill = obj.GetComponent<SkillClass.UIButton>().skill;
 
         if(replaceSkill == null)
         {
@@ -96,8 +96,8 @@ public class UIShortcutSkillView : MonoBehaviour {
                 }
             }
 
-            int objIndex = skillBtns_1.IndexOf(obj.GetComponent<SkillButton>());
-            Global.shortcutSkills_1[objIndex] = SkillManager.GetOneSkillByID(replaceSkill.id);
+            int objIndex = skillBtns_1.IndexOf(obj.GetComponent<SkillClass.UIButton>());
+            Global.shortcutSkills_1[objIndex] = SkillClass.Manager.GetOneSkillByID(replaceSkill.id);
         }
         else
         {
@@ -109,8 +109,8 @@ public class UIShortcutSkillView : MonoBehaviour {
                 }
             }
 
-            int objIndex = skillBtns_2.IndexOf(obj.GetComponent<SkillButton>());
-            Global.shortcutSkills_2[objIndex] = SkillManager.GetOneSkillByID(replaceSkill.id);
+            int objIndex = skillBtns_2.IndexOf(obj.GetComponent<SkillClass.UIButton>());
+            Global.shortcutSkills_2[objIndex] = SkillClass.Manager.GetOneSkillByID(replaceSkill.id);
         }
     }
 }

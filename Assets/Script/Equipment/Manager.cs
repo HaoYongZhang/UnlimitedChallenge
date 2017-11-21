@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace EquipmentClass
 {
-    public class EquipmentManager : MonoBehaviour
+    public class Manager : MonoBehaviour
     {
         public Equipment leftWeapon;
         public Equipment rightWeapon;
@@ -25,6 +25,17 @@ namespace EquipmentClass
         void Update()
         {
 
+        }
+
+        public void replaceEquipmentPart(Equipment equipment)
+        {
+            switch(equipment.part)
+            {
+                case EquipmentPart.weapon:{
+                        leftWeapon = equipment;
+                    }
+                    break;
+            }
         }
 
         /// <summary>

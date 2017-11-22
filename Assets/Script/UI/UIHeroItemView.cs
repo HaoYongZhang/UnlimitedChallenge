@@ -10,13 +10,6 @@ public class UIHeroItemView : MonoBehaviour {
     public GameObject equipmentRightView;
     public GameObject itemsSet;
 
-    public EquipmentClass.UIButton leftWeapon;
-    public EquipmentClass.UIButton rightWeapon;
-    public EquipmentClass.UIButton head;
-    public EquipmentClass.UIButton body;
-    public EquipmentClass.UIButton legs;
-    public EquipmentClass.UIButton treasure;
-
     public Text leftWeaponText;
     public Text rightWeaponText;
     public Text headText;
@@ -32,22 +25,6 @@ public class UIHeroItemView : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        //创建装备按钮
-        leftWeapon = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.weapon);
-        rightWeapon = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.weapon);
-        head = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.head);
-        body = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.body);
-        legs = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.legs);
-        treasure = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.treasure);
-
-        //设置装备拖拽的代理
-        leftWeapon.gameObject.GetComponent<UIMouseDelegate>().onDropDelegate = onDropSkill;
-        rightWeapon.gameObject.GetComponent<UIMouseDelegate>().onDropDelegate = onDropSkill;
-        head.gameObject.GetComponent<UIMouseDelegate>().onDropDelegate = onDropSkill;
-        body.gameObject.GetComponent<UIMouseDelegate>().onDropDelegate = onDropSkill;
-        legs.gameObject.GetComponent<UIMouseDelegate>().onDropDelegate = onDropSkill;
-        treasure.gameObject.GetComponent<UIMouseDelegate>().onDropDelegate = onDropSkill;
-
         //添加装备文本
         leftWeaponText = new GameObject().AddComponent<Text>();
         rightWeaponText = new GameObject().AddComponent<Text>();
@@ -74,23 +51,23 @@ public class UIHeroItemView : MonoBehaviour {
         }
 
         //左边
-        leftWeapon.transform.SetParent(equipmentLeftView.transform, false);
+        Global.hero.equipmentManager.leftWeapon.transform.SetParent(equipmentLeftView.transform, false);
         leftWeaponText.transform.SetParent(equipmentLeftView.transform, false);
 
-        head.transform.SetParent(equipmentLeftView.transform, false);
+        Global.hero.equipmentManager.head.transform.SetParent(equipmentLeftView.transform, false);
         headText.transform.SetParent(equipmentLeftView.transform, false);
 
-        treasure.transform.SetParent(equipmentLeftView.transform, false);
+        Global.hero.equipmentManager.treasure.transform.SetParent(equipmentLeftView.transform, false);
         treasureText.transform.SetParent(equipmentLeftView.transform, false);
 
         //右边
-        rightWeapon.transform.SetParent(equipmentRightView.transform, false);
+        Global.hero.equipmentManager.rightWeapon.transform.SetParent(equipmentRightView.transform, false);
         rightWeaponText.transform.SetParent(equipmentRightView.transform, false);
 
-        body.transform.SetParent(equipmentRightView.transform, false);
+        Global.hero.equipmentManager.body.transform.SetParent(equipmentRightView.transform, false);
         bodyText.transform.SetParent(equipmentRightView.transform, false);
 
-        legs.transform.SetParent(equipmentRightView.transform, false);
+        Global.hero.equipmentManager.legs.transform.SetParent(equipmentRightView.transform, false);
         legsText.transform.SetParent(equipmentRightView.transform, false);
 
         setItemsSet();
@@ -150,22 +127,5 @@ public class UIHeroItemView : MonoBehaviour {
         {
             Destroy(dragTempObject);
         }
-    }
-
-
-    void onDropSkill(GameObject obj, PointerEventData eventData)
-    {
-        GameObject dropObj = eventData.pointerDrag;
-
-        Equipment replaceEquipment = dropObj.GetComponent<EquipmentClass.UIButton>().equipment;
-        Equipment oldEquipment = obj.GetComponent<EquipmentClass.UIButton>().equipment;
-
-        if(replaceEquipment.part != obj.GetComponent<EquipmentClass.UIButton>().part)
-        {
-            return;
-        }
-
-        Global.hero.equipmentManager.replaceEquipmentPart(replaceEquipment);
-        obj.GetComponent<EquipmentClass.UIButton>().setEquipment(replaceEquipment);
     }
 }

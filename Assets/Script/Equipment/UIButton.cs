@@ -108,7 +108,16 @@ namespace EquipmentClass
 		public void setEquipment(Equipment _equipment)
 		{
 			equipment = _equipment;
-			icon.sprite = _equipment.imageSprite;
+
+            if(_equipment != null)
+            {
+                icon.sprite = _equipment.imageSprite;
+            }
+            else
+            {
+                icon.sprite = defaultIcon;
+            }
+		
 		}
 	}
 }

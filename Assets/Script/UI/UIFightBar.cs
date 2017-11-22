@@ -21,15 +21,6 @@ public class UIFightBar : MonoBehaviour {
 	}
 
     void FixedUpdate(){
-        //Equipment wearsEquipment = UIScene.Instance.sceneProperty.GetComponent<UIHeroView>().itemsView.GetComponent<UIHeroItemView>().leftWeapon.equipment;
-
-        //if(weapon != wearsEquipment)
-        //{
-        //    weapon = wearsEquipment;
-        //    if(weapon != null)
-        //    {
-        //        weaponImage.sprite = wearsEquipment.imageSprite;
-        //    }
-        //}
+        
     }
 }

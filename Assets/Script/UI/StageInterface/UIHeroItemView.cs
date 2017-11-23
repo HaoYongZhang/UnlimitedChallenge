@@ -99,7 +99,7 @@ public class UIHeroItemView : MonoBehaviour {
     {
         //代替品实例化
         dragTempObject = new GameObject("DragTempObject");
-        dragTempObject.transform.SetParent(UIScene.Instance.sceneProperty.transform, false);
+        dragTempObject.transform.SetParent(UIScene.Instance.heroView.transform, false);
         dragTempObject.AddComponent<RectTransform>();
 
         EquipmentClass.UIButton temp = EquipmentClass.UIButton.NewInstantiate();

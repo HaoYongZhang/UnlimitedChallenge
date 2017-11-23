@@ -82,13 +82,13 @@ public class HeroController : MonoBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.R))
 		{
-            if(UIScene.Instance.sceneProperty.activeSelf)
+            if(UIScene.Instance.heroView.activeSelf)
             {
-                UIScene.Instance.sceneProperty.GetComponent<UIHeroView>().hide();
+                UIScene.Instance.heroView.GetComponent<UIHeroView>().hide();
             }
             else
             {
-                UIScene.Instance.sceneProperty.GetComponent<UIHeroView>().show();
+                UIScene.Instance.heroView.GetComponent<UIHeroView>().show();
             }
 		}
 

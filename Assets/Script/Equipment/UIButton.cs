@@ -56,16 +56,7 @@ namespace EquipmentClass
 
 		void FixedUpdate()
 		{
-			//当技能移除时
-			if (equipment == null)
-			{
-				icon.sprite = defaultIcon;
-			}
-
-			//if (equipment != null)
-			//{
-			//    Equipment oneEquipment = EquipmentManager.GetOneSkillByID(equipment.id);
-			//}
+			
 		}
 
 		Sprite getPartDefaultImage(EquipmentPart _part)

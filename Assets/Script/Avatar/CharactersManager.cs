@@ -36,7 +36,8 @@ public class CharactersManager : MonoBehaviour
     public static string right_weapon_name = "RightWeapon";
 
     List<Transform> boneTransforms;
-    Dictionary<string, GameObject> boneDict = new Dictionary<string, GameObject>();
+    Dictionary<string, GameObject> currentAvatarDict = new Dictionary<string, GameObject>();
+    Dictionary<string, GameObject> defaultAvatarDict = new Dictionary<string, GameObject>();
 
     string path = "Material/Role/Hero/";
 
@@ -76,23 +77,25 @@ public class CharactersManager : MonoBehaviour
         leftWeapon = new GameObject();
         rightWeapon = new GameObject();
 
-        boneDict.Add(head_name, head);
-        boneDict.Add(body_name, body);
-        boneDict.Add(hand_left_arm_name, hand_left_arm);
-        boneDict.Add(hand_left_forearm_name, hand_left_forearm);
-        boneDict.Add(hand_right_arm_name, hand_right_arm);
-        boneDict.Add(hand_right_forearm_name, hand_right_forearm);
-        boneDict.Add(leg_left_thigh_name, leg_left_thigh);
-        boneDict.Add(leg_left_shin_name, leg_left_shin);
-        boneDict.Add(leg_right_thigh_name, leg_right_thigh);
-        boneDict.Add(leg_right_shin_name, leg_right_shin);
-        boneDict.Add(left_weapon_name, leftWeapon);
-        boneDict.Add(right_weapon_name, rightWeapon);
+        currentAvatarDict.Add(head_name, head);
+        currentAvatarDict.Add(body_name, body);
+        currentAvatarDict.Add(hand_left_arm_name, hand_left_arm);
+        currentAvatarDict.Add(hand_left_forearm_name, hand_left_forearm);
+        currentAvatarDict.Add(hand_right_arm_name, hand_right_arm);
+        currentAvatarDict.Add(hand_right_forearm_name, hand_right_forearm);
+        currentAvatarDict.Add(leg_left_thigh_name, leg_left_thigh);
+        currentAvatarDict.Add(leg_left_shin_name, leg_left_shin);
+        currentAvatarDict.Add(leg_right_thigh_name, leg_right_thigh);
+        currentAvatarDict.Add(leg_right_shin_name, leg_right_shin);
+        currentAvatarDict.Add(left_weapon_name, leftWeapon);
+        currentAvatarDict.Add(right_weapon_name, rightWeapon);
 
-        foreach (KeyValuePair<string, GameObject> dict in boneDict)
+        foreach (KeyValuePair<string, GameObject> dict in currentAvatarDict)
         {
             dict.Value.name = dict.Key;
             dict.Value.transform.SetParent(gameObject.transform, false);
+
+            defaultAvatarDict.Add(dict.Key, dict.Value);
 
             //不对武器进行绑定
             if (dict.Key != left_weapon_name && dict.Key != right_weapon_name)
@@ -134,15 +137,26 @@ public class CharactersManager : MonoBehaviour
     }
 
     public void replaceAvator(string rootBoneName, GameObject source){
-        
-        GameObject targer = boneDict[rootBoneName];
+        GameObject targer = currentAvatarDict[rootBoneName];
         targer.SetActive(false);
-        Destroy(targer);
 
-        source.transform.SetParent(gameObject.transform, false);
-        combineSkinnedMeshRenderer(rootBoneName, source);
-        source.name = rootBoneName;
+        if (targer != defaultAvatarDict[rootBoneName])
+        {
+            Destroy(targer);
+        }
 
-        boneDict[rootBoneName] = source;
+        if(source != null)
+        {
+            source.transform.SetParent(gameObject.transform, false);
+            combineSkinnedMeshRenderer(rootBoneName, source);
+            source.name = rootBoneName;
+
+            currentAvatarDict[rootBoneName] = source;
+        }
+        else
+        {
+            defaultAvatarDict[rootBoneName].SetActive(true);
+            currentAvatarDict[rootBoneName] = defaultAvatarDict[rootBoneName];
+        }
     }
 }

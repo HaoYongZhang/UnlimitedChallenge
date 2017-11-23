@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using EquipmentClass;
 
 public class UIFightBar : MonoBehaviour {
-    Equipment weapon;
     public Image weaponImage;
     public Image weaponBG;
     public WeaponType weaponType;
@@ -20,7 +19,4 @@ public class UIFightBar : MonoBehaviour {
 		
 	}
 
-    void FixedUpdate(){
-        
-    }
 }

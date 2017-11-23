@@ -21,6 +21,8 @@ namespace EquipmentClass
 
         //拖动物品时的临时创建对象
         GameObject dragTempObject;
+        //判断能否执行拖拽方法
+        bool canDrag;
 
         void Awake()
         {
@@ -71,8 +73,34 @@ namespace EquipmentClass
             switch(equipment.part)
             {
                 case EquipmentPart.weapon:{
-                        
                         Global.hero.charactersManager.replaceAvator(CharactersManager.left_weapon_name, equipmentObj);
+                    }
+                    break;
+            }
+        }
+
+        public void takeOnEquipment(EquipmentClass.UIButton tagerEquiBtn, EquipmentClass.UIButton sourceEquiBtn)
+        {
+            tagerEquiBtn.setEquipment(sourceEquiBtn.equipment);
+            replaceEquipmentPart(sourceEquiBtn.equipment);
+
+            switch (tagerEquiBtn.part)
+            {
+                case EquipmentPart.weapon:
+                    {
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.left_weapon_name, null);
+                    }
+                    break;
+            }
+        }
+
+        public void takeOffEquipment(EquipmentPart part)
+        {
+            switch (part)
+            {
+                case EquipmentPart.weapon:
+                    {
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.left_weapon_name, null);
                     }
                     break;
             }
@@ -98,16 +126,27 @@ namespace EquipmentClass
 
         void onBeginDrag(GameObject obj, PointerEventData eventData)
         {
+            EquipmentClass.UIButton originalEquiBtn = obj.GetComponentInChildren<EquipmentClass.UIButton>();
+
+            canDrag = (originalEquiBtn.equipment != null);
+
+            if(!canDrag)
+            {
+                return;
+            }
+
             //代替品实例化
             dragTempObject = new GameObject("DragTempObject");
-            dragTempObject.transform.SetParent(UIScene.Instance.sceneProperty.transform, false);
+            dragTempObject.transform.SetParent(UIScene.Instance.heroView.transform, false);
             dragTempObject.AddComponent<RectTransform>();
 
             EquipmentClass.UIButton temp = EquipmentClass.UIButton.NewInstantiate();
             temp.transform.SetParent(dragTempObject.transform, false);
-            temp.setEquipment(obj.GetComponentInChildren<EquipmentClass.UIButton>().equipment);
+            temp.setEquipment(originalEquiBtn.equipment);
 
-            obj.GetComponentInChildren<EquipmentClass.UIButton>().setEquipment(null);
+            //取消武器装备
+            takeOffEquipment(originalEquiBtn.equipment.part);
+            originalEquiBtn.setEquipment(null);
 
             //防止拖拽结束时，代替品挡住了准备覆盖的对象而使得 OnDrop（） 无效
             CanvasGroup group = dragTempObject.AddComponent<CanvasGroup>();
@@ -116,8 +155,12 @@ namespace EquipmentClass
 
         void onDrag(GameObject obj, PointerEventData eventData)
         {
-            //并将拖拽时的坐标给予被拖拽对象的代替品
+            if (!canDrag)
+            {
+                return;
+            }
 
+            //并将拖拽时的坐标给予被拖拽对象的代替品
             Vector3 movePosition = new Vector3(Input.mousePosition.x + 20, Input.mousePosition.y - 20);
 
             dragTempObject.transform.position = movePosition;
@@ -125,6 +168,11 @@ namespace EquipmentClass
 
         void onEndDrag(GameObject obj, PointerEventData eventData)
         {
+            if (!canDrag)
+            {
+                return;
+            }
+
             //拖拽结束，销毁代替品
             if (dragTempObject)
             {
@@ -144,8 +192,7 @@ namespace EquipmentClass
                 return;
             }
 
-            replaceEquipmentPart(replaceEquipment);
-            obj.GetComponent<EquipmentClass.UIButton>().setEquipment(replaceEquipment);
+            takeOnEquipment(obj.GetComponent<EquipmentClass.UIButton>(), dropObj.GetComponent<EquipmentClass.UIButton>());
         }
     }
 }

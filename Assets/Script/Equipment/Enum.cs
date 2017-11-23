@@ -29,8 +29,8 @@ namespace EquipmentClass
     /// </summary>
     public enum WeaponType
     {
-        [Description("非武器")]
-        none,
+        [Description("拳爪")]
+        hands,
         [Description("刀剑")]
         sword,
         [Description("枪棍")]

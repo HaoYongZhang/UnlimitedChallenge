@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using EquipmentClass;
 
 public class UIFightBar : MonoBehaviour {
+    public Equipment currentWeapon;
     public Image weaponImage;
     public Image weaponBG;
     public WeaponType weaponType;
@@ -19,4 +20,17 @@ public class UIFightBar : MonoBehaviour {
 		
 	}
 
+    public void setCurrentWeapon(Equipment _equipment)
+    {
+        if(_equipment != null)
+        {
+            currentWeapon = _equipment;
+            weaponImage.sprite = _equipment.imageSprite;
+        }
+        else
+        {
+            currentWeapon = Global.hero.equipmentManager.defaultWeapon;
+            weaponImage.sprite = Global.hero.equipmentManager.defaultWeapon.imageSprite;
+        }
+    }
 }

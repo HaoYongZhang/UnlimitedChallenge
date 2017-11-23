@@ -84,14 +84,7 @@ namespace EquipmentClass
             tagerEquiBtn.setEquipment(sourceEquiBtn.equipment);
             replaceEquipmentPart(sourceEquiBtn.equipment);
 
-            switch (tagerEquiBtn.part)
-            {
-                case EquipmentPart.weapon:
-                    {
-                        Global.hero.charactersManager.replaceAvator(CharactersManager.left_weapon_name, null);
-                    }
-                    break;
-            }
+            UIScene.Instance.fightBar.setCurrentWeapon(sourceEquiBtn.equipment);
         }
 
         public void takeOffEquipment(EquipmentPart part)
@@ -101,6 +94,7 @@ namespace EquipmentClass
                 case EquipmentPart.weapon:
                     {
                         Global.hero.charactersManager.replaceAvator(CharactersManager.left_weapon_name, null);
+                        UIScene.Instance.fightBar.setCurrentWeapon(null);
                     }
                     break;
             }

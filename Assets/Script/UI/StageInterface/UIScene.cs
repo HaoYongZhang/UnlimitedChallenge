@@ -16,7 +16,7 @@ public class UIScene : MonoBehaviour
     public GameObject skillsBar;
     public GameObject skillStatusBar;
     public GameObject heroView;
-    public GameObject fightBar;
+    public UIFightBar fightBar;
 
     public Slider hpBar;
     public Slider mpBar;
@@ -88,6 +88,8 @@ public class UIScene : MonoBehaviour
         skillInfo.SetActive(false);
 
         skillsBar = GameObject.Find("SkillsBar");
+
+        fightBar = GameObject.Find("FightBar").GetComponent<UIFightBar>();
 
         for (int i = 0; i < 5; i++)
         {

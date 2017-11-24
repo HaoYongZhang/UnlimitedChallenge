@@ -82,7 +82,9 @@ public class Hero : MonoBehaviour {
         Global.shortcutSkills_1[2] = SkillClass.Manager.GetOneSkillByID("630001");
 
         List<Equipment> e = Global.equipments;
-        Debug.Log("测试" + e[0].partName);
+
+        Dictionary<string, string> da = DataManager.Instance.skillDatas.getSkillData("310030");
+        Debug.Log(da);
 
         //UIScene.Instance.skillButtons[0].setSkill(SkillManager.GetOneSkillByID(normal.talentSkillID));
         //UIScene.Instance.skillButtons[1].setSkill(SkillManager.GetOneSkillByID("310030"));

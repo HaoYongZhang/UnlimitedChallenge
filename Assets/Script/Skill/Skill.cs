@@ -56,9 +56,15 @@ namespace SkillClass
 
             loadCategoryProperty();
             loadTypeProperty();
+            //loadData();
 
             imageSprite = Resources.Load("Image/Skill/skill_" + id, typeof(Sprite)) as Sprite;
             isActive = (data["isActive"] == "1");
+        }
+
+        void loadData()
+        {
+            
         }
 
         /// <summary>

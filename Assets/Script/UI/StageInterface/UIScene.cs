@@ -323,8 +323,6 @@ public class UIScene : MonoBehaviour
             info += skill.description + "\n";
         }
 
-        info += "<size=30>" + "<color=#00ffffff>" + "来源于" + skill.data["origin"] + "</color>" + "</size>";
-
         string isActiveStr = skill.isActive ? "主动技能" : "被动技能";
         float height = 0;
 

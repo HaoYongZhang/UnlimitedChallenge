@@ -29,10 +29,8 @@ namespace SkillClass
                 return Description.GetDescription(this);
             }
         }
-        //通用技能数据
+        //技能数据
         public Dictionary<string, string> data = new Dictionary<string, string>();
-        //特定技能数据
-        public Dictionary<string, string> addlData = new Dictionary<string, string>();
         //技能是否进入冷却
         public bool isCooldown = false;
         //技能当前的冷却时间
@@ -54,81 +52,10 @@ namespace SkillClass
             categoryName = PropertyUtil.GetEnumDescription(category);
             typeName = PropertyUtil.GetEnumDescription(type);
 
-            loadCategoryProperty();
-            loadTypeProperty();
-            //loadData();
+            data = DataManager.Instance.skillDatas.getSkillData(_id);
 
             imageSprite = Resources.Load("Image/Skill/skill_" + id, typeof(Sprite)) as Sprite;
             isActive = (data["isActive"] == "1");
-        }
-
-        void loadData()
-        {
-            
-        }
-
-        /// <summary>
-        /// 加载技能的类别属性
-        /// </summary>
-        void loadCategoryProperty()
-        {
-            //查找技能的csv文件
-            string fileName = "skill_" + category.ToString() + ".csv";
-            //csv文件的第一行数据为属性数据
-            List<string> property = new List<string> ();
-            //csv文件的列表数据
-            List<string> propertyValue = new List<string> ();
-
-            List<List<string>> basicData = CSV.Instance.loadFile (Application.dataPath + "/Resources/Data/Skill/Category", fileName);
-            for (int i = 0; i < basicData.Count; i++) {
-                if (i == 0) {
-                    property = basicData [i];
-                } else {
-                    if (basicData [i] [0] == id) {
-                        propertyValue = basicData [i];
-                        break;
-                    }
-                }
-            }
-
-            //把类别数据装载到skill类的data里面
-            for (int i = 0; i < property.Count; i++) {
-                data.Add (property[i], propertyValue[i]);
-            }
-        }
-
-
-        /// <summary>
-        /// 加载技能的类型属性
-        /// </summary>
-        void loadTypeProperty()
-        {
-            //查找技能的csv文件
-            string fileName = "skill_" + type.ToString() + ".csv";
-            //csv文件的第一行数据为属性数据
-            List<string> property = new List<string> ();
-            //csv文件的列表数据
-            List<string> propertyValue = new List<string> ();
-
-            List<List<string>> basicData = CSV.Instance.loadFile (Application.dataPath + "/Resources/Data/Skill/Type", fileName);
-            for (int i = 0; i < basicData.Count; i++) {
-                if (i == 0) {
-                    property = basicData [i];
-                } else {
-                    if (basicData [i] [0] == id) {
-                        propertyValue = basicData [i];
-                        break;
-                    }
-                }
-            }
-
-            //把类别数据装载到skill类的data里面
-            for (int i = 0; i < property.Count; i++) {
-                if(propertyValue[i] != "" && property[i] != "id")
-                {
-                    addlData.Add (property[i], propertyValue[i]);
-                }
-            }
         }
     }
 }

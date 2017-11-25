@@ -30,72 +30,13 @@ namespace EquipmentClass
         {
             id = _id;
 
-            part = getEnum<EquipmentPart>(id.Substring(0, 1));
+            part = PropertyUtil.GetEnum<EquipmentPart>(id.Substring(0, 1));
 
             partName = PropertyUtil.GetEnumDescription(part);
 
-            loadPart();
+            data = DataManager.Instance.equipmentDatas.getEquipmentData(_id);
 
             imageSprite = Resources.Load("Image/Equipment/equipment_" + id, typeof(Sprite)) as Sprite;
-        }
-
-        T getEnum<T>(string enumValue)
-        {
-            T enumObj = (T)Enum.Parse(typeof(T), enumValue);
-
-            return enumObj;
-        }
-
-        void loadPart()
-        {
-            //查找技能的csv文件
-            string fileName = "equipment_" + part.ToString() + ".csv";
-
-            //csv文件的第一行数据为属性数据
-            List<string> keyList = new List<string>();
-            //csv文件的列表数据
-            List<string> valueList = new List<string>();
-
-            List<List<string>> csvData = CSV.Instance.loadFile(Application.dataPath + "/Resources/Data/Equipment", fileName);
-            for (int i = 0; i < csvData.Count; i++)
-            {
-                if (i == 0)
-                {
-                    keyList = csvData[i];
-                }
-                else
-                {
-                    if (csvData[i][0] == id)
-                    {
-                        valueList = csvData[i];
-                        break;
-                    }
-                }
-            }
-
-            Dictionary<string, string> dataDict = new Dictionary<string, string>();
-
-            //把类别数据装载到skill类的data里面
-            for (int i = 0; i < keyList.Count; i++)
-            {
-                dataDict.Add(keyList[i], valueList[i]);
-            }
-
-            foreach (KeyValuePair<string, string> dict in dataDict)
-            {
-                if (PropertyUtil.isExist(property, dict.Key))
-                {
-                    if(dict.Value !=  "")
-                    {
-                        PropertyUtil.ReflectSetter(property, dict.Key, float.Parse(dict.Value));
-                    }
-
-                }
-                else
-                {
-                    data.Add(dict.Key, dict.Value);
-                }
-            }
         }
 
     }

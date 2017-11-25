@@ -295,7 +295,7 @@ namespace SkillClass
         /// <param name="skill">Skill.</param>
         void treatment(Skill skill)
         {
-            string increateHp = skill.addlData["increateHp"];
+            string increateHp = skill.data["increateHp"];
             if (increateHp != null)
             {
                 //截取字符串，获得属性增加的值
@@ -322,7 +322,7 @@ namespace SkillClass
             //获取HeroManager的属性
             Property property = Global.hero.property;
 
-            foreach (KeyValuePair<string, string> dict in skill.addlData)
+            foreach (KeyValuePair<string, string> dict in skill.data)
             {
                 if (PropertyUtil.isExist(property, dict.Key))
                 {
@@ -351,7 +351,7 @@ namespace SkillClass
             //获取HeroManager的属性
             Property property = Global.hero.property;
 
-            foreach (KeyValuePair<string, string> dict in skill.addlData)
+            foreach (KeyValuePair<string, string> dict in skill.data)
             {
                 if (PropertyUtil.isExist(property, dict.Key))
                 {

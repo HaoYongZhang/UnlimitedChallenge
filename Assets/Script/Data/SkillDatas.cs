@@ -44,15 +44,6 @@ public class SkillDatas
         csvData_4.RemoveAt(0);
         List<List<string>> dataList_4 = csvData_4;
         data.Add(SkillType.intensify, new CSVDataStruct(head_4, dataList_4));
-
-        foreach (KeyValuePair<SkillType, CSVDataStruct> pair in data)
-        {
-            Debug.Log(pair.Key);
-            for (int i = 0; i < pair.Value.dataList.Count; i++)
-            {
-                Debug.Log(dataList[i][1]);
-            }
-        }
     }
 
     public Dictionary<string, string> getSkillData(string id)
@@ -60,15 +51,12 @@ public class SkillDatas
         
         SkillType type = PropertyUtil.GetEnum<SkillType>(id.Substring(1, 1));
         CSVDataStruct csvStruct = data[type];
-        Debug.Log(type);
         Dictionary<string, string> skillData = new Dictionary<string, string>();
 
         for (int i = 0; i < csvStruct.dataList.Count; i++)
         {
-            Debug.Log(csvStruct.dataList[i][0]);
             if (csvStruct.dataList[i][0] == id)
             {
-                Debug.Log("进入");
                 for(int j = 0; j < csvStruct.dataList[i].Count; j++)
                 {
                     skillData.Add(csvStruct.head[j], csvStruct.dataList[i][j]);
@@ -77,10 +65,30 @@ public class SkillDatas
             }
         }
 
-        foreach(KeyValuePair<string, string> pair in skillData)
+        for (int i = 0; i < propertysData.dataList.Count; i++)
         {
-            Debug.Log(pair.Key + "===" + pair.Value);
+            if (propertysData.dataList[i][0] == id)
+            {
+                for (int j = 0; j < propertysData.dataList[i].Count; j++)
+                {
+                    //因为上表已经存在id字段了，字典key值不能重复
+                    if(propertysData.head[j] != "id")
+                    {
+                        //筛选空的属性，减少使用时的历遍
+                        if(propertysData.dataList[i][j] != "")
+                        {
+                            skillData.Add(propertysData.head[j], propertysData.dataList[i][j]);
+                        }
+                    }
+                }
+                break;
+            }
         }
+
+        //foreach(KeyValuePair<string, string> pair in skillData)
+        //{
+        //    Debug.Log(pair.Key + "===" + pair.Value);
+        //}
 
         return skillData;
     }

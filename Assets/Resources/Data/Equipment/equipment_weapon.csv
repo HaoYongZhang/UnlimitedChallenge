@@ -1,3 +1,3 @@
-id,addlAttack,attackType,attackDistance,rank,skillID
+id,attack,attackType,attackDistance,rank,skillID
 10001,20,physics,50,D,
 10010,100,physics,100,D,

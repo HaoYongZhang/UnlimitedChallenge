@@ -83,7 +83,7 @@ public class Hero : MonoBehaviour {
 
         List<Equipment> e = Global.equipments;
 
-        Dictionary<string, string> da = DataManager.Instance.skillDatas.getSkillData("310030");
+        Dictionary<string, string> da = DataManager.Instance.skillDatas.getSkillData("140001");
         Debug.Log(da);
 
         //UIScene.Instance.skillButtons[0].setSkill(SkillManager.GetOneSkillByID(normal.talentSkillID));

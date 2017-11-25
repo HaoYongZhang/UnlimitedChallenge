@@ -7,6 +7,6 @@ public class Launch : MonoBehaviour {
     [RuntimeInitializeOnLoadMethod]
     static void initialize()
     {
-        
+        DataManager.Instance.loadCSVData();
     }
 }

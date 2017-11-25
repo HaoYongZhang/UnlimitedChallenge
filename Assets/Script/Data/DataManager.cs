@@ -16,6 +16,7 @@ public class DataManager
 {
     static DataManager _instance;
     public SkillDatas skillDatas;
+    public EquipmentDatas equipmentDatas;
 
     public static DataManager Instance
     {
@@ -24,7 +25,6 @@ public class DataManager
             if (_instance == null)  // 如果没有找到
             {
                 _instance = new DataManager();
-                _instance.skillDatas = new SkillDatas();
             }
             return _instance;
         }
@@ -35,5 +35,9 @@ public class DataManager
         
     }
 
+    public void loadCSVData(){
+        skillDatas = new SkillDatas();
+        equipmentDatas = new EquipmentDatas();
+    }
 
 }

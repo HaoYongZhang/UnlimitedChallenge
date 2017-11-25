@@ -60,7 +60,7 @@ public class RangeManager : MonoBehaviour
 
     public void setSkillRange(Skill skill)
     {
-        radius = float.Parse(skill.addlData["skillDistance"]);
+        radius = float.Parse(skill.data["skillDistance"]);
     }
 
     /// <summary>

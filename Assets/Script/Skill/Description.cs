@@ -65,10 +65,10 @@ namespace SkillClass
         {
             string originalDescription = skill.data["description"];
 
-            string strength = skill.addlData["strength"] != "0" ? "力量*" + skill.addlData["strength"] + "+" : "";
-            string agility = skill.addlData["agility"] != "0" ? "敏捷*" + skill.addlData["agility"] + "+" : "";
-            string intellect = skill.addlData["intellect"] != "0" ? "内力*" + skill.addlData["intellect"] : "";
-            string damageFormula = "伤害：" + skill.addlData["basicDamage"] + "+" + strength + agility + intellect;
+            string strength = skill.data["strength"] != "0" ? "力量*" + skill.data["strength"] + "+" : "";
+            string agility = skill.data["agility"] != "0" ? "敏捷*" + skill.data["agility"] + "+" : "";
+            string intellect = skill.data["intellect"] != "0" ? "内力*" + skill.data["intellect"] : "";
+            string damageFormula = "伤害：" + skill.data["basicDamage"] + "+" + strength + agility + intellect;
 
             return originalDescription + "\n" + "<color=orange>" + damageFormula + "</color>";
         }
@@ -82,53 +82,60 @@ namespace SkillClass
         {
             string originalDescription = skill.data["description"];
             int i = 0;
-            foreach (KeyValuePair<string, string> dict in skill.addlData)
+            Property property = new Property();
+
+            foreach (KeyValuePair<string, string> dict in skill.data)
             {
-                //截取字符串，获得+/-符号
-                string symbol = dict.Value.Substring(0, 1);
-                string increateStr = (symbol == "+" ? "+" : "-");
-                string increateColor = (symbol == "+" ? "<color=lime>" : "<color=red>");
-                string increateValue;
-                string descriptionName;
+                if (PropertyUtil.isExist(property, dict.Key))
+                {
+                    //截取字符串，获得+/-符号
+                    string symbol = dict.Value.Substring(0, 1);
+                    string increateStr = (symbol == "+" ? "+" : "-");
+                    string increateColor = (symbol == "+" ? "<color=lime>" : "<color=red>");
+                    string increateValue;
+                    string descriptionName;
 
-                //判断如果属性值是百分比时，最高恢复是100%，也就是1.0f
-                //所以大于1.0f就是直接增加生命值的显示
-                if (float.Parse(dict.Value) > 1.0f)
-                {
-                    increateValue = dict.Value.Substring(1, dict.Value.Length - 1) + "点";
-                }
-                else
-                {
-                    float rate = float.Parse(dict.Value.Substring(1, dict.Value.Length - 1));
+                    //判断如果属性值是百分比时，最高恢复是100%，也就是1.0f
+                    //所以大于1.0f就是直接增加生命值的显示
+                    if (float.Parse(dict.Value) > 1.0f)
+                    {
+                        increateValue = dict.Value.Substring(1, dict.Value.Length - 1) + "点";
+                    }
+                    else
+                    {
+                        float rate = float.Parse(dict.Value.Substring(1, dict.Value.Length - 1));
 
-                    increateValue = rate * 100 + "%";
-                }
+                        increateValue = rate * 100 + "%";
+                    }
 
-                if(dict.Key == "increateHp")
-                {
-                    descriptionName = "恢复生命";
-                }
-                else if (dict.Key == "increateMp")
-                {
-                    descriptionName = "恢复能量";
-                }
-                else if (dict.Key == "addlHpRegeneration")
-                {
-                    descriptionName = "每秒恢复生命";
-                }
-                else if (dict.Key == "addlMpRegeneration")
-                {
-                    descriptionName = "每秒恢复能量";
-                }
-                else
-                {
-                    descriptionName = "技能属性错误";
-                }
+                    if (dict.Key == "increateHp")
+                    {
+                        descriptionName = "恢复生命";
+                    }
+                    else if (dict.Key == "increateMp")
+                    {
+                        descriptionName = "恢复能量";
+                    }
+                    else if (dict.Key == "addlHpRegeneration")
+                    {
+                        descriptionName = "每秒恢复生命";
+                    }
+                    else if (dict.Key == "addlMpRegeneration")
+                    {
+                        descriptionName = "每秒恢复能量";
+                    }
+                    else
+                    {
+                        descriptionName = "技能属性错误";
+                    }
 
-                string s = "@" + i;
-                originalDescription = originalDescription.Replace(s, "\n" + increateColor + descriptionName + increateStr + increateValue + "</color>");
+                    string s = "@" + i;
+                    originalDescription = originalDescription.Replace(s, "\n" + increateColor + descriptionName + increateStr + increateValue + "</color>");
 
-                i++;
+                    i++;
+                }
+                            
+
             }
 
             return originalDescription;
@@ -145,7 +152,8 @@ namespace SkillClass
             Property property = new Property();
             int i = 0;
             string originalDescription = skill.data["description"];
-            foreach (KeyValuePair<string, string> dict in skill.addlData)
+
+            foreach (KeyValuePair<string, string> dict in skill.data)
             {
                 if (PropertyUtil.isExist(property, dict.Key))
                 {

@@ -27,7 +27,7 @@ public class CSV
 
 	public List<List<string>> loadFile(string path, string fileName)
 	{
-		dataList.Clear();
+        dataList = new List<List<string>>();
 		StreamReader sr = null;
 		try
 		{

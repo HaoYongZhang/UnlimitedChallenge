@@ -75,7 +75,8 @@ public class Hero : MonoBehaviour {
         Global.skills.Add(new Skill("310030"));
         Global.skills.Add(new Skill("630001"));
 
-        Global.items.Add(new Equipment("10010"));
+        Global.items.Add(new Equipment("11010"));
+        Global.items.Add(new Equipment("14001"));
 
         Global.shortcutSkills_1[0] = SkillClass.Manager.GetOneSkillByID(normal.talentSkillID);
         Global.shortcutSkills_1[1] = SkillClass.Manager.GetOneSkillByID("310030");

@@ -80,5 +80,4 @@ namespace EquipmentClass
         [Description("能量")]
         other
     }
-
 }

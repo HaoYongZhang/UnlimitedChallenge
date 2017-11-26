@@ -138,25 +138,60 @@ public class CharactersManager : MonoBehaviour
 
     public void replaceAvator(string rootBoneName, GameObject source){
         GameObject targer = currentAvatarDict[rootBoneName];
-        targer.SetActive(false);
 
-        if (targer != defaultAvatarDict[rootBoneName])
+        if (rootBoneName == left_weapon_name || rootBoneName == right_weapon_name)
         {
-            Destroy(targer);
-        }
+            foreach (Transform tf in boneTransforms)
+            {
+                if(tf.name == (prefixBoneName + rootBoneName))
+                {
+                    //清空子对象
+                    for (int i = 0; i < tf.childCount; i++)
+                    {
+                        GameObject go = tf.GetChild(i).gameObject;
+                        Destroy(go);
+                    }
 
-        if(source != null)
-        {
-            source.transform.SetParent(gameObject.transform, false);
-            combineSkinnedMeshRenderer(rootBoneName, source);
-            source.name = rootBoneName;
+                    if(source != null)
+                    {
+                        source.transform.SetParent(tf, false);
+                        source.transform.localPosition = Vector3.zero;
+                        source.transform.localRotation = Quaternion.identity;
+                        source.transform.localScale = new Vector3(1, 1, 1);
 
-            currentAvatarDict[rootBoneName] = source;
+                        //获取物体的Z距离，修正武器挂载位置
+                        Transform model = source.transform.Find("Model");
+                        float zSize = model.GetComponent<MeshFilter>().mesh.bounds.size.z * model.transform.localScale.z;
+                        source.transform.localPosition = new Vector3(0, 0, zSize / 2);
+                    }
+
+                    break;
+                }
+            }
         }
         else
         {
-            defaultAvatarDict[rootBoneName].SetActive(true);
-            currentAvatarDict[rootBoneName] = defaultAvatarDict[rootBoneName];
+            targer.SetActive(false);
+
+            if (targer != defaultAvatarDict[rootBoneName])
+            {
+                Destroy(targer);
+            }
+
+            if (source != null)
+            {
+                source.transform.SetParent(gameObject.transform, false);
+                combineSkinnedMeshRenderer(rootBoneName, source);
+                source.name = rootBoneName;
+
+                currentAvatarDict[rootBoneName] = source;
+            }
+            else
+            {
+                defaultAvatarDict[rootBoneName].SetActive(true);
+                currentAvatarDict[rootBoneName] = defaultAvatarDict[rootBoneName];
+            }
         }
+
     }
 }

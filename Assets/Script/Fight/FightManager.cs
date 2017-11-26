@@ -4,6 +4,8 @@ using UnityEngine;
 using System;
 using System.Reflection;
 using System.ComponentModel;
+using EquipmentClass;
+using Utility;
 
 public class FightManager : MonoBehaviour {
     
@@ -23,8 +25,9 @@ public class FightManager : MonoBehaviour {
     public void fight()
     {
         isFight = true;
+        WeaponType weaponType = PropertyUtil.GetEnum<WeaponType>(Global.hero.equipmentManager.currentWeapon.data["weaponType"]);
         Global.hero.animator.SetBool("Fight", true);
-        Global.hero.animator.SetFloat("CombatType", (float)type);
+        Global.hero.animator.SetFloat("WeaponType", (float)weaponType);
     }
 
 

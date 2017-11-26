@@ -11,7 +11,7 @@ namespace EquipmentClass
     {
         //装备id
         public string id;
-        //装备类型
+        //装备部位
         public EquipmentPart part;
         //装备类型名称
         public string partName;

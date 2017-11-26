@@ -1,3 +1,4 @@
-id,attack,attackType,attackDistance,rank,skillID
-10001,20,physics,50,D,
-10010,100,physics,100,D,
+id,attack,weaponType,attackDistance,rank,skillID
+10001,20,hands,50,D,
+11010,100,sword,100,B,
+14001,80,pistol,200,C,

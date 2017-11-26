@@ -14,6 +14,8 @@ public class Global{
         }
     }
 
+    public static Dictionary<string, Rank> ranks = new Dictionary<string, Rank>();
+
     /// <summary>
     /// 拥有的技能列表
     /// </summary>
@@ -110,7 +112,6 @@ public class Global{
             return list;
         }
     }
-
 
     // 记录人物进入场景前的位置数组
 	public static List<Vector3> enterSceneBeforPositions = new List<Vector3>();

@@ -64,7 +64,6 @@ public class EquipmentDatas
             {
                 for (int j = 0; j < propertysData.dataList[i].Count; j++)
                 {
-                    Debug.Log(propertysData.head[j]);
                     //因为上表已经存在id字段了，字典key值不能重复
                     if (propertysData.head[j] != "id")
                     {
@@ -79,10 +78,10 @@ public class EquipmentDatas
             }
         }
 
-        foreach(KeyValuePair<string, string> pair in equipmentData)
-        {
-            Debug.Log(pair.Key + "===" + pair.Value);
-        }
+        //foreach(KeyValuePair<string, string> pair in equipmentData)
+        //{
+        //    Debug.Log(pair.Key + "===" + pair.Value);
+        //}
 
         return equipmentData;
     }

@@ -60,7 +60,7 @@ GameObject:
   - component: {fileID: 222689469270427092}
   - component: {fileID: 114866132995337230}
   m_Layer: 5
-  m_Name: Background
+  m_Name: EquipmentBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,7 +148,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b7d6529a2e404e6c808f7b90b49eb46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  part: 0
   icon: {fileID: 114111928435967768}
+  bg: {fileID: 114866132995337230}
 --- !u!114 &114512037786945552
 MonoBehaviour:
   m_ObjectHideFlags: 1

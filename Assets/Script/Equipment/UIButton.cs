@@ -12,8 +12,10 @@ namespace EquipmentClass
 		public Equipment equipment;
 		public EquipmentPart part;
 		public Image icon;
+        public Image bg;
 
 		Sprite defaultIcon;
+        Sprite defaultBG;
 
 		public static UIButton NewInstantiate()
 		{
@@ -27,6 +29,7 @@ namespace EquipmentClass
 			UIButton equipmentButton = NewInstantiate();
 			equipmentButton.equipment = _equipment;
 			equipmentButton.icon.sprite = _equipment.imageSprite;
+            equipmentButton.bg.sprite = Global.ranks[_equipment.data["rank"]].image;
 
 			return equipmentButton;
 		}
@@ -36,6 +39,7 @@ namespace EquipmentClass
 			UIButton equipmentButton = NewInstantiate();
 			equipmentButton.part = _part;
 			equipmentButton.defaultIcon = equipmentButton.getPartDefaultImage(_part);
+            equipmentButton.defaultBG = equipmentButton.bg.sprite;
 			equipmentButton.icon.sprite = equipmentButton.defaultIcon;
 
 			return equipmentButton;
@@ -103,10 +107,12 @@ namespace EquipmentClass
             if(_equipment != null)
             {
                 icon.sprite = _equipment.imageSprite;
+                bg.sprite = Global.ranks[_equipment.data["rank"]].image;
             }
             else
             {
                 icon.sprite = defaultIcon;
+                bg.sprite = defaultBG;
             }
 		
 		}

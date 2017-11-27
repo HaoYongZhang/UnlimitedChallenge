@@ -78,24 +78,33 @@ public class UIHeroItemView : MonoBehaviour {
 		
 	}
 
-    void setItemsSet()
+    public void setItemsSet()
     {
-        foreach (Equipment equipment in Global.equipments)
+        //清空子对象
+        for (int i = 0; i < itemsSet.transform.childCount; i++)
         {
-            EquipmentClass.UIButton equipmentButton = EquipmentClass.UIButton.NewInstantiate(equipment);
-            equipmentButton.transform.SetParent(itemsSet.transform, false);
-
-            UIMouseDelegate mouseDelegate = equipmentButton.gameObject.GetComponent<UIMouseDelegate>();
-            //mouseDelegate.onPointerClickDelegate = Global.hero.skillManager.onClickSkillButton;
-            //mouseDelegate.onPointerEnterDelegate = UIScene.Instance.onPointerEnterSkillButton;
-            //mouseDelegate.onPointerExitDelegate = UIScene.Instance.onPointerExitSkillButton;
-            mouseDelegate.onBeginDragDelegate = onBeginDragSkillButton;
-            mouseDelegate.onDragDelegate = onDragSkillButton;
-            mouseDelegate.onEndDragDelegate = onEndDragSkillButton;
+            GameObject go = itemsSet.transform.GetChild(i).gameObject;
+            Destroy(go);
         }
+
+        //foreach (EquipmentClass.UIButton equipmentButton in Global.equipmentButtons)
+        //{
+        //    if(!equipmentButton.equipment.isWear)
+        //    {
+        //        equipmentButton.transform.SetParent(itemsSet.transform, false);
+
+        //        UIMouseDelegate mouseDelegate = equipmentButton.gameObject.GetComponent<UIMouseDelegate>();
+        //        //mouseDelegate.onPointerClickDelegate = Global.hero.skillManager.onClickSkillButton;
+        //        //mouseDelegate.onPointerEnterDelegate = UIScene.Instance.onPointerEnterSkillButton;
+        //        //mouseDelegate.onPointerExitDelegate = UIScene.Instance.onPointerExitSkillButton;
+        //        mouseDelegate.onBeginDragDelegate = onBeginDrag;
+        //        mouseDelegate.onDragDelegate = onDrag;
+        //        mouseDelegate.onEndDragDelegate = onEndDrag;
+        //    }
+        //}
     }
 
-    void onBeginDragSkillButton(GameObject obj, PointerEventData eventData)
+    void onBeginDrag(GameObject obj, PointerEventData eventData)
     {
         //代替品实例化
         dragTempObject = new GameObject("DragTempObject");
@@ -111,16 +120,16 @@ public class UIHeroItemView : MonoBehaviour {
         group.blocksRaycasts = false;
     }
 
-    void onDragSkillButton(GameObject obj, PointerEventData eventData)
+    void onDrag(GameObject obj, PointerEventData eventData)
     {
         //并将拖拽时的坐标给予被拖拽对象的代替品
-
+       
         Vector3 movePosition = new Vector3(Input.mousePosition.x + 20, Input.mousePosition.y - 20);
 
         dragTempObject.transform.position = movePosition;
     }
 
-    void onEndDragSkillButton(GameObject obj, PointerEventData eventData)
+    void onEndDrag(GameObject obj, PointerEventData eventData)
     {
         //拖拽结束，销毁代替品
         if (dragTempObject)

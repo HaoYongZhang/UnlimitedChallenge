@@ -138,7 +138,6 @@ public class CharactersManager : MonoBehaviour
 
     public void replaceAvator(string rootBoneName, GameObject source){
         GameObject targer = currentAvatarDict[rootBoneName];
-
         if (rootBoneName == left_weapon_name || rootBoneName == right_weapon_name)
         {
             foreach (Transform tf in boneTransforms)

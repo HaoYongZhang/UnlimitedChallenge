@@ -37,6 +37,13 @@ public class EquipmentDatas
         csvData_2.RemoveAt(0);
         List<List<string>> dataList_2 = csvData_2;
         data.Add(EquipmentPart.head, new CSVDataStruct(head_2, dataList_2));
+
+        //头部数据
+        List<List<string>> csvData_3 = CSV.Instance.loadFile(path, "equipment_body.csv");
+        List<string> head_3 = csvData_3[0];
+        csvData_3.RemoveAt(0);
+        List<List<string>> dataList_3 = csvData_3;
+        data.Add(EquipmentPart.body, new CSVDataStruct(head_3, dataList_3));
     }
 
     public Dictionary<string, string> getEquipmentData(string id)

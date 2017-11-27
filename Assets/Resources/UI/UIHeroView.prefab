@@ -1624,12 +1624,6 @@ MonoBehaviour:
   equipmentLeftView: {fileID: 1968932222096206}
   equipmentRightView: {fileID: 1612714619855006}
   itemsSet: {fileID: 1833011454754812}
-  leftWeapon: {fileID: 0}
-  rightWeapon: {fileID: 0}
-  head: {fileID: 0}
-  body: {fileID: 0}
-  legs: {fileID: 0}
-  treasure: {fileID: 0}
   leftWeaponText: {fileID: 0}
   rightWeaponText: {fileID: 0}
   headText: {fileID: 0}
@@ -2860,7 +2854,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 80, y: 80}
-  m_Spacing: {x: 0, y: 0}
+  m_Spacing: {x: 25, y: 25}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!114 &114457202689528230

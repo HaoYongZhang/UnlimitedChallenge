@@ -95,17 +95,17 @@ public class Global{
     /// </summary>
     public static List<System.Object> items = new List<System.Object>();
 
-    public static List<Equipment> equipments
+    public static List<EquipmentClass.UIButton> equipmentButtons
     {
         get{
             
-            List <Equipment> list = new List<Equipment>();
+            List <EquipmentClass.UIButton> list = new List<EquipmentClass.UIButton>();
 
             foreach(System.Object o in items)
             {
-                if(o.GetType().ToString() == "EquipmentClass.Equipment")
+                if(o.GetType().ToString() == "EquipmentClass.UIButton")
                 {
-                    list.Add((Equipment)o);
+                    list.Add((EquipmentClass.UIButton)o);
                 }
             }
 

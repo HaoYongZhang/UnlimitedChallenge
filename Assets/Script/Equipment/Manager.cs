@@ -83,27 +83,97 @@ namespace EquipmentClass
 
         public void replaceEquipmentPart(Equipment equipment)
         {
-            GameObject equipmentObj = (GameObject)Instantiate(Resources.Load("Material/Equipment/equipment_" + equipment.id));
+            
             switch(equipment.part)
             {
                 case EquipmentPart.weapon:{
+                        GameObject equipmentObj = (GameObject)Instantiate(Resources.Load("Material/Equipment/equipment_" + equipment.id));
                         Global.hero.charactersManager.replaceAvator(CharactersManager.left_weapon_name, equipmentObj);
                     }
+                    break;
+                case EquipmentPart.body:
+                    {
+                        GameObject equipObj_1 = Resources.Load("Material/Equipment/equipment_" + equipment.id + "_body") as GameObject;
+                        GameObject equipObj_2 = Resources.Load("Material/Equipment/equipment_" + equipment.id + "_hand_left_arm") as GameObject;
+                        GameObject equipObj_3 = Resources.Load("Material/Equipment/equipment_" + equipment.id + "_hand_right_arm") as GameObject;
+                        GameObject equipObj_4 = Resources.Load("Material/Equipment/equipment_" + equipment.id + "_hand_left_forearm") as GameObject;
+                        GameObject equipObj_5 = Resources.Load("Material/Equipment/equipment_" + equipment.id + "_hand_right_forearm") as GameObject;
+
+                        if(equipObj_1 != null)
+                        {
+                            equipObj_1 = Instantiate(equipObj_1);
+                        }
+                        if (equipObj_2 != null)
+                        {
+                            equipObj_2 = Instantiate(equipObj_2);
+                        }
+                        if (equipObj_3 != null)
+                        {
+                            equipObj_3 = Instantiate(equipObj_3);
+                        }
+                        if (equipObj_4 != null)
+                        {
+                            equipObj_4 = Instantiate(equipObj_4);
+                        }
+                        if (equipObj_5 != null)
+                        {
+                            equipObj_5 = Instantiate(equipObj_5);
+                        }
+
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.body_name, equipObj_1);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.hand_left_arm_name, equipObj_2);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.hand_right_arm_name, equipObj_3);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.hand_left_forearm_name, equipObj_4);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.hand_right_forearm_name, equipObj_5);
+                    }
+
                     break;
             }
         }
 
+        /// <summary>
+        /// 穿上装备
+        /// </summary>
+        /// <param name="tagerEquiBtn">Tager equi button.</param>
+        /// <param name="sourceEquiBtn">Source equi button.</param>
         public void takeOnEquipment(EquipmentClass.UIButton tagerEquiBtn, EquipmentClass.UIButton sourceEquiBtn)
         {
             tagerEquiBtn.setEquipment(sourceEquiBtn.equipment);
-            replaceEquipmentPart(sourceEquiBtn.equipment);
+            replaceEquipmentPart(tagerEquiBtn.equipment);
 
-            UIScene.Instance.fightBar.setWeaponBG(sourceEquiBtn.equipment);
+            if(tagerEquiBtn.equipment.part == EquipmentPart.weapon)
+            {
+                UIScene.Instance.fightBar.setWeaponBG(tagerEquiBtn.equipment);
+            }
+
+            foreach (EquipmentClass.UIButton equipBtn in Global.equipmentButtons)
+            {
+                if (equipBtn.equipment.id == tagerEquiBtn.equipment.id)
+                {
+                    equipBtn.equipment.isWear = true;
+                    break;
+                }
+            }
+
+            //UIScene.Instance.heroView.GetComponent<UIHeroView>().itemsView.GetComponent<UIHeroItemView>().setItemsSet();
         }
 
-        public void takeOffEquipment(EquipmentPart part)
+        /// <summary>
+        /// 脱下装备
+        /// </summary>
+        /// <param name="equipmentButton">Equipment button.</param>
+        public void takeOffEquipment(EquipmentClass.UIButton equipmentButton)
         {
-            switch (part)
+            foreach(EquipmentClass.UIButton equipBtn in Global.equipmentButtons)
+            {
+                if(equipBtn.equipment.id == equipmentButton.equipment.id)
+                {
+                    equipBtn.equipment.isWear = false;
+                    break;
+                }
+            }
+
+            switch (equipmentButton.equipment.part)
             {
                 case EquipmentPart.weapon:
                     {
@@ -111,26 +181,21 @@ namespace EquipmentClass
                         UIScene.Instance.fightBar.setWeaponBG(null);
                     }
                     break;
-            }
-        }
-
-        /// <summary>
-        /// 返回同一个技能，共用这个技能的所有状态，否则会有深拷贝造成技能数据不一致
-        /// </summary>
-        /// <returns>The one skill by identifier.</returns>
-        /// <param name="_id">Identifier.</param>
-        public static Equipment GetOneSkillByID(string _id)
-        {
-            foreach (Equipment equipment in Global.equipments)
-            {
-                if (equipment.id == _id)
-                {
-                    return equipment;
-                }
+                case EquipmentPart.body:
+                    {
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.body_name, null);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.hand_left_arm_name, null);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.hand_right_arm_name, null);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.hand_left_forearm_name, null);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.hand_right_forearm_name, null);
+                    }
+                    break;
             }
 
-            return null;
+            UIScene.Instance.heroView.GetComponent<UIHeroView>().itemsView.GetComponent<UIHeroItemView>().setItemsSet();
+            equipmentButton.setEquipment(null);
         }
+
 
         void onBeginDrag(GameObject obj, PointerEventData eventData)
         {
@@ -153,8 +218,7 @@ namespace EquipmentClass
             temp.setEquipment(originalEquiBtn.equipment);
 
             //取消武器装备
-            takeOffEquipment(originalEquiBtn.equipment.part);
-            originalEquiBtn.setEquipment(null);
+            takeOffEquipment(originalEquiBtn);
 
             //防止拖拽结束时，代替品挡住了准备覆盖的对象而使得 OnDrop（） 无效
             CanvasGroup group = dragTempObject.AddComponent<CanvasGroup>();
@@ -193,14 +257,14 @@ namespace EquipmentClass
             GameObject dropObj = eventData.pointerDrag;
 
             Equipment replaceEquipment = dropObj.GetComponent<EquipmentClass.UIButton>().equipment;
-            Equipment oldEquipment = obj.GetComponent<EquipmentClass.UIButton>().equipment;
+            EquipmentClass.UIButton oldEquipmentBtn = obj.GetComponent<EquipmentClass.UIButton>();
 
-            if (replaceEquipment.part != obj.GetComponent<EquipmentClass.UIButton>().part)
+            if (replaceEquipment.part != oldEquipmentBtn.part)
             {
                 return;
             }
 
-            takeOnEquipment(obj.GetComponent<EquipmentClass.UIButton>(), dropObj.GetComponent<EquipmentClass.UIButton>());
+            takeOnEquipment(oldEquipmentBtn, dropObj.GetComponent<EquipmentClass.UIButton>());
         }
     }
 }

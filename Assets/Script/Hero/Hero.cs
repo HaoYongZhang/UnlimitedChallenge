@@ -75,17 +75,14 @@ public class Hero : MonoBehaviour {
         Global.skills.Add(new Skill("310030"));
         Global.skills.Add(new Skill("630001"));
 
-        Global.items.Add(new Equipment("11010"));
-        Global.items.Add(new Equipment("14001"));
+        Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("11010")));
+        Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("14001")));
+        Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("30020")));
 
         Global.shortcutSkills_1[0] = SkillClass.Manager.GetOneSkillByID(normal.talentSkillID);
         Global.shortcutSkills_1[1] = SkillClass.Manager.GetOneSkillByID("310030");
         Global.shortcutSkills_1[2] = SkillClass.Manager.GetOneSkillByID("630001");
 
-        List<Equipment> e = Global.equipments;
-
-        Dictionary<string, string> da = DataManager.Instance.skillDatas.getSkillData("140001");
-        Debug.Log(da);
 
         //UIScene.Instance.skillButtons[0].setSkill(SkillManager.GetOneSkillByID(normal.talentSkillID));
         //UIScene.Instance.skillButtons[1].setSkill(SkillManager.GetOneSkillByID("310030"));

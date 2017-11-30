@@ -81,12 +81,12 @@ public class UIHeroView : MonoBehaviour {
 
     public void show()
     {
-        UIScene.Instance.heroView.SetActive(true);
+        UIScene.Instance.heroView.gameObject.SetActive(true);
     }
 
     public void hide()
     {
-        UIScene.Instance.heroView.SetActive(false);
+        UIScene.Instance.heroView.gameObject.SetActive(false);
         UIScene.Instance.hideSkillInfo();
     }
 }           

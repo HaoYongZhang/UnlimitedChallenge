@@ -15,7 +15,7 @@ public class UIScene : MonoBehaviour
     public GameObject skillInfo;
     public GameObject skillsBar;
     public GameObject skillStatusBar;
-    public GameObject heroView;
+    public UIHeroView heroView;
     public UIFightBar fightBar;
 
     public Slider hpBar;
@@ -79,10 +79,12 @@ public class UIScene : MonoBehaviour
 
         skillStatusBar = GameObject.Find("SkillStatusBar");
 
-        heroView = Instantiate((GameObject)Resources.Load("UI/UIHeroView"));
-        heroView.name = "UIHeroView";
-        heroView.transform.SetParent(scene_ui_object.transform, false);
-        heroView.SetActive(false);
+        GameObject heroViewObj = Instantiate((GameObject)Resources.Load("UI/UIHeroView"));
+        heroViewObj.name = "UIHeroView";
+        heroViewObj.transform.SetParent(scene_ui_object.transform, false);
+        heroViewObj.SetActive(false);
+
+        heroView = heroViewObj.GetComponent<UIHeroView>();
 
         skillInfo = GameObject.Find("SkillInfo");
         skillInfo.SetActive(false);

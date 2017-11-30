@@ -20,6 +20,26 @@ public class UIHeroItemView : MonoBehaviour {
     List<string> equipmentNameList = new List<string>{"主武器", "副武器", "头部", "上半身", "下半身", "宝物"};
     List<Text> equipmentTextList = new List<Text>();
 
+    List<EquipmentClass.UIButton> equipmentSet
+    {
+        get
+        {
+            List<EquipmentClass.UIButton> list = new List<UIButton>();
+
+            for (int i = 0; i < Global.equipmentButtons.Count; i++)
+            {
+                EquipmentClass.UIButton equipmentButton = Global.equipmentButtons[i];
+                //获取没有装备的
+                if (!equipmentButton.equipment.isWear)
+                {
+                    list.Add(equipmentButton);
+                }
+            }
+
+            return list;
+        }
+    }
+
     //拖动物品时的临时创建对象
     GameObject dragTempObject;
 
@@ -81,27 +101,37 @@ public class UIHeroItemView : MonoBehaviour {
     public void setItemsSet()
     {
         //清空子对象
-        for (int i = 0; i < itemsSet.transform.childCount; i++)
-        {
-            GameObject go = itemsSet.transform.GetChild(i).gameObject;
-            Destroy(go);
-        }
-
-        //foreach (EquipmentClass.UIButton equipmentButton in Global.equipmentButtons)
+        //for (int i = 0; i < itemsSet.transform.childCount; i++)
         //{
-        //    if(!equipmentButton.equipment.isWear)
-        //    {
-        //        equipmentButton.transform.SetParent(itemsSet.transform, false);
-
-        //        UIMouseDelegate mouseDelegate = equipmentButton.gameObject.GetComponent<UIMouseDelegate>();
-        //        //mouseDelegate.onPointerClickDelegate = Global.hero.skillManager.onClickSkillButton;
-        //        //mouseDelegate.onPointerEnterDelegate = UIScene.Instance.onPointerEnterSkillButton;
-        //        //mouseDelegate.onPointerExitDelegate = UIScene.Instance.onPointerExitSkillButton;
-        //        mouseDelegate.onBeginDragDelegate = onBeginDrag;
-        //        mouseDelegate.onDragDelegate = onDrag;
-        //        mouseDelegate.onEndDragDelegate = onEndDrag;
-        //    }
+        //    GameObject go = itemsSet.transform.GetChild(i).gameObject;
+        //    go.SetActive(false);
         //}
+
+        //foreach (EquipmentClass.UIButton equipmentButton in equipmentSet)
+        //{
+        //    equipmentButton.gameObject.SetActive(true);
+        //    equipmentButton.transform.SetParent(itemsSet.transform, false);
+
+        //    UIMouseDelegate mouseDelegate = equipmentButton.gameObject.GetComponent<UIMouseDelegate>();
+        //    //mouseDelegate.onPointerClickDelegate = Global.hero.skillManager.onClickSkillButton;
+        //    //mouseDelegate.onPointerEnterDelegate = UIScene.Instance.onPointerEnterSkillButton;
+        //    //mouseDelegate.onPointerExitDelegate = UIScene.Instance.onPointerExitSkillButton;
+        //    mouseDelegate.onBeginDragDelegate = onBeginDrag;
+        //    mouseDelegate.onDragDelegate = onDrag;
+        //    mouseDelegate.onEndDragDelegate = onEndDrag;
+        //}
+
+        for (int i = 0; i < Global.equipmentButtons.Count; i ++)
+        {
+            UIButton equipBtn = Global.equipmentButtons[i];
+            equipBtn.gameObject.SetActive(!equipBtn.equipment.isWear);
+
+            equipBtn.transform.SetParent(itemsSet.transform, false);
+            UIMouseDelegate mouseDelegate = equipBtn.gameObject.GetComponent<UIMouseDelegate>();
+            mouseDelegate.onBeginDragDelegate = onBeginDrag;
+            mouseDelegate.onDragDelegate = onDrag;
+            mouseDelegate.onEndDragDelegate = onEndDrag;
+        }
     }
 
     void onBeginDrag(GameObject obj, PointerEventData eventData)
@@ -111,9 +141,9 @@ public class UIHeroItemView : MonoBehaviour {
         dragTempObject.transform.SetParent(UIScene.Instance.heroView.transform, false);
         dragTempObject.AddComponent<RectTransform>();
 
-        EquipmentClass.UIButton temp = EquipmentClass.UIButton.NewInstantiate();
+        Equipment tempEquipment = new Equipment(obj.GetComponentInChildren<UIButton>().equipment.id);
+        UIButton temp = EquipmentClass.UIButton.NewInstantiate(tempEquipment);
         temp.transform.SetParent(dragTempObject.transform, false);
-        temp.setEquipment(obj.GetComponentInChildren<EquipmentClass.UIButton>().equipment);
 
         //防止拖拽结束时，代替品挡住了准备覆盖的对象而使得 OnDrop（） 无效
         CanvasGroup group = dragTempObject.AddComponent<CanvasGroup>();
@@ -136,5 +166,7 @@ public class UIHeroItemView : MonoBehaviour {
         {
             Destroy(dragTempObject);
         }
+
+        UIScene.Instance.heroView.itemsView.GetComponent<UIHeroItemView>().setItemsSet();
     }
 }

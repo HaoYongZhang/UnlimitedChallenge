@@ -13,6 +13,7 @@ namespace EquipmentClass
 		public EquipmentPart part;
 		public Image icon;
         public Image bg;
+        public int number;
 
 		Sprite defaultIcon;
         Sprite defaultBG;
@@ -28,6 +29,7 @@ namespace EquipmentClass
 		{
 			UIButton equipmentButton = NewInstantiate();
 			equipmentButton.equipment = _equipment;
+            equipmentButton.part = _equipment.part;
 			equipmentButton.icon.sprite = _equipment.imageSprite;
             equipmentButton.bg.sprite = Global.ranks[_equipment.data["rank"]].image;
 

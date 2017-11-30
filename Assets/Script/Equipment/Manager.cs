@@ -135,18 +135,18 @@ namespace EquipmentClass
         /// 穿上装备
         /// </summary>
         /// <param name="tagerEquiBtn">Tager equi button.</param>
-        /// <param name="sourceEquiBtn">Source equi button.</param>
-        public void takeOnEquipment(EquipmentClass.UIButton tagerEquiBtn, EquipmentClass.UIButton sourceEquiBtn)
+        /// <param name="dropEquiBtn">Source equi button.</param>
+        public void takeOnEquipment(UIButton tagerEquiBtn, UIButton dropEquiBtn)
         {
-            tagerEquiBtn.setEquipment(sourceEquiBtn.equipment);
-            replaceEquipmentPart(tagerEquiBtn.equipment);
+            replaceEquipmentPart(dropEquiBtn.equipment);
+            tagerEquiBtn.setEquipment(dropEquiBtn.equipment);
 
             if(tagerEquiBtn.equipment.part == EquipmentPart.weapon)
             {
                 UIScene.Instance.fightBar.setWeaponBG(tagerEquiBtn.equipment);
             }
 
-            foreach (EquipmentClass.UIButton equipBtn in Global.equipmentButtons)
+            foreach (UIButton equipBtn in Global.equipmentButtons)
             {
                 if (equipBtn.equipment.id == tagerEquiBtn.equipment.id)
                 {
@@ -154,8 +154,6 @@ namespace EquipmentClass
                     break;
                 }
             }
-
-            //UIScene.Instance.heroView.GetComponent<UIHeroView>().itemsView.GetComponent<UIHeroItemView>().setItemsSet();
         }
 
         /// <summary>
@@ -192,14 +190,13 @@ namespace EquipmentClass
                     break;
             }
 
-            UIScene.Instance.heroView.GetComponent<UIHeroView>().itemsView.GetComponent<UIHeroItemView>().setItemsSet();
             equipmentButton.setEquipment(null);
         }
 
-
+        //开始拖拽
         void onBeginDrag(GameObject obj, PointerEventData eventData)
         {
-            EquipmentClass.UIButton originalEquiBtn = obj.GetComponentInChildren<EquipmentClass.UIButton>();
+            UIButton originalEquiBtn = obj.GetComponentInChildren<UIButton>();
 
             canDrag = (originalEquiBtn.equipment != null);
 
@@ -225,6 +222,7 @@ namespace EquipmentClass
             group.blocksRaycasts = false;
         }
 
+        //拖拽中
         void onDrag(GameObject obj, PointerEventData eventData)
         {
             if (!canDrag)
@@ -238,6 +236,7 @@ namespace EquipmentClass
             dragTempObject.transform.position = movePosition;
         }
 
+        //结束拖拽
         void onEndDrag(GameObject obj, PointerEventData eventData)
         {
             if (!canDrag)
@@ -250,21 +249,24 @@ namespace EquipmentClass
             {
                 Destroy(dragTempObject);
             }
+
+            UIScene.Instance.heroView.itemsView.GetComponent<UIHeroItemView>().setItemsSet();
         }
 
-        void onDrop(GameObject obj, PointerEventData eventData)
+        //接收被拖拽的物品
+        void onDrop(GameObject tagerObj, PointerEventData eventData)
         {
             GameObject dropObj = eventData.pointerDrag;
 
-            Equipment replaceEquipment = dropObj.GetComponent<EquipmentClass.UIButton>().equipment;
-            EquipmentClass.UIButton oldEquipmentBtn = obj.GetComponent<EquipmentClass.UIButton>();
+            UIButton dropEquipmentBtn = dropObj.GetComponent<UIButton>();
+            UIButton tagerEquipmentBtn = tagerObj.GetComponent<UIButton>();
 
-            if (replaceEquipment.part != oldEquipmentBtn.part)
+            if (dropEquipmentBtn.part != tagerEquipmentBtn.part)
             {
                 return;
             }
 
-            takeOnEquipment(oldEquipmentBtn, dropObj.GetComponent<EquipmentClass.UIButton>());
+            takeOnEquipment(tagerEquipmentBtn, dropEquipmentBtn);
         }
     }
 }

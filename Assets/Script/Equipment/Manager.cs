@@ -30,6 +30,7 @@ namespace EquipmentClass
         public EquipmentClass.UIButton body;
         public EquipmentClass.UIButton legs;
         public EquipmentClass.UIButton treasure;
+        public EquipmentClass.UIButton treasure_2;
 
         Dictionary<string, EquipmentClass.UIButton> equipmentDict = new Dictionary<string, EquipmentClass.UIButton>();
 
@@ -50,6 +51,7 @@ namespace EquipmentClass
             body = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.body);
             legs = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.legs);
             treasure = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.treasure);
+            treasure_2 = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.treasure);
 
             equipmentDict.Add("leftWeapon", leftWeapon);
             equipmentDict.Add("rightWeapon", rightWeapon);
@@ -57,6 +59,7 @@ namespace EquipmentClass
             equipmentDict.Add("body", body);
             equipmentDict.Add("legs", legs);
             equipmentDict.Add("treasure", treasure);
+            equipmentDict.Add("treasure_2", treasure_2);
 
             foreach(KeyValuePair<string, EquipmentClass.UIButton> dict in equipmentDict)
             {
@@ -187,6 +190,7 @@ namespace EquipmentClass
         /// <param name="dropEquiBtn">Source equi button.</param>
         public void takeOnEquipment(UIButton tagerEquiBtn, UIButton dropEquiBtn)
         {
+            bool hasTakeOne = false;
             foreach (UIButton equipBtn in Global.equipmentButtons)
             {
                 //如果已经装备了装备时，取消穿戴状态
@@ -202,9 +206,10 @@ namespace EquipmentClass
                 if(!equipBtn.equipment.isWear)
                 {
                     //设置穿戴状态
-                    if (equipBtn.equipment.id == dropEquiBtn.equipment.id)
+                    if (equipBtn.equipment.id == dropEquiBtn.equipment.id && !hasTakeOne)
                     {
                         equipBtn.equipment.isWear = true;
+                        hasTakeOne = true;
                     }
                 }
             }

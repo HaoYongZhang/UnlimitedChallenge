@@ -44,6 +44,19 @@ namespace EquipmentClass
     }
 
     /// <summary>
+    /// 头部类型
+    /// </summary>
+    public enum HeadType
+    {
+        [Description("头发")]
+        hair,
+        [Description("面具")]
+        face,
+        [Description("帽子")]
+        cap
+    }
+
+    /// <summary>
     /// 伤害修正
     /// </summary>
     public enum DamageCorrect

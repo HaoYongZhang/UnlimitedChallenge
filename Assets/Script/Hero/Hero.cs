@@ -77,20 +77,14 @@ public class Hero : MonoBehaviour {
 
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("11010")));
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("14001")));
+        Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("30001")));
+        Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("40001")));
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("30020")));
+        Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("40020")));
 
         Global.shortcutSkills_1[0] = SkillClass.Manager.GetOneSkillByID(normal.talentSkillID);
         Global.shortcutSkills_1[1] = SkillClass.Manager.GetOneSkillByID("310030");
         Global.shortcutSkills_1[2] = SkillClass.Manager.GetOneSkillByID("630001");
-
-
-        //UIScene.Instance.skillButtons[0].setSkill(SkillManager.GetOneSkillByID(normal.talentSkillID));
-        //UIScene.Instance.skillButtons[1].setSkill(SkillManager.GetOneSkillByID("310030"));
-        //UIScene.Instance.skillButtons[2].setSkill(SkillManager.GetOneSkillByID("630001"));
-
-        //Weapon leftWeapon = new Weapon("20001");
-        //GameObject leftWeaponObj = (GameObject)Instantiate(Resources.Load("Material/Weapon/weapon_" + leftWeapon.id));
-        //Global.hero.charactersManager.replaceAvator(CharactersManager.left_weapon_name, leftWeaponObj);
 
         InvokeRepeating("RegenerationPerSecond", 0, 1f);
 	}
@@ -128,7 +122,6 @@ public class Hero : MonoBehaviour {
         //当能量值不是最大值时
         if (property.mp <= property.mpMax)
         {
-
             //当回复能量值后将会溢出最大值时
             if (Math.Round(property.mp + property.mpRegeneration, 1) > property.mpMax)
             {

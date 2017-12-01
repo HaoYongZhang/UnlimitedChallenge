@@ -71,8 +71,10 @@ namespace EquipmentClass
         // Use this for initialization
         void Start()
         {
+            takeOnEquipment(body, GetEquipmentButton("30001"));
+            takeOnEquipment(legs, GetEquipmentButton("40001"));
 
-
+            UIScene.Instance.heroView.itemsView.GetComponent<UIHeroItemView>().setItemsSet();
         }
 
         // Update is called once per frame
@@ -81,9 +83,26 @@ namespace EquipmentClass
 
         }
 
+
+        public UIButton GetEquipmentButton(string _id)
+        {
+            foreach(UIButton equipBtn in Global.equipmentButtons)
+            {
+                if(equipBtn.equipment.id == _id)
+                {
+                    return equipBtn;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// 更换装备外观
+        /// </summary>
+        /// <param name="equipment">Equipment.</param>
         public void replaceEquipmentPart(Equipment equipment)
         {
-            
             switch(equipment.part)
             {
                 case EquipmentPart.weapon:{
@@ -126,6 +145,36 @@ namespace EquipmentClass
                         Global.hero.charactersManager.replaceAvator(CharactersManager.hand_left_forearm_name, equipObj_4);
                         Global.hero.charactersManager.replaceAvator(CharactersManager.hand_right_forearm_name, equipObj_5);
                     }
+                    break;
+                case EquipmentPart.legs:
+                    {
+                        GameObject equipObj_1 = Resources.Load("Material/Equipment/equipment_" + equipment.id + "_leg_left_thigh") as GameObject;
+                        GameObject equipObj_2 = Resources.Load("Material/Equipment/equipment_" + equipment.id + "_leg_left_shin") as GameObject;
+                        GameObject equipObj_3 = Resources.Load("Material/Equipment/equipment_" + equipment.id + "_leg_right_thigh") as GameObject;
+                        GameObject equipObj_4 = Resources.Load("Material/Equipment/equipment_" + equipment.id + "_leg_right_shin") as GameObject;
+
+                        if (equipObj_1 != null)
+                        {
+                            equipObj_1 = Instantiate(equipObj_1);
+                        }
+                        if (equipObj_2 != null)
+                        {
+                            equipObj_2 = Instantiate(equipObj_2);
+                        }
+                        if (equipObj_3 != null)
+                        {
+                            equipObj_3 = Instantiate(equipObj_3);
+                        }
+                        if (equipObj_4 != null)
+                        {
+                            equipObj_4 = Instantiate(equipObj_4);
+                        }
+
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.leg_left_thigh_name, equipObj_1);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.leg_left_shin_name, equipObj_2);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.leg_right_thigh_name, equipObj_3);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.leg_right_shin_name, equipObj_4);
+                    }
 
                     break;
             }
@@ -138,21 +187,35 @@ namespace EquipmentClass
         /// <param name="dropEquiBtn">Source equi button.</param>
         public void takeOnEquipment(UIButton tagerEquiBtn, UIButton dropEquiBtn)
         {
+            foreach (UIButton equipBtn in Global.equipmentButtons)
+            {
+                //如果已经装备了装备时，取消穿戴状态
+                if(tagerEquiBtn.equipment != null)
+                {
+                    if(tagerEquiBtn.equipment.id == equipBtn.equipment.id)
+                    {
+                        equipBtn.equipment.isWear = false;
+                    }
+                }
+
+                //筛选没有穿戴的装备
+                if(!equipBtn.equipment.isWear)
+                {
+                    //设置穿戴状态
+                    if (equipBtn.equipment.id == dropEquiBtn.equipment.id)
+                    {
+                        equipBtn.equipment.isWear = true;
+                    }
+                }
+            }
+
             replaceEquipmentPart(dropEquiBtn.equipment);
             tagerEquiBtn.setEquipment(dropEquiBtn.equipment);
 
-            if(tagerEquiBtn.equipment.part == EquipmentPart.weapon)
+            //如果更换的装备是武器时，改变UI图标
+            if (tagerEquiBtn.equipment.part == EquipmentPart.weapon)
             {
                 UIScene.Instance.fightBar.setWeaponBG(tagerEquiBtn.equipment);
-            }
-
-            foreach (UIButton equipBtn in Global.equipmentButtons)
-            {
-                if (equipBtn.equipment.id == tagerEquiBtn.equipment.id)
-                {
-                    equipBtn.equipment.isWear = true;
-                    break;
-                }
             }
         }
 
@@ -186,6 +249,14 @@ namespace EquipmentClass
                         Global.hero.charactersManager.replaceAvator(CharactersManager.hand_right_arm_name, null);
                         Global.hero.charactersManager.replaceAvator(CharactersManager.hand_left_forearm_name, null);
                         Global.hero.charactersManager.replaceAvator(CharactersManager.hand_right_forearm_name, null);
+                    }
+                    break;
+                case EquipmentPart.legs:
+                    {
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.leg_left_shin_name, null);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.leg_left_thigh_name, null);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.leg_right_shin_name, null);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.leg_right_thigh_name, null);
                     }
                     break;
             }
@@ -261,6 +332,7 @@ namespace EquipmentClass
             UIButton dropEquipmentBtn = dropObj.GetComponent<UIButton>();
             UIButton tagerEquipmentBtn = tagerObj.GetComponent<UIButton>();
 
+            //如果装备部位不同，则返回
             if (dropEquipmentBtn.part != tagerEquipmentBtn.part)
             {
                 return;

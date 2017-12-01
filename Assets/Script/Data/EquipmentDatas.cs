@@ -38,12 +38,19 @@ public class EquipmentDatas
         List<List<string>> dataList_2 = csvData_2;
         data.Add(EquipmentPart.head, new CSVDataStruct(head_2, dataList_2));
 
-        //头部数据
+        //身体数据
         List<List<string>> csvData_3 = CSV.Instance.loadFile(path, "equipment_body.csv");
         List<string> head_3 = csvData_3[0];
         csvData_3.RemoveAt(0);
         List<List<string>> dataList_3 = csvData_3;
         data.Add(EquipmentPart.body, new CSVDataStruct(head_3, dataList_3));
+
+        //腿部数据
+        List<List<string>> csvData_4 = CSV.Instance.loadFile(path, "equipment_legs.csv");
+        List<string> head_4 = csvData_4[0];
+        csvData_4.RemoveAt(0);
+        List<List<string>> dataList_4 = csvData_4;
+        data.Add(EquipmentPart.legs, new CSVDataStruct(head_4, dataList_4));
     }
 
     public Dictionary<string, string> getEquipmentData(string id)

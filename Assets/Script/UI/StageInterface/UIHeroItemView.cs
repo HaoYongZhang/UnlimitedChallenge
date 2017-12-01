@@ -100,27 +100,6 @@ public class UIHeroItemView : MonoBehaviour {
 
     public void setItemsSet()
     {
-        //清空子对象
-        //for (int i = 0; i < itemsSet.transform.childCount; i++)
-        //{
-        //    GameObject go = itemsSet.transform.GetChild(i).gameObject;
-        //    go.SetActive(false);
-        //}
-
-        //foreach (EquipmentClass.UIButton equipmentButton in equipmentSet)
-        //{
-        //    equipmentButton.gameObject.SetActive(true);
-        //    equipmentButton.transform.SetParent(itemsSet.transform, false);
-
-        //    UIMouseDelegate mouseDelegate = equipmentButton.gameObject.GetComponent<UIMouseDelegate>();
-        //    //mouseDelegate.onPointerClickDelegate = Global.hero.skillManager.onClickSkillButton;
-        //    //mouseDelegate.onPointerEnterDelegate = UIScene.Instance.onPointerEnterSkillButton;
-        //    //mouseDelegate.onPointerExitDelegate = UIScene.Instance.onPointerExitSkillButton;
-        //    mouseDelegate.onBeginDragDelegate = onBeginDrag;
-        //    mouseDelegate.onDragDelegate = onDrag;
-        //    mouseDelegate.onEndDragDelegate = onEndDrag;
-        //}
-
         for (int i = 0; i < Global.equipmentButtons.Count; i ++)
         {
             UIButton equipBtn = Global.equipmentButtons[i];

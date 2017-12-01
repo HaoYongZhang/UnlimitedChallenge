@@ -7,6 +7,7 @@ public class CharactersManager : MonoBehaviour
     public GameObject mainBone;
 
     GameObject head;
+    GameObject headdress;
     GameObject body;
     GameObject hand_left_arm;
     GameObject hand_left_forearm;
@@ -22,6 +23,7 @@ public class CharactersManager : MonoBehaviour
 
     public static string prefixBoneName = "mixamorig:";
     public static string head_name = "Head";
+    public static string headdress_name = "Headdress";
     public static string body_name = "Hips";
     public static string hand_left_arm_name = "LeftArm";
     public static string hand_left_forearm_name = "LeftForeArm";
@@ -64,6 +66,7 @@ public class CharactersManager : MonoBehaviour
         boneTransforms.Insert(0, mainBone.transform);
 
         head = (GameObject)Instantiate(Resources.Load(path + "head"));
+        headdress = (GameObject)Instantiate(Resources.Load(path + "headdress"));
         body = (GameObject)Instantiate(Resources.Load(path + "body"));
         hand_left_arm = (GameObject)Instantiate(Resources.Load(path + "hand_left_arm"));
         hand_left_forearm = (GameObject)Instantiate(Resources.Load(path + "hand_left_forearm"));
@@ -78,6 +81,7 @@ public class CharactersManager : MonoBehaviour
         rightWeapon = new GameObject();
 
         currentAvatarDict.Add(head_name, head);
+        currentAvatarDict.Add(headdress_name, headdress);
         currentAvatarDict.Add(body_name, body);
         currentAvatarDict.Add(hand_left_arm_name, hand_left_arm);
         currentAvatarDict.Add(hand_left_forearm_name, hand_left_forearm);

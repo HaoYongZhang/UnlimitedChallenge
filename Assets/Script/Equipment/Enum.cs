@@ -44,12 +44,12 @@ namespace EquipmentClass
     }
 
     /// <summary>
-    /// 头部类型
+    /// 头部装备的部位
     /// </summary>
-    public enum HeadType
+    public enum HeadPart
     {
         [Description("头发")]
-        hair,
+        headdress,
         [Description("面具")]
         face,
         [Description("帽子")]

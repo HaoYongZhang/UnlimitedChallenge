@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.ComponentModel;
 using UnityEngine.EventSystems;
+using Utility;
 
 namespace EquipmentClass
 {
@@ -32,7 +33,7 @@ namespace EquipmentClass
         public EquipmentClass.UIButton treasure;
         public EquipmentClass.UIButton treasure_2;
 
-        Dictionary<string, EquipmentClass.UIButton> equipmentDict = new Dictionary<string, EquipmentClass.UIButton>();
+        public Dictionary<string, EquipmentClass.UIButton> equipmentDict = new Dictionary<string, EquipmentClass.UIButton>();
 
         //拖动物品时的临时创建对象
         GameObject dragTempObject;
@@ -53,8 +54,8 @@ namespace EquipmentClass
             treasure = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.treasure);
             treasure_2 = EquipmentClass.UIButton.NewInstantiate(EquipmentPart.treasure);
 
-            equipmentDict.Add("leftWeapon", leftWeapon);
-            equipmentDict.Add("rightWeapon", rightWeapon);
+            equipmentDict.Add("weapon", leftWeapon);
+            equipmentDict.Add("subWeapon", rightWeapon);
             equipmentDict.Add("head", head);
             equipmentDict.Add("body", body);
             equipmentDict.Add("legs", legs);
@@ -63,6 +64,7 @@ namespace EquipmentClass
 
             foreach(KeyValuePair<string, EquipmentClass.UIButton> dict in equipmentDict)
             {
+                dict.Value.gameObject.GetComponent<UIMouseDelegate>().onPointerDoubleClickDelegate = onDoubleClick;
                 dict.Value.gameObject.GetComponent<UIMouseDelegate>().onBeginDragDelegate = onBeginDrag;
                 dict.Value.gameObject.GetComponent<UIMouseDelegate>().onDragDelegate = onDrag;
                 dict.Value.gameObject.GetComponent<UIMouseDelegate>().onEndDragDelegate = onEndDrag;
@@ -111,6 +113,30 @@ namespace EquipmentClass
                 case EquipmentPart.weapon:{
                         GameObject equipmentObj = (GameObject)Instantiate(Resources.Load("Material/Equipment/equipment_" + equipment.id));
                         Global.hero.charactersManager.replaceAvator(CharactersManager.left_weapon_name, equipmentObj);
+                    }
+                    break;
+                case EquipmentPart.head:
+                    {
+                        HeadPart headPart = PropertyUtil.GetEnum<HeadPart>(equipment.data["headPart"]);
+                        GameObject equipmentObj = (GameObject)Instantiate(Resources.Load("Material/Equipment/equipment_" + equipment.id + "_" + headPart.ToString()));
+
+                        //清空遗留的装备模型
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.head_face_name, null);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.headdress_name, null);
+
+                        switch(headPart)
+                        {
+                            case HeadPart.headdress:
+                                {
+                                    Global.hero.charactersManager.replaceAvator(CharactersManager.headdress_name, equipmentObj);
+                                }
+                                break;
+                            case HeadPart.face:
+                                {
+                                    Global.hero.charactersManager.replaceAvator(CharactersManager.head_face_name, equipmentObj);
+                                }
+                                break;
+                        }
                     }
                     break;
                 case EquipmentPart.body:
@@ -247,6 +273,12 @@ namespace EquipmentClass
                         UIScene.Instance.fightBar.setWeaponBG(null);
                     }
                     break;
+                case EquipmentPart.head:
+                    {
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.headdress_name, null);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.head_face_name, null);
+                    }
+                    break;
                 case EquipmentPart.body:
                     {
                         Global.hero.charactersManager.replaceAvator(CharactersManager.body_name, null);
@@ -267,6 +299,13 @@ namespace EquipmentClass
             }
 
             equipmentButton.setEquipment(null);
+        }
+
+        //双击装备
+        void onDoubleClick(GameObject obj, PointerEventData eventData)
+        {
+            takeOffEquipment(obj.GetComponent<UIButton>());
+            UIScene.Instance.heroView.itemsView.GetComponent<UIHeroItemView>().setItemsSet();
         }
 
         //开始拖拽

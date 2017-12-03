@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public delegate void OnPointerClickDelegate(GameObject obj, PointerEventData eventData);
+public delegate void OnPointerDoubleClickDelegate(GameObject obj, PointerEventData eventData);
 public delegate void OnPointerEnterDelegate(GameObject obj, PointerEventData eventData);
 public delegate void OnPointerExitDelegate(GameObject obj, PointerEventData eventData);
 
@@ -14,8 +15,8 @@ public delegate void OnDropDelegate(GameObject obj, PointerEventData eventData);
 
 public class UIMouseDelegate : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler
 {
-
     public OnPointerClickDelegate onPointerClickDelegate;
+    public OnPointerDoubleClickDelegate onPointerDoubleClickDelegate;
     public OnPointerEnterDelegate onPointerEnterDelegate;
     public OnPointerExitDelegate onPointerExitDelegate;
 
@@ -42,10 +43,24 @@ public class UIMouseDelegate : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// <param name="eventData">Event data.</param>
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (onPointerClickDelegate != null)
+        //双击
+        if (eventData.clickCount == 2)
         {
-            onPointerClickDelegate(gameObject, eventData);
+            if (onPointerDoubleClickDelegate != null)
+            {
+                onPointerDoubleClickDelegate(gameObject, eventData);
+            }
         }
+        //单击
+        else
+        {
+            if (onPointerClickDelegate != null)
+            {
+                onPointerClickDelegate(gameObject, eventData);
+            }
+
+        }
+
     }
 
     /// <summary>

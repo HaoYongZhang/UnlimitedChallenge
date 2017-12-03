@@ -1,2 +1,4 @@
-id,name
-20001,帽子
+id,name,rank,headPart
+20001,帽子,D,headdress
+20020,战术头盔,C,headdress
+20060,无感者面具,B,face

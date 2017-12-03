@@ -24,6 +24,7 @@ public class CharactersManager : MonoBehaviour
     public static string prefixBoneName = "mixamorig:";
     public static string head_name = "Head";
     public static string headdress_name = "Headdress";
+    public static string head_face_name = "HeadFace";
     public static string body_name = "Hips";
     public static string hand_left_arm_name = "LeftArm";
     public static string hand_left_forearm_name = "LeftForeArm";
@@ -91,8 +92,7 @@ public class CharactersManager : MonoBehaviour
         currentAvatarDict.Add(leg_left_shin_name, leg_left_shin);
         currentAvatarDict.Add(leg_right_thigh_name, leg_right_thigh);
         currentAvatarDict.Add(leg_right_shin_name, leg_right_shin);
-        currentAvatarDict.Add(left_weapon_name, leftWeapon);
-        currentAvatarDict.Add(right_weapon_name, rightWeapon);
+
 
         foreach (KeyValuePair<string, GameObject> dict in currentAvatarDict)
         {
@@ -101,12 +101,13 @@ public class CharactersManager : MonoBehaviour
 
             defaultAvatarDict.Add(dict.Key, dict.Value);
 
-            //不对武器进行绑定
-            if (dict.Key != left_weapon_name && dict.Key != right_weapon_name)
-            {
-                combineSkinnedMeshRenderer(dict.Key, dict.Value);
-            }
+            combineSkinnedMeshRenderer(dict.Key, dict.Value);
         }
+
+        //不进行初始化绑定的部位
+        currentAvatarDict.Add(head_face_name, null);
+        currentAvatarDict.Add(left_weapon_name, leftWeapon);
+        currentAvatarDict.Add(right_weapon_name, rightWeapon);
     }
 
     void combineSkinnedMeshRenderer(string rootBoneName, GameObject obj)
@@ -141,7 +142,8 @@ public class CharactersManager : MonoBehaviour
     }
 
     public void replaceAvator(string rootBoneName, GameObject source){
-        GameObject targer = currentAvatarDict[rootBoneName];
+        
+        //如果部位是武器类型时
         if (rootBoneName == left_weapon_name || rootBoneName == right_weapon_name)
         {
             foreach (Transform tf in boneTransforms)
@@ -172,16 +174,36 @@ public class CharactersManager : MonoBehaviour
                 }
             }
         }
+        //非武器部位
         else
         {
-            targer.SetActive(false);
+            //当前的部位
+            GameObject currentAvatar = currentAvatarDict[rootBoneName];
+            //判断是不是默认初始化的骨骼名称
+            bool isDefaultBoneName = defaultAvatarDict.ContainsKey(rootBoneName);
 
-            if (targer != defaultAvatarDict[rootBoneName])
+            //原来部位存在时
+            if (currentAvatar)
             {
-                Destroy(targer);
+                currentAvatar.SetActive(false);
+
+                if(isDefaultBoneName)
+                {
+                    //如果原来部位和默认的部位不是同一个时，销毁
+                    if (currentAvatar != defaultAvatarDict[rootBoneName])
+                    {
+                        Destroy(currentAvatar);
+                    }
+                }
+                else
+                {
+                    Destroy(currentAvatar);
+                }
             }
 
-            if (source != null)
+
+            //来源对象存在时，更换部位
+            if (source)
             {
                 source.transform.SetParent(gameObject.transform, false);
                 combineSkinnedMeshRenderer(rootBoneName, source);
@@ -189,10 +211,20 @@ public class CharactersManager : MonoBehaviour
 
                 currentAvatarDict[rootBoneName] = source;
             }
+            //来源对象不存在时，进行对象的初始化
             else
             {
-                defaultAvatarDict[rootBoneName].SetActive(true);
-                currentAvatarDict[rootBoneName] = defaultAvatarDict[rootBoneName];
+                //如果是默认部位时，显示默认部位
+                if(isDefaultBoneName)
+                {
+                    defaultAvatarDict[rootBoneName].SetActive(true);
+                    currentAvatarDict[rootBoneName] = defaultAvatarDict[rootBoneName];
+                }
+                else
+                {
+                    currentAvatarDict[rootBoneName] = null;
+                }
+
             }
         }
 

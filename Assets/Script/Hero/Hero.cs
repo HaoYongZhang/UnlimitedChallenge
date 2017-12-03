@@ -79,6 +79,8 @@ public class Hero : MonoBehaviour {
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("14001")));
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("30001")));
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("40001")));
+        Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("20020")));
+        Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("20060")));
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("30020")));
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("40020")));
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("40020")));

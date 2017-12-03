@@ -69,7 +69,17 @@ public class UIHeroItemView : MonoBehaviour {
             mouseDelegate.onBeginDragDelegate = onBeginDrag;
             mouseDelegate.onDragDelegate = onDrag;
             mouseDelegate.onEndDragDelegate = onEndDrag;
+            mouseDelegate.onPointerDoubleClickDelegate = onDoubleClick;
         }
+    }
+
+    void onDoubleClick(GameObject obj, PointerEventData eventData)
+    {
+        UIButton equipBtn = obj.GetComponent<UIButton>();
+
+        Global.hero.equipmentManager.takeOnEquipment(Global.hero.equipmentManager.equipmentDict[equipBtn.part.ToString()], equipBtn);
+
+        setItemsSet();
     }
 
     void onBeginDrag(GameObject obj, PointerEventData eventData)

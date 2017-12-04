@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: c6016751af1284d61ad4cb24913343b0
-timeCreated: 1512374030
+guid: 86071ff5c22444adc848ec72c823160d
+timeCreated: 1512374794
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -60,7 +60,7 @@ ModelImporter:
     400050: unamed
     400052: //RootNode
     4300000: unamed
-    7400000: mixamo.com
+    7400000: zombie_walk
     9500000: //RootNode
     13700000: unamed
   externalObjects:
@@ -68,7 +68,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: palettemat
-    second: {fileID: 2100000, guid: 89455a822bbf54a849e4d6f641650e01, type: 2}
+    second: {fileID: 2100000, guid: 770c8358802c04980a7936d1d720e0ce, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -94,7 +94,35 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: zombie_walk
+      takeName: mixamo.com
+      firstFrame: 0
+      lastFrame: 121
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []

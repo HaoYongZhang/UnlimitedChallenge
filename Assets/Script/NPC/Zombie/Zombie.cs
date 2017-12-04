@@ -9,7 +9,7 @@ public class Zombie : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Invoke("test", 3f);
+        //Invoke("test", 3f);
 	}
 	
 	// Update is called once per frame
@@ -20,6 +20,6 @@ public class Zombie : MonoBehaviour {
     void test()
     {
         Debug.Log("执行");
-        _animator.SetBool("fight", true);
+        //_animator.SetBool("running", true);
     }
 }

@@ -121,7 +121,6 @@ public class CharactersManager : MonoBehaviour
         if(model.gameObject.GetComponent<SkinnedMeshRenderer>() != null)
         { 
             DestroyImmediate(model.gameObject.GetComponent<SkinnedMeshRenderer>());
-            Debug.Log("执行销毁" + rootBoneName);
         }
 
         SkinnedMeshRenderer smr = model.gameObject.AddComponent<SkinnedMeshRenderer>();

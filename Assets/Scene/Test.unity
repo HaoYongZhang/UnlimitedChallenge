@@ -247,7 +247,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &87431935
 Animator:
   serializedVersion: 3
@@ -1869,7 +1869,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4239058542261340, guid: 11fbea50c49ff4112b1f20708b27fa4a, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -2.05
       objectReference: {fileID: 0}
     - target: {fileID: 4239058542261340, guid: 11fbea50c49ff4112b1f20708b27fa4a, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1895,9 +1895,14 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 54513407639307698, guid: 11fbea50c49ff4112b1f20708b27fa4a,
+        type: 2}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1299131771559552, guid: 11fbea50c49ff4112b1f20708b27fa4a, type: 2}
-      propertyPath: m_Name
-      value: zombie
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 11fbea50c49ff4112b1f20708b27fa4a, type: 2}

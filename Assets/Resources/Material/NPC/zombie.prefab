@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 114737801508312052}
   m_Layer: 0
   m_Name: zombie
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -482,15 +482,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1299131771559552}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.05, z: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 41.7, y: 2.5, z: -8.4}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
   - {fileID: 4328181738626632}
   - {fileID: 4975555195226520}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!4 &4268279539153868
 Transform:
   m_ObjectHideFlags: 1
@@ -867,9 +867,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fefc86c80514749849c32bd438f792ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 0
-  player: {fileID: 0}
-  animator: {fileID: 0}
+  _player: {fileID: 0}
+  _animator: {fileID: 0}
+  _rigidbody: {fileID: 0}
+  state: 0
+  senseDistance: 100
+  attackDistance: 10
+  moveSpeed: 20
 --- !u!137 &137705459429077242
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

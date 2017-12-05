@@ -12,11 +12,13 @@ namespace EnemyClass
         public State state = State.idle;
 
         //感知距离
-        public float senseDistance = 100f;
+        public float senseDistance = 50f;
         //攻击距离
-        public float attackDistance = 10f;
+        public float attackDistance = 15f;
         //移动速度
         public float moveSpeed = 20f;
+        //是否正在攻击期间
+        bool isDuringAttack;
 
         void Start()
         {
@@ -34,7 +36,7 @@ namespace EnemyClass
 
         void FixedUpdate()
         {
-            if (!isInAnimation("Attack") && isInAnimation("Chase"))
+            if (isInAnimation("Chase"))
             {
                 move();
             }
@@ -51,26 +53,26 @@ namespace EnemyClass
             //主角进入感知距离
             if (distance <= senseDistance)
             {
-                Debug.Log("主角进入感知距离");
+                //Debug.Log("主角进入感知距离");
                 //主角进入攻击距离，进行攻击
                 if(distance <= attackDistance)
                 {
-                    Debug.Log("主角进入攻击距离，进行攻击");
-                    this.transform.LookAt(_player.transform);
+                    //Debug.Log("主角进入攻击距离，进行攻击");
+                    faceTo(_player);
                     state = State.attack;
                 }
                 //主角不在攻击距离，进行追击
                 else
                 {
-                    Debug.Log("主角不在攻击距离，进行追击");
-                    this.transform.LookAt(_player.transform);
+                    //Debug.Log("主角不在攻击距离，进行追击");
+                    faceTo(_player);
                     state = State.chase;
                 }
             }
             //主角不在感知范围
             else
             {
-                Debug.Log("主角不在感知范围");
+                //Debug.Log("主角不在感知范围");
                 state = State.idle;
             }
         }
@@ -112,7 +114,7 @@ namespace EnemyClass
 
         void idle()
         {
-            if (!isInAnimation("Attack"))
+            if (!isDuringAttack)
             {
                 _animator.SetBool("chase", false);
                 _animator.SetBool("attack", false);
@@ -121,7 +123,7 @@ namespace EnemyClass
 
         void chase()
         {
-            if(!isInAnimation("Attack"))
+            if(!isDuringAttack)
             {
                 _animator.SetBool("chase", true);
             }
@@ -135,10 +137,12 @@ namespace EnemyClass
 
         void attack()
         {
-            if (!isInAnimation("Attack"))
+            if (!isDuringAttack)
             {
                 Debug.Log("出发攻击");
+                _animator.SetBool("chase", false);
                 _animator.SetBool("attack", true);
+                isDuringAttack = true;
             }
         }
 
@@ -162,7 +166,15 @@ namespace EnemyClass
         //攻击完成
         void endAttack()
         {
+            Debug.Log("结束攻击");
+            isDuringAttack = false;
             _animator.SetBool("attack", false);
+        }
+
+        void faceTo(GameObject obj)
+        {
+            Vector3 point = new Vector3(obj.transform.position.x, transform.position.y, obj.transform.position.z);
+            transform.LookAt(point);
         }
     }
 }

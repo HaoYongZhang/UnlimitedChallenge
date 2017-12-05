@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: e90804f64cf0e4546bf669e931ebe6d4
-timeCreated: 1512484633
+guid: 8a1f68866507c495b9d0021292dbd058
+timeCreated: 1512484827
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -60,7 +60,7 @@ ModelImporter:
     400050: unamed
     400052: //RootNode
     4300000: unamed
-    7400000: zombie_walk
+    7400000: zombie_attack
     9500000: //RootNode
     13700000: unamed
   externalObjects:
@@ -96,17 +96,17 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: zombie_walk
+      name: zombie_attack
       takeName: mixamo.com
       firstFrame: 0
-      lastFrame: 121
+      lastFrame: 100
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -118,7 +118,28 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: startAttack
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 1
+        functionName: endAttack
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.41350213
+        functionName: inAttack
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

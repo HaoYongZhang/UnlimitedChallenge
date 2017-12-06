@@ -13,7 +13,7 @@ public class Normal
 	public Normal()
 	{
 		property.basStrength = 10;
-        property.basAgility = 10;
+        property.basAgility = 0;
         property.basIntellect = 10;
 
 		property.hp = property.hpMax;

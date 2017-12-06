@@ -1,15 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EnemyClass;
 
 public class Zombie : MonoBehaviour {
-    
-    public Rigidbody _rigid;
-    public Animator _animator;
+
+    public Property property{ get; set; }
 
 	// Use this for initialization
 	void Start () {
-        //Invoke("test", 3f);
+        GetComponent<AI>().attackDamageDelegate = attackDamage;
+
+        property = new Property();
+        property.basAttack = 100;
 	}
 	
 	// Update is called once per frame
@@ -17,9 +20,8 @@ public class Zombie : MonoBehaviour {
 		
 	}
 
-    void test()
+    void attackDamage()
     {
-        Debug.Log("执行");
-        //_animator.SetBool("running", true);
+        DamageManager.CommonAttack<Zombie, Hero>(gameObject, Global.hero.gameObject, DamageType.physics);
     }
 }

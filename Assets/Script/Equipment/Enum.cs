@@ -78,19 +78,4 @@ namespace EquipmentClass
         [Description("机械枪")]
         gun
     }
-
-    /// <summary>
-    /// 伤害类型
-    /// </summary>
-    public enum DamageType
-    {
-        [Description("物理")]
-        physics,
-        [Description("内力")]
-        Force,
-        [Description("魔法")]
-        Magic,
-        [Description("能量")]
-        other
-    }
 }

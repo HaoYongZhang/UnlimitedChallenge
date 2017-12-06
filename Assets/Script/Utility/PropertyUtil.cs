@@ -37,6 +37,7 @@ namespace Utility
         /// <returns></returns>
         public static object ReflectGetter(object obj, string propertyName)
         {
+            //注意propertyName必须要有get;set;
 			Type type = obj.GetType();
 			PropertyInfo propertyInfo = type.GetProperty(propertyName);
 			var propertyValue = propertyInfo.GetValue(obj, null);

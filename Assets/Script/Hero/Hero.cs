@@ -10,7 +10,7 @@ public class Hero : MonoBehaviour {
     public static Hero _instance;
     public Normal normal = new Normal();
 
-    public Property property;
+    public Property property{ get; set; }
     public Knowledge knowledge;
 
     public Rigidbody rigid;

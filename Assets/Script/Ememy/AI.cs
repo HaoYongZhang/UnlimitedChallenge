@@ -11,6 +11,8 @@ namespace EnemyClass
         public Rigidbody _rigidbody;
         public State state = State.idle;
 
+        public AttackDamageDelegate attackDamageDelegate;
+
         //感知距离
         public float senseDistance = 50f;
         //攻击距离
@@ -139,7 +141,6 @@ namespace EnemyClass
         {
             if (!isDuringAttack)
             {
-                Debug.Log("出发攻击");
                 _animator.SetBool("chase", false);
                 _animator.SetBool("attack", true);
                 isDuringAttack = true;
@@ -160,13 +161,12 @@ namespace EnemyClass
 
         void inAttack()
         {
-            
+            attackDamageDelegate();
         }
 
         //攻击完成
         void endAttack()
         {
-            Debug.Log("结束攻击");
             isDuringAttack = false;
             _animator.SetBool("attack", false);
         }

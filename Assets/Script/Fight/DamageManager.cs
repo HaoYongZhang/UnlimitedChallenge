@@ -25,14 +25,23 @@ public class DamageManager
         {
             case DamageType.physics:
                 {
-                    //护甲的伤害减免（0.06*护甲/(1+0.06*护甲)）
-                    float damageReduction = 0.06f * victimProperty.armor / (1 + 0.06f * victimProperty.armor);
-                    //伤害倍率
-                    float damageRate = 1 - damageReduction;
+                    //伤害倍率 = 1 - 物理抗性
+                    float damageRate = 1 - victimProperty.physicalReduction;
                     //实际伤害
                     damage = Utility.Math.Round(attackerProperty.attack * damageRate, 1);
 
                     //Debug.Log("护甲的伤害减免=" + damageReduction);
+                    //Debug.Log("伤害倍率=" + damageRate);
+                    //Debug.Log("实际伤害=" + damage);
+                }
+                break;
+            case DamageType.magic:
+                {
+                    //伤害倍率 = 1 - 法术抗性
+                    float damageRate = 1 - victimProperty.magicReduction;
+                    //实际伤害
+                    damage = Utility.Math.Round(attackerProperty.attack * damageRate, 1);
+
                     //Debug.Log("伤害倍率=" + damageRate);
                     //Debug.Log("实际伤害=" + damage);
                 }
@@ -51,8 +60,8 @@ public enum DamageType
 {
     [Description("物理")]
     physics,
-    [Description("能量")]
-    energy,
+    [Description("法术")]
+    magic,
     [Description("纯粹")]
     pure
 }

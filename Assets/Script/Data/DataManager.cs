@@ -15,8 +15,10 @@ public struct CSVDataStruct{
 public class DataManager
 {
     static DataManager _instance;
+
     public SkillDatas skillDatas;
     public EquipmentDatas equipmentDatas;
+    public EnemyDatas enemyDatas;
 
     public static DataManager Instance
     {
@@ -38,6 +40,7 @@ public class DataManager
     public void loadCSVData(){
         skillDatas = new SkillDatas();
         equipmentDatas = new EquipmentDatas();
+        enemyDatas = new EnemyDatas();
     }
 
 }

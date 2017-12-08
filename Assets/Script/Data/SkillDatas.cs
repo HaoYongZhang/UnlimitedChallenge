@@ -75,7 +75,7 @@ public class SkillDatas
                     if(propertysData.head[j] != "id")
                     {
                         //筛选空的属性，减少使用时的历遍
-                        if(propertysData.dataList[i][j] != "")
+                        if(propertysData.dataList[i][j] != "" && propertysData.dataList[i][j] != "0")
                         {
                             skillData.Add(propertysData.head[j], propertysData.dataList[i][j]);
                         }

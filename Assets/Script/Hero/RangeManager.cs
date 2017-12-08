@@ -67,20 +67,19 @@ public class RangeManager : MonoBehaviour
     /// 搜索攻击范围内的敌人
     /// </summary>
     /// <returns>The attack range.</returns>
-    /// <param name="attackRange">Attack range.</param>
-    public List<GameObject> SearchAttackRangeEnemys(float attackRange)
+    /// <param name="attackRadius">攻击范围半径.</param>
+    public List<GameObject> SearchAttackRangeEnemys(float attackRadius)
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, attackRange);
+        LayerMask layerMask = 1 << LayerMask.NameToLayer("Enemy");
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, attackRadius, layerMask);
 
         List<GameObject> enemys = new List<GameObject>();
 
-        if (colliders.Length > 0)
+        for (int i = 0; i < colliders.Length; i++)
         {
-            for (int i = 0; i < colliders.Length; i++)
-            {
-                enemys.Add(colliders[i].gameObject);
-                //Debug.Log(colliders[i].gameObject.name);
-            }
+            enemys.Add(colliders[i].gameObject);
+            //Debug.Log(colliders[i].gameObject.name);
         }
 
         return enemys;

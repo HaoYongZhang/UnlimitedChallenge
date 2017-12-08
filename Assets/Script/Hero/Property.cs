@@ -16,7 +16,7 @@ public class Property {
     public float basAgility;
     //基础智力
     public float basIntellect;
-	//基础护甲
+	//基础物理护甲
 	public float basArmor;
 	//基础移动速度
 	public float basMoveSpeed;
@@ -26,6 +26,10 @@ public class Property {
 	public float basAttackTime;
 	//基础攻击速度
 	public float basAttackSpeed;
+    //基础物理抗性
+    public float basPhysicalReduction;
+    //基础法术抗性
+    public float basMagicReduction;
 
 	//------额外的（additional）
 	//额外最大生命值
@@ -49,7 +53,7 @@ public class Property {
     //额外智力
     [Description("智力")]
 	public float addlIntellect{get;set;}
-	//额外护甲
+    //额外物理护甲
     [Description("护甲")]
 	public float addlArmor{get;set;}
 	//额外移动速度
@@ -61,6 +65,11 @@ public class Property {
 	//额外攻击速度
     [Description("攻击速度")]
 	public float addlAttackSpeed{get;set;}
+    //额外物理抗性
+    [Description("物理伤害减免")]
+    public float addlPhysicalReduction;
+    //额外法术抗性
+    public float addlMagicReduction;
 
     //------比例的（rate）
     //最大生命值比率
@@ -84,7 +93,7 @@ public class Property {
     //智力比率
     [Description("智力")]
     public float rateIntellect{ get; set; }
-    //护甲比率
+    //物理护甲比率
     [Description("护甲")]
     public float rateArmor{ get; set; }
     //移动速度比率
@@ -181,7 +190,8 @@ public class Property {
 	{
 		get
 		{
-            return (basMoveSpeed + addlMoveSpeed) *rateMoveSpeed;
+            //移动速度 = （基础移动速度 + 额外移动速度）* （移动速度倍率 + （敏捷 * 0.06%））
+            return (basMoveSpeed + addlMoveSpeed) * (rateMoveSpeed + agility * 0.0006f);
 		}
 	}
 
@@ -215,9 +225,31 @@ public class Property {
 
 
     //物理抗性
-    public float physicalResistance;
-    //魔法抗性
-    public float magicResistance;
+    public float physicalReduction
+    {
+        get
+        {
+            //护甲的伤害减免（0.06 * 护甲/(1 + 0.06 * 护甲)）
+            float armorReduction = 0.06f * armor / (1 + 0.06f * armor);
+            //物理伤害倍率（1 - 护甲伤害减免）*（1 - 基础物理伤害减免）*（1 - 额外物理伤害减免）
+            float damageRate = (1 - armorReduction) * (1 - basPhysicalReduction) * (1 - addlPhysicalReduction);
+
+            return (1 - damageRate);
+        }
+    }
+    //法术抗性
+    public float magicReduction
+    {
+        get
+        {
+            //智力的伤害减免（0.06 * 护甲/(1 + 0.06 * 护甲)）
+            float intellectReduction = 0.03f * intellect / (1 + 0.03f * intellect);
+            //法术伤害倍率（1 - 智力伤害减免）*（1 - 基础法术伤害减免）*（1 - 额外法术伤害减免）
+            float damageRate = (1 - intellectReduction) * (1 - basMagicReduction) * (1 - addlMagicReduction);
+
+            return (1 - damageRate);
+        }
+    }
     //物理伤害格挡
     public float physicalDamageBlock;
     //魔法伤害格挡
@@ -228,7 +260,6 @@ public class Property {
 		basAttackTime = 1.7f;
 		basHpMax = 200f;
 		basMpMax = 75f;
-        magicDamageBlock = 0.25f;
 
         //最大生命值比率
         rateHpMax = 1f;
@@ -244,7 +275,7 @@ public class Property {
         rateAgility = 1f;
         //智力比率
         rateIntellect = 1f;
-        //护甲比率
+        //物理护甲比率
         rateArmor = 1f;
         //移动速度比率
         rateMoveSpeed = 1f;
@@ -254,8 +285,4 @@ public class Property {
         rateAttackSpeed = 1f;
     }
 
-	void Awake()
-	{
-		
-	}
 }

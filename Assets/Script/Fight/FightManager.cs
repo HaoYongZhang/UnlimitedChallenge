@@ -24,28 +24,40 @@ public class FightManager : MonoBehaviour {
 
     public void fight()
     {
-        isFight = true;
-        WeaponType weaponType = PropertyUtil.GetEnum<WeaponType>(Global.hero.equipmentManager.currentWeapon.data["weaponType"]);
-        Global.hero.animator.SetBool("Fight", true);
-        Global.hero.animator.SetFloat("WeaponType", (float)weaponType);
+        if(!isFight)
+        {
+            isFight = true;
+            WeaponType weaponType = PropertyUtil.GetEnum<WeaponType>(Global.hero.equipmentManager.currentWeapon.data["weaponType"]);
+            Global.hero.animator.SetFloat("weaponType", (float)weaponType);
+            Global.hero.animator.SetBool("attack", true);
+        }
     }
 
+    /// <summary>
+    /// 开始攻击
+    /// </summary>
+    void startAttack()
+    {
+        
+    }
 
     /// <summary>
-    /// 攻击动画攻击时刻
+    /// 攻击时刻
     /// </summary>
-    void attackAnimationEnter()
+    void inAttack()
     {
         Global.hero.rangeManager.SearchAttackRangeEnemys(20);
     }
 
     /// <summary>
-    /// 攻击动画结束
+    /// 攻击结束
     /// </summary>
-    void attackAnimationEnd()
+    void endAttack()
     {
-        Global.hero.animator.SetBool("Fight", false);
-        Invoke("endIsFight", 0.5f);
+        Global.hero.animator.SetBool("attack", false);
+        isFight = false;
+
+        //Invoke("endIsFight", 0.5f);
     }
 
     void endIsFight()

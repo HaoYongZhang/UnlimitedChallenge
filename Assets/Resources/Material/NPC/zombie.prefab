@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 95525027603179082}
   - component: {fileID: 54513407639307698}
   - component: {fileID: 65804883460333904}
-  - component: {fileID: 114469157057371934}
+  - component: {fileID: 114135983867668784}
   - component: {fileID: 114737801508312052}
   m_Layer: 0
   m_Name: zombie
@@ -482,15 +482,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1299131771559552}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 41.7, y: 2.5, z: -8.4}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
   - {fileID: 4328181738626632}
   - {fileID: 4975555195226520}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4268279539153868
 Transform:
   m_ObjectHideFlags: 1
@@ -843,7 +843,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114469157057371934
+--- !u!114 &114135983867668784
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -851,11 +851,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1299131771559552}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f930a1a37f98c4c58ba26a65bba1def0, type: 3}
+  m_Script: {fileID: 11500000, guid: 982b3204a919c4d248f64c78081d4230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rigid: {fileID: 54513407639307698}
-  _animator: {fileID: 95525027603179082}
+  enumyId: zombie
 --- !u!114 &114737801508312052
 MonoBehaviour:
   m_ObjectHideFlags: 1

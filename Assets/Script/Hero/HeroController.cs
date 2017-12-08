@@ -115,16 +115,16 @@ public class HeroController : MonoBehaviour {
 
 	void FixedUpdate()
 	{
-		MoveControlByTranslateGetAxis();
+        if (!Global.hero.fightManager.isFight)
+        {
+            MoveControlByTranslateGetAxis();
+        }
 	}
 
 	//Translate移动控制函数
 	void MoveControlByTranslateGetAxis() 
 	{
-        if(Global.hero.fightManager.isFight)
-        {
-            return;
-        }
+        
 
         float horizontal = Input.GetAxis("Horizontal"); //A D 左右
 		float vertical = Input.GetAxis("Vertical"); //W S 上 下

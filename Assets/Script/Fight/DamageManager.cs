@@ -3,6 +3,7 @@ using System.Collections;
 using Utility;
 using System;
 using System.ComponentModel;
+using System.Collections.Generic;
 
 public delegate void AttackDamageDelegate();
 
@@ -30,9 +31,8 @@ public class DamageManager
                     //实际伤害
                     damage = Utility.Math.Round(attackerProperty.attack * damageRate, 1);
 
-                    //Debug.Log("护甲的伤害减免=" + damageReduction);
-                    //Debug.Log("伤害倍率=" + damageRate);
-                    //Debug.Log("实际伤害=" + damage);
+                    Debug.Log("伤害倍率=" + damageRate);
+                    Debug.Log("实际伤害=" + damage);
                 }
                 break;
             case DamageType.magic:
@@ -48,7 +48,36 @@ public class DamageManager
                 break;
         }
 
+        List<RandomFunctionStruct> randomList = new List<RandomFunctionStruct>();
+
+        randomList.Add(new RandomFunctionStruct(10f, () =>
+        {
+            Debug.Log("99999");
+        }));
+        randomList.Add(new RandomFunctionStruct(25f, new RandomFunctionDelegate(test2)));
+        randomList.Add(new RandomFunctionStruct(5f, new RandomFunctionDelegate(test3)));
+
+        for (int i = 0; i < 10; i ++)
+        {
+            RandomUtil.RandomFunction(randomList);
+        }
+
         victimProperty.hp -= damage;
+    }
+
+    static void test1()
+    {
+        Debug.Log("11111111");
+    }
+
+    static void test2()
+    {
+        Debug.Log("222222222");
+    }
+
+    static void test3()
+    {
+        Debug.Log("33333333");
     }
 }
 

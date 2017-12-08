@@ -3,33 +3,33 @@
 public class Property {
 	//------基础的（basic）
 	//基础最大生命值
-	public float basHpMax;
+    public float basHpMax{ get; set; }
 	//基础最大能量值
-	public float basMpMax;
+    public float basMpMax{ get; set; }
 	//基础生命恢复速度
-	public float basHpRegeneration;
+    public float basHpRegeneration{ get; set; }
 	//基础能量恢复速度
-	public float basMpRegeneration;
+    public float basMpRegeneration{ get; set; }
 	//基础力量
-    public float basStrength;
+    public float basStrength{ get; set; }
     //基础敏捷
-    public float basAgility;
+    public float basAgility{ get; set; }
     //基础智力
-    public float basIntellect;
+    public float basIntellect{ get; set; }
 	//基础物理护甲
-	public float basArmor;
+    public float basArmor{ get; set; }
 	//基础移动速度
-	public float basMoveSpeed;
+    public float basMoveSpeed{ get; set; }
 	//基础攻击力
-	public float basAttack;
+    public float basAttack{ get; set; }
 	//基础攻击间隔
-	public float basAttackTime;
+    public float basAttackTime{ get; set; }
 	//基础攻击速度
-	public float basAttackSpeed;
+    public float basAttackSpeed{ get; set; }
     //基础物理抗性
-    public float basPhysicalReduction;
+    public float basPhysicalReduction{ get; set; }
     //基础法术抗性
-    public float basMagicReduction;
+    public float basMagicReduction{ get; set; }
 
 	//------额外的（additional）
 	//额外最大生命值
@@ -67,9 +67,10 @@ public class Property {
 	public float addlAttackSpeed{get;set;}
     //额外物理抗性
     [Description("物理伤害减免")]
-    public float addlPhysicalReduction;
+    public float addlPhysicalReduction{ get; set; }
     //额外法术抗性
-    public float addlMagicReduction;
+    [Description("法术伤害减免")]
+    public float addlMagicReduction{ get; set; }
 
     //------比例的（rate）
     //最大生命值比率

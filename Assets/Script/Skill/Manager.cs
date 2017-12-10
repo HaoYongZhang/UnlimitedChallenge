@@ -34,7 +34,7 @@ namespace SkillClass
 
             if (Global.skillRelease == SkillRelease.selected)
             {
-                inAttack(hasSelectedSkill);
+                inAttackSkill(hasSelectedSkill);
                 Global.skillRelease = SkillRelease.none;
             }
         }
@@ -260,7 +260,7 @@ namespace SkillClass
             Global.skillRelease = SkillRelease.selecting;
         }
 
-        void inAttack(Skill skill)
+        void inAttackSkill(Skill skill)
         {
             ////获取英雄对象
             //Transform player = GameObject.FindGameObjectWithTag("Player").transform;

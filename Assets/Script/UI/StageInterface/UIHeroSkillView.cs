@@ -114,7 +114,7 @@ public class UIHeroSkillView : MonoBehaviour {
 
         SkillClass.UIButton skillBtn = obj.GetComponent<SkillClass.UIButton>();
 
-        Global.hero.skillManager.useSkill(skillBtn.skill);
+        Global.hero.skillManager.releaseSkill(skillBtn.skill);
     }
 
     void onBeginDragSkillButton(GameObject obj, PointerEventData eventData)

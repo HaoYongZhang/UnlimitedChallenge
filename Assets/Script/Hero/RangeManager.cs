@@ -67,20 +67,44 @@ public class RangeManager : MonoBehaviour
     /// 搜索范围内的敌人
     /// </summary>
     /// <returns>The attack range.</returns>
-    /// <param name="attackRadius">攻击范围半径.</param>
-    public List<GameObject> SearchRangeEnemys(float attackRadius)
+    /// <param name="attackDistance">攻击范围半径.</param>
+    public List<GameObject> SearchRangeEnemys(float attackDistance)
     {
         LayerMask layerMask = 1 << LayerMask.NameToLayer("Enemy");
 
-        Collider[] colliders = Physics.OverlapSphere(transform.position, attackRadius, layerMask);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, attackDistance, layerMask);
 
         List<GameObject> enemys = new List<GameObject>();
 
         for (int i = 0; i < colliders.Length; i++)
         {
-            enemys.Add(colliders[i].gameObject);
-            //Debug.Log(colliders[i].gameObject.name);
+            Quaternion r = transform.rotation;
+            Vector3 f0 = (transform.position + (r * Vector3.forward) * attackDistance);
+            Debug.DrawLine(transform.position, f0, Color.red);
+
+            Quaternion r0 = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 30f, transform.rotation.eulerAngles.z);
+            Quaternion r1 = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 30f, transform.rotation.eulerAngles.z);
+
+            Vector3 f1 = (transform.position + (r0 * Vector3.forward) * attackDistance);
+            Vector3 f2 = (transform.position + (r1 * Vector3.forward) * attackDistance);
+
+            Debug.DrawLine(transform.position, f1, Color.red);
+            Debug.DrawLine(transform.position, f2, Color.red);
+            Debug.DrawLine(f1, f2, Color.red);
+
+            Vector3 point = enemys[i].transform.position;
+
+            if (Global.hero.rangeManager.IsInTriangle(point, transform.position, f1, f2))
+            {
+                enemys.Add(colliders[i].gameObject);
+            }
+            else
+            {
+                Debug.Log("不在攻击范围 !!!");
+            }
         }
+
+        Debug.Log(colliders.Length);
 
         return enemys;
     }

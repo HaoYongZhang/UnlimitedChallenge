@@ -46,37 +46,7 @@ public class FightManager : MonoBehaviour {
     /// </summary>
     void inAttack()
     {
-        //List<GameObject> enemys = Global.hero.rangeManager.SearchRangeEnemys(20);
-
-        //for (int i = 0; i < enemys.Count; i ++)
-        //{
-        //    float distance = 15f;
-
-        //    Quaternion r = transform.rotation;
-        //    Vector3 f0 = (transform.position + (r * Vector3.forward) * distance);
-        //    Debug.DrawLine(transform.position, f0, Color.red);
-
-        //    Quaternion r0 = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 30f, transform.rotation.eulerAngles.z);
-        //    Quaternion r1 = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 30f, transform.rotation.eulerAngles.z);
-
-        //    Vector3 f1 = (transform.position + (r0 * Vector3.forward) * distance);
-        //    Vector3 f2 = (transform.position + (r1 * Vector3.forward) * distance);
-
-        //    Debug.DrawLine(transform.position, f1, Color.red);
-        //    Debug.DrawLine(transform.position, f2, Color.red);
-        //    Debug.DrawLine(f1, f2, Color.red);
-
-        //    Vector3 point = enemys[0].transform.position;
-
-        //    if (Global.hero.rangeManager.IsInTriangle(point, transform.position, f1, f2))
-        //    {
-        //        Debug.Log("cube in this !!!");
-        //    }
-        //    else
-        //    {
-        //        Debug.Log("cube not in this !!!");
-        //    }
-        //}
+        List<GameObject> enemys = Global.hero.rangeManager.SearchRangeEnemys(20);
     }
 
     /// <summary>

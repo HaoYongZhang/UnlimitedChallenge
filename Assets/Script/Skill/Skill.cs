@@ -31,12 +31,13 @@ namespace SkillClass
         }
         //技能数据
         public Dictionary<string, string> data = new Dictionary<string, string>();
+
         //技能是否进入冷却
-        public bool isCooldown = false;
+        public bool isCooldown;
         //技能当前的冷却时间
-        public float currentCoolDown = 0;
+        public float currentCoolDown;
         //技能是否在持续中
-        public bool isInDuration = false;
+        public bool isInDuration;
         //当前技能等级
         public int currentLevel = 1;
         //每秒实际CD间隔时间
@@ -56,6 +57,11 @@ namespace SkillClass
 
             imageSprite = Resources.Load("Image/Skill/skill_" + id, typeof(Sprite)) as Sprite;
             isActive = (data["isActive"] == "1");
+        }
+
+        public void release()
+        {
+            Global.hero.skillManager.releaseSkill(this);
         }
     }
 }

@@ -44,8 +44,6 @@ namespace SkillClass
         {
             for (int i = 0; i < UIScene.Instance.skillButtons.Count; i++)
             {
-                //int j = i;
-
                 SkillClass.UIButton btn = UIScene.Instance.skillButtons[i];
 
                 btn.gameObject.GetComponent<UIMouseDelegate>().onPointerClickDelegate = onClickSkillButton;
@@ -61,7 +59,7 @@ namespace SkillClass
                 return;
             }
 
-            useSkill(skillBtn.skill);
+            releaseSkill(skillBtn.skill);
         }
 
         /// <summary>
@@ -85,7 +83,7 @@ namespace SkillClass
         {
             for (int i = 0; i < Global.skills.Count; i++)
             {
-                Skill oneSkill = Manager.GetOneSkillByID(Global.skills[i].id);
+                Skill oneSkill = GetOneSkillByID(Global.skills[i].id);
                 if (oneSkill.isCooldown)
                 {
                     if (oneSkill.currentCoolDown < float.Parse(oneSkill.data["cooldown"]))
@@ -102,7 +100,7 @@ namespace SkillClass
                         //当技能持续时间结束时
                         if (oneSkill.isInDuration && oneSkill.currentCoolDown >= float.Parse(oneSkill.data["duration"]))
                         {
-                            afterCooldown(oneSkill);
+                            endDuration(oneSkill);
                         }
                     }
                     else
@@ -119,7 +117,7 @@ namespace SkillClass
         /// 技能冷却结束
         /// </summary>
         /// <param name="skill">Skill.</param>
-        void afterCooldown(Skill skill)
+        void endDuration(Skill skill)
         {
             switch (skill.type)
             {
@@ -159,10 +157,11 @@ namespace SkillClass
         /// 使用技能
         /// </summary>
         /// <param name="skill">Skill.</param>
-        public void useSkill(Skill skill)
+        public void releaseSkill(Skill skill)
         {
             Skill oneSkill = GetOneSkillByID(skill.id);
-            if (beforeUseSkill(oneSkill) == false)
+
+            if (canReleaseSkill(oneSkill) == false)
             {
                 return;
             }
@@ -171,7 +170,7 @@ namespace SkillClass
             {
                 case SkillType.attack:
                     {
-                        attack(oneSkill);
+                        releaseAttackSkill(oneSkill);
                     }
                     break;
                 case SkillType.defense:
@@ -202,7 +201,13 @@ namespace SkillClass
             }
         }
 
-        bool beforeUseSkill(Skill skill)
+
+        /// <summary>
+        /// 判断能否释放技能
+        /// </summary>
+        /// <returns><c>true</c>, if release skill was caned, <c>false</c> otherwise.</returns>
+        /// <param name="skill">Skill.</param>
+        bool canReleaseSkill(Skill skill)
         {
             // 如果技能不存在，返回
             if (skill == null)
@@ -231,7 +236,6 @@ namespace SkillClass
             // 如果蓝量不足，返回
             if (Global.hero.property.mp < float.Parse(skill.data["costEnergy"]))
             {
-                Debug.Log("能量不足");
                 return false;
             }
 
@@ -245,7 +249,7 @@ namespace SkillClass
             Global.hero.property.mp -= float.Parse(skill.data["costEnergy"]);
         }
 
-        void attack(Skill skill)
+        void releaseAttackSkill(Skill skill)
         {
             hasSelectedSkill = skill;
 
@@ -317,8 +321,6 @@ namespace SkillClass
             UIScene.Instance.addSkillStatusIcon(skill);
             //开始技能的持续时间
             skill.isInDuration = true;
-            //获取英雄对象
-            Transform player = GameObject.FindGameObjectWithTag("Player").transform;
             //获取HeroManager的属性
             Property property = Global.hero.property;
 
@@ -346,9 +348,7 @@ namespace SkillClass
             UIScene.Instance.removeSkillStatusIcon(skill);
             //结束技能的持续时间
             skill.isInDuration = false;
-            //获取英雄对象
-            Transform player = GameObject.FindGameObjectWithTag("Player").transform;
-            //获取HeroManager的属性
+            //获取Hero的属性
             Property property = Global.hero.property;
 
             foreach (KeyValuePair<string, string> dict in skill.data)

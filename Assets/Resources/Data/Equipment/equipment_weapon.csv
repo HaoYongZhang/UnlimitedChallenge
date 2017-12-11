@@ -1,4 +1,4 @@
-id,attack,weaponType,attackDistance,rank,skillID
-10001,20,hands,50,D,
-11010,100,sword,100,B,
-14001,80,pistol,200,C,
+id,name,rank,attack,weaponType,damageType,attackDistance,skillID
+10001,拳头,D,10,hands,physics,10,
+11010,青锋剑,B,20,sword,magic,20,
+14001,战术手枪,C,80,pistol,physics,60,

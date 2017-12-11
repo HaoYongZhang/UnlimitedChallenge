@@ -42,8 +42,8 @@ public class DamageManager
                     //实际伤害
                     damage = Utility.Math.Round(attackerProperty.attack * damageRate, 1);
 
-                    //Debug.Log("伤害倍率=" + damageRate);
-                    //Debug.Log("实际伤害=" + damage);
+                    Debug.Log("伤害倍率=" + damageRate);
+                    Debug.Log("实际伤害=" + damage);
                 }
                 break;
         }

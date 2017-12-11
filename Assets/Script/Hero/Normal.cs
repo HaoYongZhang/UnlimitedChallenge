@@ -20,6 +20,8 @@ public class Normal
 		property.mp = property.mpMax;
 		property.basMoveSpeed = 20;
 
+        property.basAttack = 200;
+
         knowledge.shot = 3;
 	}
 }

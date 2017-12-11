@@ -6,6 +6,7 @@ using System.Reflection;
 using System.ComponentModel;
 using EquipmentClass;
 using Utility;
+using EnemyClass;
 
 public class FightManager : MonoBehaviour {
     
@@ -38,7 +39,7 @@ public class FightManager : MonoBehaviour {
     /// </summary>
     void startAttack()
     {
-        Debug.Log("cesfy");
+        //Debug.Log("开始攻击");
     }
 
     /// <summary>
@@ -46,7 +47,16 @@ public class FightManager : MonoBehaviour {
     /// </summary>
     void inAttack()
     {
-        List<GameObject> enemys = Global.hero.rangeManager.SearchRangeEnemys(20);
+        Equipment equipment = Global.hero.equipmentManager.currentWeapon;
+
+        float attackDistance = float.Parse(equipment.data["attackDistance"]);
+
+        List<GameObject> enemys = Global.hero.rangeManager.SearchRangeEnemys(attackDistance);
+
+        for (int i = 0; i < enemys.Count; i++)
+        {
+            DamageManager.CommonAttack<Hero, Enemy>(gameObject, enemys[i], PropertyUtil.GetEnum<DamageType>(equipment.data["damageType"]));
+        }
     }
 
     /// <summary>
@@ -55,13 +65,7 @@ public class FightManager : MonoBehaviour {
     void endAttack()
     {
         Global.hero.animator.SetBool("attack", false);
-        //isFight = false;
 
-        Invoke("endIsFight", 0.5f);
-    }
-
-    void endIsFight()
-    {
         isFight = false;
     }
 }

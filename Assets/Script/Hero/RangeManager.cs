@@ -92,19 +92,13 @@ public class RangeManager : MonoBehaviour
             Debug.DrawLine(transform.position, f2, Color.red);
             Debug.DrawLine(f1, f2, Color.red);
 
-            Vector3 point = enemys[i].transform.position;
+            Vector3 point = colliders[i].transform.position;
 
             if (Global.hero.rangeManager.IsInTriangle(point, transform.position, f1, f2))
             {
                 enemys.Add(colliders[i].gameObject);
             }
-            else
-            {
-                Debug.Log("不在攻击范围 !!!");
-            }
         }
-
-        Debug.Log(colliders.Length);
 
         return enemys;
     }

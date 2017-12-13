@@ -9,11 +9,14 @@ namespace EnemyClass
     {
         public string enumyId;
         public Property property { get; set; }
+        public UIHp hpSlider;
 
         void Start()
         {
+            //添加伤害代理
             GetComponent<AI>().attackDamageDelegate = attackDamage;
 
+            //设置属性
             property = new Property();
             Dictionary<string, string> propertyData = DataManager.Instance.enemyDatas.getData(enumyId);
 
@@ -27,6 +30,16 @@ namespace EnemyClass
 
             property.hp = property.hpMax;
             property.mp = property.mpMax;
+
+            //设置血条UI
+            GameObject hpObj = (GameObject)Instantiate(Resources.Load("UI/EnemyHpSlider"));
+
+            hpSlider = hpObj.GetComponent<UIHp>();
+            hpSlider.tager = this;
+            hpSlider.offset = new Vector2(0, 60);
+
+            hpObj.transform.SetParent(UIEnemy.Instance.transform, false);
+            UIEnemy.Instance.enemyHps.Add(hpObj);
         }
 
 

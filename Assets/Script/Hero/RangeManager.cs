@@ -82,8 +82,8 @@ public class RangeManager : MonoBehaviour
             Vector3 f0 = (transform.position + (r * Vector3.forward) * attackDistance);
             Debug.DrawLine(transform.position, f0, Color.red);
 
-            Quaternion r0 = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 30f, transform.rotation.eulerAngles.z);
-            Quaternion r1 = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 30f, transform.rotation.eulerAngles.z);
+            Quaternion r0 = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 60f, transform.rotation.eulerAngles.z);
+            Quaternion r1 = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 60f, transform.rotation.eulerAngles.z);
 
             Vector3 f1 = (transform.position + (r0 * Vector3.forward) * attackDistance);
             Vector3 f2 = (transform.position + (r1 * Vector3.forward) * attackDistance);

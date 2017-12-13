@@ -190,13 +190,18 @@ namespace EnemyClass
 
         void death()
         {
-            Debug.Log("死亡");
             GetComponent<Animator>().SetBool("death", true);
+
+            //死亡时销毁血条
+            if(GetComponent<Enemy>().hpSlider != null)
+            {
+                Destroy(GetComponent<Enemy>().hpSlider.gameObject);
+            }
         }
 
         void endDeath()
         {
-            
+            Destroy(gameObject, 3);
         }
     }
 }

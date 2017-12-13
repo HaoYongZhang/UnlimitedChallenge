@@ -14,6 +14,8 @@ public class Global{
         }
     }
 
+    public static Camera mainCamera;
+
     public static Dictionary<string, Rank> ranks = new Dictionary<string, Rank>();
 
     /// <summary>
@@ -137,11 +139,13 @@ public class Global{
         UnityEngine.Object.DontDestroyOnLoad(gameObject);
 
         //设置主摄像头
-        Camera _mainCamera = gameObject.AddComponent<Camera> ();
-		_mainCamera.tag = "MainCamera";
-		_mainCamera.gameObject.AddComponent<HeroCamera> ();
+        Global.mainCamera = gameObject.AddComponent<Camera> ();
+        Global.mainCamera.tag = "MainCamera";
+        Global.mainCamera.gameObject.AddComponent<HeroCamera> ();
 
-		//设置场景UI
-        UIScene.Instance.transform.parent = _mainCamera.transform;
+        //设置敌方UI
+        UIEnemy.Instance.transform.SetParent(Global.mainCamera.transform, false);
+        //设置场景UI
+        UIScene.Instance.transform.SetParent(Global.mainCamera.transform, false);
 	}
 }

@@ -19,23 +19,27 @@ namespace EnemyClass
 
             foreach(KeyValuePair<string, string> pair in propertyData)
             {
-                //Debug.Log(pair.Key + "===" + pair.Value);
                 if(PropertyUtil.isExist(property, pair.Key))
                 {
                     PropertyUtil.ReflectSetter(property, pair.Key, float.Parse(pair.Value));
                 }
             }
+
+            property.hp = property.hpMax;
+            property.mp = property.mpMax;
         }
 
 
         void Update()
         {
-
+            
         }
 
         void attackDamage()
         {
             DamageManager.CommonAttack<Enemy, Hero>(gameObject, Global.hero.gameObject, DamageType.physics);
         }
+
+
     }
 }

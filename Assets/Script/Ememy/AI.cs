@@ -50,32 +50,35 @@ namespace EnemyClass
         /// </summary>
         void sense()
         {
-            //判断敌人与主角之间的距离
-            float distance = (_player.transform.position - this.transform.position).magnitude;
-            //主角进入感知距离
-            if (distance <= senseDistance)
+            if(state != State.death)
             {
-                //Debug.Log("主角进入感知距离");
-                //主角进入攻击距离，进行攻击
-                if(distance <= attackDistance)
+                //判断敌人与主角之间的距离
+                float distance = (_player.transform.position - this.transform.position).magnitude;
+                //主角进入感知距离
+                if (distance <= senseDistance)
                 {
-                    //Debug.Log("主角进入攻击距离，进行攻击");
-                    faceTo(_player);
-                    state = State.attack;
+                    //Debug.Log("主角进入感知距离");
+                    //主角进入攻击距离，进行攻击
+                    if (distance <= attackDistance)
+                    {
+                        //Debug.Log("主角进入攻击距离，进行攻击");
+                        faceTo(_player);
+                        state = State.attack;
+                    }
+                    //主角不在攻击距离，进行追击
+                    else
+                    {
+                        //Debug.Log("主角不在攻击距离，进行追击");
+                        faceTo(_player);
+                        state = State.chase;
+                    }
                 }
-                //主角不在攻击距离，进行追击
+                //主角不在感知范围
                 else
                 {
-                    //Debug.Log("主角不在攻击距离，进行追击");
-                    faceTo(_player);
-                    state = State.chase;
+                    //Debug.Log("主角不在感知范围");
+                    state = State.idle;
                 }
-            }
-            //主角不在感知范围
-            else
-            {
-                //Debug.Log("主角不在感知范围");
-                state = State.idle;
             }
         }
 
@@ -85,7 +88,10 @@ namespace EnemyClass
         /// </summary>
         void think()
         {
-
+            if (GetComponent<Enemy>().property.hp < 0)
+            {
+                state = State.death;
+            }
         }
 
 
@@ -109,6 +115,11 @@ namespace EnemyClass
                 case State.attack:
                     {
                         attack();
+                    }
+                    break;
+                case State.death:
+                    {
+                        death();
                     }
                     break;
             }
@@ -175,6 +186,17 @@ namespace EnemyClass
         {
             Vector3 point = new Vector3(obj.transform.position.x, transform.position.y, obj.transform.position.z);
             transform.LookAt(point);
+        }
+
+        void death()
+        {
+            Debug.Log("死亡");
+            GetComponent<Animator>().SetBool("death", true);
+        }
+
+        void endDeath()
+        {
+            
         }
     }
 }

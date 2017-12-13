@@ -20,6 +20,20 @@ namespace Utility
     public class RandomUtil
     {
         /// <summary>
+        /// 返回一个随机数字
+        /// </summary>
+        /// <returns>The number.</returns>
+        /// <param name="start">Start.</param>
+        /// <param name="end">End.</param>
+        public static float RandomNumber(float start, float end)
+        {
+            float num = Random.Range(start, end);
+
+            return num;
+        }
+
+
+        /// <summary>
         /// 按照概率随机执行方法
         /// </summary>
         /// <param name="list">List.</param>

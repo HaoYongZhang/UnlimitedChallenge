@@ -90,6 +90,12 @@ public class Hero : MonoBehaviour {
         Global.shortcutSkills_1[2] = SkillClass.Manager.GetOneSkillByID("630001");
 
         InvokeRepeating("RegenerationPerSecond", 0, 1f);
+
+        //for (int i = 0; i < 10; i ++)
+        //{
+        //    float damageRange = RandomUtil.RandomNumber(0.8f, 1.2f);
+        //    Debug.Log(damageRange);
+        //}
 	}
 	
 	// Update is called once per frame

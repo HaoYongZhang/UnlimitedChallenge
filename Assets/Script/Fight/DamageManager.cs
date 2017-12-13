@@ -9,6 +9,9 @@ public delegate void AttackDamageDelegate();
 
 public class DamageManager
 {
+    public static float damageRangeMin = 0.8f;
+    public static float damageRangeMax = 1.2f;
+
     /// <summary>
     /// 普通攻击
     /// </summary>
@@ -40,7 +43,7 @@ public class DamageManager
                     //伤害倍率 = 1 - 法术抗性
                     float damageRate = 1 - victimProperty.magicReduction;
                     //实际伤害
-                    damage = Utility.Math.Round(attackerProperty.attack * damageRate, 1);
+                    damage = attackerProperty.attack * damageRate;
 
                     Debug.Log("伤害倍率=" + damageRate);
                     Debug.Log("实际伤害=" + damage);
@@ -48,7 +51,10 @@ public class DamageManager
                 break;
         }
 
-        victimProperty.hp -= damage;
+        //伤害波动范围为80% ~ 120%
+        float damageRange = RandomUtil.RandomNumber(damageRangeMin, damageRangeMax);
+
+        victimProperty.hp -= Utility.Math.Round(damage * damageRange, 1);
     }
 }
 

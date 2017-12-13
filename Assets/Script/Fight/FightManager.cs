@@ -56,6 +56,8 @@ public class FightManager : MonoBehaviour {
         for (int i = 0; i < enemys.Count; i++)
         {
             DamageManager.CommonAttack<Hero, Enemy>(gameObject, enemys[i], PropertyUtil.GetEnum<DamageType>(equipment.data["damageType"]));
+
+            Debug.Log(enemys[i].GetComponent<Enemy>().property.hp);
         }
     }
 

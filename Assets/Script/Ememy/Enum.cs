@@ -8,6 +8,7 @@ namespace EnemyClass
     {
         idle,
         chase,
-        attack
+        attack,
+        death
     }
 }

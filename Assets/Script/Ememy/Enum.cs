@@ -4,7 +4,14 @@ using System.ComponentModel;
 
 namespace EnemyClass
 {
-    public enum State
+    public enum Sense
+    {
+        none,
+        senseRange,
+        attackRange
+    }
+
+    public enum Action
     {
         idle,
         chase,

@@ -7,18 +7,19 @@ namespace EnemyClass
 {
     public class Enemy : MonoBehaviour
     {
-        public string enumyId;
+        public string enemyId;
+        public Dictionary<string, string> data;
         public Property property { get; set; }
         public UIHp hpSlider;
 
         void Start()
         {
-            //添加伤害代理
-            GetComponent<AI>().attackDamageDelegate = attackDamage;
+            //设置数据
+            data = DataManager.Instance.enemyDatas.getData(enemyId);
 
             //设置属性
             property = new Property();
-            Dictionary<string, string> propertyData = DataManager.Instance.enemyDatas.getData(enumyId);
+            Dictionary<string, string> propertyData = DataManager.Instance.enemyDatas.getPropertyData(enemyId);
 
             foreach(KeyValuePair<string, string> pair in propertyData)
             {
@@ -47,12 +48,5 @@ namespace EnemyClass
         {
             
         }
-
-        void attackDamage()
-        {
-            DamageManager.CommonAttack<Enemy, Hero>(gameObject, Global.hero.gameObject, DamageType.physics);
-        }
-
-
     }
 }

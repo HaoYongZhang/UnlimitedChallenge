@@ -1,29 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
-using EnemyClass;
+using Utility;
 
 namespace EnemyClass
 {
     public class AI : MonoBehaviour
     {
+        Enemy _enemy;
+
         public GameObject _player;
         public Animator _animator;
         public Rigidbody _rigidbody;
-        public State state = State.idle;
+        public Action actionState = Action.idle;
+        public Sense senseState = Sense.none;
 
-        public AttackDamageDelegate attackDamageDelegate;
-
-        //感知距离
-        public float senseDistance = 50f;
-        //攻击距离
-        public float attackDistance = 15f;
-        //移动速度
-        public float moveSpeed = 20f;
         //是否正在攻击期间
         bool isDuringAttack;
 
         void Start()
         {
+            _enemy = GetComponent<Enemy>();
             _player = Global.hero.gameObject;
             _animator = gameObject.GetComponent<Animator>();
             _rigidbody = gameObject.GetComponent<Rigidbody>();
@@ -50,35 +46,26 @@ namespace EnemyClass
         /// </summary>
         void sense()
         {
-            if(state != State.death)
+            //判断敌人与主角之间的距离
+            float distance = (_player.transform.position - this.transform.position).magnitude;
+            //主角进入感知距离
+            if (distance <= (float.Parse(_enemy.data["senseDistance"])))
             {
-                //判断敌人与主角之间的距离
-                float distance = (_player.transform.position - this.transform.position).magnitude;
-                //主角进入感知距离
-                if (distance <= senseDistance)
+                //主角进入攻击距离，进行攻击
+                if (distance <= (float.Parse(_enemy.data["attackDistance"])))
                 {
-                    //Debug.Log("主角进入感知距离");
-                    //主角进入攻击距离，进行攻击
-                    if (distance <= attackDistance)
-                    {
-                        //Debug.Log("主角进入攻击距离，进行攻击");
-                        faceTo(_player);
-                        state = State.attack;
-                    }
-                    //主角不在攻击距离，进行追击
-                    else
-                    {
-                        //Debug.Log("主角不在攻击距离，进行追击");
-                        faceTo(_player);
-                        state = State.chase;
-                    }
+                    senseState = Sense.attackRange;
                 }
-                //主角不在感知范围
+                //主角不在攻击距离，进行追击
                 else
                 {
-                    //Debug.Log("主角不在感知范围");
-                    state = State.idle;
+                    senseState = Sense.senseRange;
                 }
+            }
+            //主角不在感知范围
+            else
+            {
+                senseState = Sense.none;
             }
         }
 
@@ -90,7 +77,30 @@ namespace EnemyClass
         {
             if (GetComponent<Enemy>().property.hp < 0)
             {
-                state = State.death;
+                actionState = Action.death;
+            }
+            else
+            {
+                switch (senseState)
+                {
+                    case Sense.none:
+                        {
+                            actionState = Action.idle;
+                        }
+                        break;
+                    case Sense.senseRange:
+                        {
+                            faceTo(_player);
+                            actionState = Action.chase;
+                        }
+                        break;
+                    case Sense.attackRange:
+                        {
+                            faceTo(_player);
+                            actionState = Action.attack;
+                        }
+                        break;
+                }
             }
         }
 
@@ -100,24 +110,24 @@ namespace EnemyClass
         /// </summary>
         void action()
         {
-            switch (state)
+            switch (actionState)
             {
-                case State.idle:
+                case Action.idle:
                     {
                         idle();
                     }
                     break;
-                case State.chase:
+                case Action.chase:
                     {
                         chase();
                     }
                     break;
-                case State.attack:
+                case Action.attack:
                     {
                         attack();
                     }
                     break;
-                case State.death:
+                case Action.death:
                     {
                         death();
                     }
@@ -145,7 +155,7 @@ namespace EnemyClass
 
         void move()
         {
-            _rigidbody.MovePosition(_rigidbody.position + transform.forward * moveSpeed * Time.deltaTime);
+            _rigidbody.MovePosition(_rigidbody.position + transform.forward * _enemy.property.moveSpeed * Time.deltaTime);
         }
 
         void attack()
@@ -172,7 +182,22 @@ namespace EnemyClass
 
         void inAttack()
         {
-            attackDamageDelegate();
+            float attackDistance = float.Parse(_enemy.data["attackDistance"]);
+
+            float distance = (_player.transform.position - this.transform.position).magnitude;
+
+            if (distance <= attackDistance)
+            {
+                Debug.Log(attackDistance);
+                DamageType damageType = PropertyUtil.GetEnum<DamageType>(_enemy.data["damageType"]);
+
+                DamageManager.CommonAttack<Enemy, Hero>(gameObject, Global.hero.gameObject, damageType);
+            }
+            else
+            {
+                endAttack();
+                actionState = Action.chase;
+            }
         }
 
         //攻击完成

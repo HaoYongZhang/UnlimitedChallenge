@@ -124,17 +124,17 @@ public class HeroController : MonoBehaviour {
 	//Translate移动控制函数
 	void MoveControlByTranslateGetAxis() 
 	{
-        
-
         float horizontal = Input.GetAxis("Horizontal"); //A D 左右
 		float vertical = Input.GetAxis("Vertical"); //W S 上 下
         float speed = Global.hero.property == null ? 10 : Global.hero.property.moveSpeed;
 
-        _rigidbody.MovePosition(transform.position + new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime);
         if(horizontal != 0f || vertical != 0f)
 		{
             _animator.SetBool("Running", true);
 			Rotating(horizontal, vertical);
+
+            Vector3 position = RotateRound(new Vector3(horizontal, 0, vertical), -45);
+            _rigidbody.MovePosition(transform.position + position * speed * Time.deltaTime);
 		}
         else{
             _animator.SetBool("Running", false);
@@ -144,14 +144,24 @@ public class HeroController : MonoBehaviour {
 	void Rotating(float horizontal, float vertical)
 	{
 		// 创建角色目标方向的向量
-		Vector3 targetDirection = new Vector3(horizontal, 0f, vertical);
+        Vector3 targetDirection = RotateRound(new Vector3(horizontal, 0f, vertical), -45);
 		// 创建目标旋转值 并假设Y轴正方向为"上"方向
-		Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up); //函数参数解释: LookRotation(目标方向为"前方向", 定义声明"上方向")
-		
+        Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up); //函数参数解释: LookRotation(目标方向为"前方向", 定义声明"上方向")
         // 创建新旋转值 并根据转向速度平滑转至目标旋转值
 		//函数参数解释: Lerp(角色刚体当前旋转值, 目标旋转值, 根据旋转速度平滑转向)
 		Quaternion newRotation = Quaternion.Lerp(_rigidbody.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 		// 更新刚体旋转值为 新旋转值
 		_rigidbody.MoveRotation(newRotation);
 	}
+
+    public Vector3 RotateRound(Vector3 v, float angle)
+    {
+        var x = v.x;
+        var y = v.z;
+        var sin = Mathf.Sin(Mathf.PI * angle / 180);
+        var cos = Mathf.Cos(Mathf.PI * angle / 180);
+        var newX = x * cos + y * sin;
+        var newY = x * -sin + y * cos;
+        return new Vector3((float)newX, 0, (float)newY);
+    }
 }

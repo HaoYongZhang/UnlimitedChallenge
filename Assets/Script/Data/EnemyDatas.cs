@@ -8,7 +8,7 @@ public class EnemyDatas
 {
     string path = Application.dataPath + "/Resources/Data/Enemy";
 
-    public Dictionary<EquipmentPart, CSVDataStruct> data = new Dictionary<EquipmentPart, CSVDataStruct>();
+    public CSVDataStruct data = new CSVDataStruct();
     public CSVDataStruct propertysData = new CSVDataStruct();
 
     public EnemyDatas()
@@ -23,9 +23,41 @@ public class EnemyDatas
         csvData.RemoveAt(0);
         List<List<string>> dataList = csvData;
         propertysData = new CSVDataStruct(head, dataList);
+
+        //武器数据
+        List<List<string>> csvData_1 = CSV.Instance.loadFile(path, "enemy.csv");
+        List<string> head_1 = csvData_1[0];
+        csvData_1.RemoveAt(0);
+        List<List<string>> dataList_1 = csvData_1;
+        data = new CSVDataStruct(head_1, dataList_1);
     }
 
+
     public Dictionary<string, string> getData(string id)
+    {
+        Dictionary<string, string> enemyData = new Dictionary<string, string>();
+
+        for (int i = 0; i < data.dataList.Count; i++)
+        {
+            if (data.dataList[i][0] == id)
+            {
+                for (int j = 0; j < data.dataList[i].Count; j++)
+                {
+                    enemyData.Add(data.head[j], data.dataList[i][j]);
+                }
+                break;
+            }
+        }
+
+        //foreach(KeyValuePair<string, string> pair in equipmentData)
+        //{
+        //    Debug.Log(pair.Key + "===" + pair.Value);
+        //}
+
+        return enemyData;
+    }
+
+    public Dictionary<string, string> getPropertyData(string id)
     {
         Dictionary<string, string> enemyData = new Dictionary<string, string>();
 

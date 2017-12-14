@@ -1,0 +1,2 @@
+id,name,senseDistance,attackDistance,damageType
+zombie,病毒丧尸,50,15,physics

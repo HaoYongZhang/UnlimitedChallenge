@@ -19,65 +19,71 @@ public class HeroController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.W))
+        //点击左键时
+        if (Input.GetMouseButtonDown(0))
         {
-            Global.heroDirection = 0;
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Global.heroDirection = 1;
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            Global.heroDirection = 2;
-        }
-		if (Input.GetKeyDown(KeyCode.D))
-        {
-            Global.heroDirection = 3;
-        }
-
-
-        //当正在释放技能时点击左键，实行释放
-        if (Input.GetMouseButton(0) && Global.skillRelease == SkillRelease.selecting)
-        {
-            Global.skillRelease = SkillRelease.selected;
+            //如果当前状态是正在选择释放技能目标时
+            if (Global.skillReleaseState == SkillReleaseState.selecting)
+            {
+                Global.hero.skillManager.OnSelected();
+            }
+            else
+            {
+                //当前没有触摸在UI上
+                if (!EventSystem.current.IsPointerOverGameObject())
+                {
+                    Debug.Log("出发");
+                    Global.hero.fightManager.fight();
+                }
+            }
         }
 
-        //当正在释放技能时点击右键，取消释放
-        if (Input.GetMouseButton(1) && Global.skillRelease == SkillRelease.selecting)
+
+        if (Input.GetMouseButtonDown(1))
         {
-            Global.skillRelease = SkillRelease.none;
+            //当正在释放技能时点击右键，取消释放
+            if(Global.skillReleaseState == SkillReleaseState.selecting)
+            {
+                for (int i = 0; i < Global.skills.Count; i++)
+                {
+                    if (Global.skills[i].releaseState == SkillReleaseState.selecting)
+                    {
+                        Global.skills[i].releaseState = SkillReleaseState.available;
+                        break;
+                    }
+                }
+            }
         }
 
         //------技能栏快捷键
         if (Input.GetKeyDown(KeyCode.Alpha1))
 		{
             SkillClass.UIButton skillBtn = UIScene.Instance.skillButtons[0];
-            Global.hero.skillManager.releaseSkill(skillBtn.skill);
+            Global.hero.skillManager.OnRelease(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             SkillClass.UIButton skillBtn = UIScene.Instance.skillButtons[1];
-            Global.hero.skillManager.releaseSkill(skillBtn.skill);
+            Global.hero.skillManager.OnRelease(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             SkillClass.UIButton skillBtn = UIScene.Instance.skillButtons[2];
-            Global.hero.skillManager.releaseSkill(skillBtn.skill);
+            Global.hero.skillManager.OnRelease(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             SkillClass.UIButton skillBtn = UIScene.Instance.skillButtons[3];
-            Global.hero.skillManager.releaseSkill(skillBtn.skill);
+            Global.hero.skillManager.OnRelease(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             SkillClass.UIButton skillBtn = UIScene.Instance.skillButtons[4];
-            Global.hero.skillManager.releaseSkill(skillBtn.skill);
+            Global.hero.skillManager.OnRelease(skillBtn.skill);
         }
 
 		if (Input.GetKeyDown(KeyCode.R))
@@ -95,21 +101,6 @@ public class HeroController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.E))
         {
             UIScene.Instance.switchSkillBar();
-        }
-
-        //当没有技能释放，点击鼠标左键
-        if (Input.GetMouseButton(0) && Global.skillRelease == SkillRelease.none)
-        {
-            //当前触摸在UI上
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                
-            }
-            //当前没有触摸在UI上
-            else
-            {
-                Global.hero.fightManager.fight();
-            }
         }
 	}
 

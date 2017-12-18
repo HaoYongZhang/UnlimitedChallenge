@@ -18,18 +18,18 @@ public class UICursor : MonoBehaviour {
     }
 
     void Update () {
-        if (Global.skillRelease == SkillRelease.none)
+        if (Global.skillReleaseState == SkillReleaseState.available)
         {
             resetCursor();
         }
 
-        if (Global.skillRelease == SkillRelease.selecting) 
+        if (Global.skillReleaseState == SkillReleaseState.selecting) 
         {
             setSkillSelecting();
 
         }
 
-        if (Global.skillRelease == SkillRelease.selected)
+        if (Global.skillReleaseState == SkillReleaseState.selected)
         {
             resetCursor();
         }

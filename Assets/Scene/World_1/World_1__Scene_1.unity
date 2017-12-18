@@ -1985,6 +1985,10 @@ Prefab:
       propertyPath: m_Name
       value: zombie (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1299131771559552, guid: 11fbea50c49ff4112b1f20708b27fa4a, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 11fbea50c49ff4112b1f20708b27fa4a, type: 2}
   m_IsPrefabParent: 0
@@ -5711,6 +5715,15 @@ Prefab:
     - target: {fileID: 4239058542261340, guid: 11fbea50c49ff4112b1f20708b27fa4a, type: 2}
       propertyPath: m_RootOrder
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114135983867668784, guid: 11fbea50c49ff4112b1f20708b27fa4a,
+        type: 2}
+      propertyPath: enumyId
+      value: zombie
+      objectReference: {fileID: 0}
+    - target: {fileID: 1299131771559552, guid: 11fbea50c49ff4112b1f20708b27fa4a, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 11fbea50c49ff4112b1f20708b27fa4a, type: 2}

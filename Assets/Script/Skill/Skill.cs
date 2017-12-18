@@ -6,15 +6,7 @@ using Utility;
 
 namespace SkillClass
 {
-    public interface ISkill
-    {
-        bool CanRelease(Skill skill);
-        void OnSelecting(Skill skill);
-        void OnRelease(Skill skill);
-        void OnDurationEnd(Skill skill);
-    }
-
-    public class Skill : MonoBehaviour
+    public class Skill
     {
         //技能id
         public string id;
@@ -26,6 +18,10 @@ namespace SkillClass
         public SkillCategory category;
         //技能类型
         public SkillType type;
+        //技能影响范围
+        public SkillEffectRange effectRange;
+        //技能释放状态
+        public SkillReleaseState releaseState;
         //技能描述
         public string description
         {
@@ -36,8 +32,6 @@ namespace SkillClass
         //技能数据
         public Dictionary<string, string> data = new Dictionary<string, string>();
 
-        //技能是否进入冷却
-        public bool isCooldown;
         //技能当前的冷却时间
         public float currentCoolDown;
         //技能是否在持续中
@@ -47,61 +41,26 @@ namespace SkillClass
         //每秒实际CD间隔时间
         public float second = Time.time;
 
-        public SkillClass.Manager skillManager;
-
         public Skill(string _id)
         {
             id = _id;
+            data = DataManager.Instance.skillDatas.getSkillData(_id);
 
             category = PropertyUtil.GetEnum<SkillCategory>(id.Substring(0, 1));
             type = PropertyUtil.GetEnum<SkillType>(id.Substring(1, 1));
 
-            data = DataManager.Instance.skillDatas.getSkillData(_id);
-
-            imageSprite = Resources.Load("Image/Skill/skill_" + id, typeof(Sprite)) as Sprite;
-            isActive = (data["isActive"] == "1");
-        }
-
-        void Update()
-        {
-            if(isCooldown)
+            if(type == SkillType.intensify || type == SkillType.defense || type == SkillType.treatment)
             {
-                cooldown();
-            }
-        }
-
-        public void release()
-        {
-            if(skillManager.CanRelease(this))
-            {
-                skillManager.OnRelease(this);
-            }
-        }
-
-        void cooldown()
-        {
-            if (currentCoolDown < float.Parse(data["cooldown"]))
-            {
-                // 更新冷却
-                currentCoolDown += Time.deltaTime;
-
-                //每秒显示技能冷却时间
-                if (Time.time - second >= 1.0f)
-                {
-                    second = Time.time;
-                }
-
-                //当技能持续时间结束时
-                if (isInDuration && currentCoolDown >= float.Parse(data["duration"]))
-                {
-                    skillManager.OnDurationEnd(this);
-                }
+                effectRange = SkillEffectRange.self;
             }
             else
             {
-                currentCoolDown = 0;
-                isCooldown = false;
+                effectRange = PropertyUtil.GetEnum<SkillEffectRange>(data["skillEffectRange"]);
             }
+
+
+            imageSprite = Resources.Load("Image/Skill/skill_" + id, typeof(Sprite)) as Sprite;
+            isActive = (data["isActive"] == "1");
         }
     }
 }

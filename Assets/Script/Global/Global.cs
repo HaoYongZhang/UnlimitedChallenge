@@ -77,7 +77,23 @@ public class Global{
     /// <summary>
     /// 技能释放状态
     /// </summary>
-    public static SkillRelease skillRelease = SkillRelease.none;
+    public static SkillReleaseState skillReleaseState
+    {
+        get
+        {
+            SkillReleaseState state = SkillReleaseState.available;
+            //循环当前技能列表，当有技能处于选择目标状态时
+            for (int i = 0; i < Global.skills.Count; i ++)
+            {
+                if(skills[i].releaseState == SkillReleaseState.selecting)
+                {
+                    state = SkillReleaseState.selecting;
+                    break;
+                }
+            }
+            return state;
+        }
+    }
 
     public static Skill FindSkillInSkills(string _id)
     {

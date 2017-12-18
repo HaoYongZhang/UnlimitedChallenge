@@ -55,7 +55,7 @@ namespace SkillClass
             {
                 Skill oneSkill = SkillClass.Manager.GetOneSkillByID(skill.id);
                 //当技能开始冷却时
-                if (oneSkill.isCooldown)
+                if (oneSkill.releaseState == SkillReleaseState.cooldown)
                 {
                     //执行冷却动画
                     cooldownImage.fillAmount = 1 - (oneSkill.currentCoolDown / float.Parse(oneSkill.data["cooldown"]));

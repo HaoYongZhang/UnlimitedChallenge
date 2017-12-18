@@ -7,12 +7,12 @@ public class RangeManager : MonoBehaviour
 {
 
     int pointCount = 50;
-    float radius = 10f;
     float angle;
     List<Vector3> points = new List<Vector3>();
     LineRenderer lineRenderer;
     //用于标识是否显示
-    public bool rendering;  
+    public bool rendering;
+    public float radius = 10f;
                                     
     void Start()
     {
@@ -26,18 +26,7 @@ public class RangeManager : MonoBehaviour
 
     void Update()
     {
-        if (Global.skillRelease == SkillRelease.none)
-        {
-            rendering = false;
-        }
-
-        if (Global.skillRelease == SkillRelease.selecting)
-        {
-            rendering = true;
-
-        }
-
-        if (Global.skillRelease == SkillRelease.selected) 
+        if (Global.skillReleaseState != SkillReleaseState.selecting)
         {
             rendering = false;
         }
@@ -56,11 +45,6 @@ public class RangeManager : MonoBehaviour
         }
 
         ClearPoints();
-    }
-
-    public void setSkillRange(Skill skill)
-    {
-        radius = float.Parse(skill.data["skillDistance"]);
     }
 
     /// <summary>
@@ -140,7 +124,7 @@ public class RangeManager : MonoBehaviour
 
     void CalculationPoints()
     {
-        Vector3 newPosition = new Vector3(transform.position.x, transform.position.y + 3, transform.position.z);
+        Vector3 newPosition = new Vector3(transform.position.x, 5, transform.position.z);
         Vector3 v = newPosition + transform.forward * radius;
         points.Add(v);
         Quaternion r = transform.rotation;
@@ -151,6 +135,7 @@ public class RangeManager : MonoBehaviour
             points.Add(v);
         }
     }
+
     void DrowPoints()
     {
         for (int i = 0; i < points.Count; i++)
@@ -160,6 +145,7 @@ public class RangeManager : MonoBehaviour
         if (points.Count > 0)   //这里要说明一下，因为圆是闭合的曲线，最后的终点也就是起点，
             lineRenderer.SetPosition(pointCount, points[0]);
     }
+
     void ClearPoints()
     {
         points.Clear();  ///清除所有点

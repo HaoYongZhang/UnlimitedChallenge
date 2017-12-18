@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.ComponentModel;
 namespace SkillClass
 {
-    public enum SkillRelease
+    /// <summary>
+    /// 技能的释放状态
+    /// </summary>
+    public enum SkillReleaseState
     {
-        //未释放
-        none,
+        //可使用
+        available,
         //选择中
         selecting,
         //已选择
-        selected
+        selected,
+        //冷却中
+        cooldown
     }
 
     /// <summary>
@@ -56,10 +61,12 @@ namespace SkillClass
     }
 
     /// <summary>
-    /// 释放影响类型
+    /// 技能释放影响范围
     /// </summary>
-    public enum SkillEffectType
+    public enum SkillEffectRange
     {
+        [Description("自身")]
+        self,
         [Description("指向性")]
         pointing,
         [Description("直线")]

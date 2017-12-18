@@ -15,7 +15,7 @@ namespace SkillClass
         // SkillManager单例
         public static Manager _instance;
 
-        public Skill hasSelectedSkill;
+        public Skill selectedSkill;
 
         void Awake()
         {
@@ -29,110 +29,195 @@ namespace SkillClass
 
         void Update()
         {
-            //cooldown();
-            keepUnactiveSkill();
+            cooldown();
 
-            if (Global.skillRelease == SkillRelease.selected)
-            {
-                inAttackSkill(hasSelectedSkill);
-                Global.skillRelease = SkillRelease.none;
-            }
+            //keepUnactiveSkill();
         }
 
-        public void OnRelease(Skill skill)
-        {
-            
-        }
-
-        public void OnDurationEnd(Skill skill)
-        {
-            
-        }
-
-        public void OnSelecting(Skill skill)
-        {
-            
-        }
-
-        //技能的默认设置
-        void defaultSkillSetting()
-        {
-            for (int i = 0; i < UIScene.Instance.skillButtons.Count; i++)
-            {
-                SkillClass.UIButton btn = UIScene.Instance.skillButtons[i];
-
-                btn.gameObject.GetComponent<UIMouseDelegate>().onPointerClickDelegate = onClickSkillButton;
-            }
-        }
-
-        public void onClickSkillButton(GameObject obj, PointerEventData ed)
-        {
-            SkillClass.UIButton skillBtn = obj.GetComponent<SkillClass.UIButton>();
-
-            if(skillBtn.skill == null)
-            {
-                return;
-            }
-
-            releaseSkill(skillBtn.skill);
-        }
 
         /// <summary>
-        /// 维持被动技能
+        /// 判断能否释放技能
         /// </summary>
-        void keepUnactiveSkill()
+        /// <returns><c>true</c>, if release skill was caned, <c>false</c> otherwise.</returns>
+        /// <param name="skill">Skill.</param>
+        public bool CanRelease(Skill skill)
         {
-            foreach (Skill skill in Global.unactiveSkills)
+            // 如果技能不存在，返回
+            if (skill == null)
             {
-                if (skill.isInDuration == false)
-                {
-                    intensify(skill);
-                }
+                return false;
             }
+
+            //如果当前有技能正在释放时，不能同时点其他技能
+            if (Global.skillReleaseState != SkillReleaseState.available)
+            {
+                return false;
+            }
+
+            // 如果是被动技能，返回
+            if (skill.data["isActive"] == "0")
+            {
+                return false;
+            }
+
+            // 如果技能正在冷却中，返回
+            if (skill.releaseState == SkillReleaseState.cooldown)
+            {
+                return false;
+            }
+
+            // 如果蓝量不足，返回
+            if (Global.hero.property.mp < float.Parse(skill.data["costEnergy"]))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
-        /// 技能冷却
-        /// </summary>
-        void cooldown()
-        {
-            for (int i = 0; i < Global.skills.Count; i++)
-            {
-                Skill oneSkill = GetOneSkillByID(Global.skills[i].id);
-                if (oneSkill.isCooldown)
-                {
-                    if (oneSkill.currentCoolDown < float.Parse(oneSkill.data["cooldown"]))
-                    {
-                        // 更新冷却
-                        oneSkill.currentCoolDown += Time.deltaTime;
-
-                        //每秒显示技能冷却时间
-                        if (Time.time - oneSkill.second >= 1.0f)
-                        {
-                            oneSkill.second = Time.time;
-                        }
-
-                        //当技能持续时间结束时
-                        if (oneSkill.isInDuration && oneSkill.currentCoolDown >= float.Parse(oneSkill.data["duration"]))
-                        {
-                            endDuration(oneSkill);
-                        }
-                    }
-                    else
-                    {
-                        oneSkill.currentCoolDown = 0;
-                        oneSkill.isCooldown = false;
-                    }
-                }
-
-            }
-        }
-
-        /// <summary>
-        /// 技能冷却结束
+        /// 选择技能目标中
         /// </summary>
         /// <param name="skill">Skill.</param>
-        void endDuration(Skill skill)
+        public void OnSelecting(Skill skill)
+        {
+            selectedSkill = skill;
+            Global.hero.rangeManager.radius = float.Parse(skill.data["skillDistance"]);
+            Global.hero.rangeManager.rendering = true;
+        }
+
+        /// <summary>
+        /// 已选择技能目标
+        /// </summary>
+        public void OnSelected()
+        {
+            selectedSkill.releaseState = SkillReleaseState.selected;
+            if(CanSelected(selectedSkill))
+            {
+                OnImplemented(selectedSkill);
+            }
+        }
+
+        /// <summary>
+        /// 检验已选择技能目标是否有效
+        /// </summary>
+        /// <returns><c>true</c>, if selected was caned, <c>false</c> otherwise.</returns>
+        /// <param name="skill">Skill.</param>
+        public bool CanSelected(Skill skill)
+        {
+            Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit rayHit;
+            float distance;
+            float skillDistance = float.Parse(skill.data["skillDistance"]);
+            if (Physics.Raycast(cameraRay, out rayHit))
+            {
+                Vector3 heroPosition = new Vector3(transform.position.x, 5, transform.position.z);
+                Vector3 rayPosition = new Vector3(rayHit.point.x, 5, rayHit.point.z);
+                //人物到鼠标点击位置的实际直线距离
+                distance = (heroPosition - rayPosition).magnitude;
+
+                Debug.Log("heroPosition =" + heroPosition);
+                Debug.Log("rayHit =" + rayPosition);
+                Debug.Log("distance =" + distance);
+                Debug.Log("skillDistance =" + skillDistance);
+
+                //点击位置大于施法距离
+                if (distance > skillDistance)
+                {
+                    Debug.Log("点击位置大于施法距离");
+                    return false;
+                }
+                //点击位置小于施法距离，成功施法
+                else
+                {
+                    return true;
+                }
+
+            }
+            else
+            {
+                Debug.Log("点击位置超出游戏范围");
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// 释放技能
+        /// </summary>
+        /// <param name="_skill">Skill.</param>
+        public void OnRelease(Skill _skill)
+        {
+            Skill skill = GetOneSkillByID(_skill.id);
+            ///判断能否释放技能
+            if (CanRelease(skill))
+            {
+                //如果技能作用于自身时，直接释放
+                if (skill.effectRange == SkillEffectRange.self)
+                {
+                    OnImplemented(skill);
+                }
+                //如果技能不是作用于自身时，选择释放地点
+                else
+                {
+                    skill.releaseState = SkillReleaseState.selecting;
+                    OnSelecting(skill);
+                }
+            }
+
+
+        }
+
+
+        /// <summary>
+        /// 实现技能释放
+        /// </summary>
+        /// <param name="skill">Skill.</param>
+        public void OnImplemented(Skill skill)
+        {
+            Global.hero.property.mp -= float.Parse(skill.data["costEnergy"]);
+
+            skill.releaseState = SkillReleaseState.cooldown;
+
+            switch (skill.type)
+            {
+                case SkillType.attack:
+                    {
+                        releaseAttackSkill(skill);
+                    }
+                    break;
+                case SkillType.defense:
+                    {
+                    }
+                    break;
+                case SkillType.treatment:
+                    {
+                        treatment(skill);
+                    }
+                    break;
+                case SkillType.intensify:
+                    {
+                        intensify(skill);
+                    }
+                    break;
+                case SkillType.complex:
+                    {
+
+                    }
+                    break;
+                case SkillType.specialty:
+                    {
+
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 技能持续效果结束
+        /// </summary>
+        /// <param name="skill">Skill.</param>
+        public void OnDurationEnd(Skill skill)
         {
             switch (skill.type)
             {
@@ -169,114 +254,102 @@ namespace SkillClass
         }
 
         /// <summary>
-        /// 使用技能
+        /// 技能冷却
         /// </summary>
-        /// <param name="skill">Skill.</param>
-        public void releaseSkill(Skill skill)
+        void cooldown()
         {
-            Skill oneSkill = GetOneSkillByID(skill.id);
+            for (int i = 0; i < Global.skills.Count; i++)
+            {
+                Skill oneSkill = GetOneSkillByID(Global.skills[i].id);
+                if (oneSkill.releaseState == SkillReleaseState.cooldown)
+                {
+                    if (oneSkill.currentCoolDown < float.Parse(oneSkill.data["cooldown"]))
+                    {
+                        // 更新冷却
+                        oneSkill.currentCoolDown += Time.deltaTime;
 
-            if (CanRelease(oneSkill) == false)
+                        //每秒显示技能冷却时间
+                        if (Time.time - oneSkill.second >= 1.0f)
+                        {
+                            oneSkill.second = Time.time;
+                        }
+
+                        //当技能持续时间结束时
+                        if (oneSkill.isInDuration && oneSkill.currentCoolDown >= float.Parse(oneSkill.data["duration"]))
+                        {
+                            OnDurationEnd(oneSkill);
+                        }
+                    }
+                    else
+                    {
+                        oneSkill.currentCoolDown = 0;
+                        oneSkill.releaseState = SkillReleaseState.available;
+                    }
+                }
+
+            }
+        }
+
+
+        //技能的默认设置
+        void defaultSkillSetting()
+        {
+            for (int i = 0; i < UIScene.Instance.skillButtons.Count; i++)
+            {
+                SkillClass.UIButton btn = UIScene.Instance.skillButtons[i];
+
+                btn.gameObject.GetComponent<UIMouseDelegate>().onPointerClickDelegate = onClickSkillButton;
+            }
+        }
+
+        public void onClickSkillButton(GameObject obj, PointerEventData ed)
+        {
+            SkillClass.UIButton skillBtn = obj.GetComponent<SkillClass.UIButton>();
+
+            if(skillBtn.skill == null)
             {
                 return;
             }
 
-            switch (oneSkill.type)
-            {
-                case SkillType.attack:
-                    {
-                        releaseAttackSkill(oneSkill);
-                    }
-                    break;
-                case SkillType.defense:
-                    {
-                    }
-                    break;
-                case SkillType.treatment:
-                    {
-                        inUseSkill(oneSkill);
-                        treatment(oneSkill);
-                    }
-                    break;
-                case SkillType.intensify:
-                    {
-                        inUseSkill(oneSkill);
-                        intensify(oneSkill);
-                    }
-                    break;
-                case SkillType.complex:
-                    {
-
-                    }
-                    break;
-                case SkillType.specialty:
-                    {
-                    }
-                    break;
-            }
+            OnRelease(skillBtn.skill);
         }
-
 
         /// <summary>
-        /// 判断能否释放技能
+        /// 维持被动技能
         /// </summary>
-        /// <returns><c>true</c>, if release skill was caned, <c>false</c> otherwise.</returns>
-        /// <param name="skill">Skill.</param>
-        public bool CanRelease(Skill skill)
+        void keepUnactiveSkill()
         {
-            // 如果技能不存在，返回
-            if (skill == null)
+            foreach (Skill skill in Global.unactiveSkills)
             {
-                return false;
+                if (skill.isInDuration == false)
+                {
+                    intensify(skill);
+                }
             }
-
-            //如果当前有技能正在释放时，不能同时点其他技能
-            if (Global.skillRelease != SkillRelease.none)
-            {
-                return false;
-            }
-
-            // 如果是被动技能，返回
-            if (skill.data["isActive"] == "0")
-            {
-                return false;
-            }
-
-            // 如果技能正在冷却中，返回
-            if (skill.isCooldown == true)
-            {
-                return false;
-            }
-
-            // 如果蓝量不足，返回
-            if (Global.hero.property.mp < float.Parse(skill.data["costEnergy"]))
-            {
-                return false;
-            }
-
-            return true;
         }
+
+
 
         void inUseSkill(Skill skill)
         {
-            skill.isCooldown = true;
+            //skill.isCooldown = true;
 
-            Global.hero.property.mp -= float.Parse(skill.data["costEnergy"]);
+            //Global.hero.property.mp -= float.Parse(skill.data["costEnergy"]);
         }
 
         void releaseAttackSkill(Skill skill)
         {
-            hasSelectedSkill = skill;
+            //hasSelectedSkill = skill;
 
-            beforeAttack(skill);
+            //beforeAttack(skill);
         }
 
         void beforeAttack(Skill skill)
         {
-            RangeManager rangeManager = GetComponent<RangeManager>();
-            rangeManager.setSkillRange(skill);
+            //RangeManager rangeManager = GetComponent<RangeManager>();
+            //rangeManager.setSkillRange(skill);
 
-            Global.skillRelease = SkillRelease.selecting;
+            //Global.skillReleaseState = SkillReleaseState.selecting;
         }
 
         void inAttackSkill(Skill skill)

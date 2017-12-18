@@ -10,7 +10,7 @@ namespace SkillClass
     /// <summary>
     /// 技能管理中心
     /// </summary>
-    public class Manager : MonoBehaviour
+    public class Manager : MonoBehaviour, ISkill
     {
         // SkillManager单例
         public static Manager _instance;
@@ -29,7 +29,7 @@ namespace SkillClass
 
         void Update()
         {
-            cooldown();
+            //cooldown();
             keepUnactiveSkill();
 
             if (Global.skillRelease == SkillRelease.selected)
@@ -37,6 +37,21 @@ namespace SkillClass
                 inAttackSkill(hasSelectedSkill);
                 Global.skillRelease = SkillRelease.none;
             }
+        }
+
+        public void OnRelease(Skill skill)
+        {
+            
+        }
+
+        public void OnDurationEnd(Skill skill)
+        {
+            
+        }
+
+        public void OnSelecting(Skill skill)
+        {
+            
         }
 
         //技能的默认设置
@@ -161,7 +176,7 @@ namespace SkillClass
         {
             Skill oneSkill = GetOneSkillByID(skill.id);
 
-            if (canReleaseSkill(oneSkill) == false)
+            if (CanRelease(oneSkill) == false)
             {
                 return;
             }
@@ -207,7 +222,7 @@ namespace SkillClass
         /// </summary>
         /// <returns><c>true</c>, if release skill was caned, <c>false</c> otherwise.</returns>
         /// <param name="skill">Skill.</param>
-        bool canReleaseSkill(Skill skill)
+        public bool CanRelease(Skill skill)
         {
             // 如果技能不存在，返回
             if (skill == null)

@@ -6,7 +6,15 @@ using Utility;
 
 namespace SkillClass
 {
-    public class Skill
+    public interface ISkill
+    {
+        bool CanRelease(Skill skill);
+        void OnSelecting(Skill skill);
+        void OnRelease(Skill skill);
+        void OnDurationEnd(Skill skill);
+    }
+
+    public class Skill : MonoBehaviour
     {
         //技能id
         public string id;
@@ -16,12 +24,8 @@ namespace SkillClass
         public Sprite imageSprite;
         //技能类别
         public SkillCategory category;
-        //技能类别的中文名称
-        public string categoryName;
         //技能类型
         public SkillType type;
-        //技能类型的中文名称
-        public string typeName;
         //技能描述
         public string description
         {
@@ -43,6 +47,8 @@ namespace SkillClass
         //每秒实际CD间隔时间
         public float second = Time.time;
 
+        public SkillClass.Manager skillManager;
+
         public Skill(string _id)
         {
             id = _id;
@@ -50,18 +56,52 @@ namespace SkillClass
             category = PropertyUtil.GetEnum<SkillCategory>(id.Substring(0, 1));
             type = PropertyUtil.GetEnum<SkillType>(id.Substring(1, 1));
 
-            categoryName = PropertyUtil.GetEnumDescription(category);
-            typeName = PropertyUtil.GetEnumDescription(type);
-
             data = DataManager.Instance.skillDatas.getSkillData(_id);
 
             imageSprite = Resources.Load("Image/Skill/skill_" + id, typeof(Sprite)) as Sprite;
             isActive = (data["isActive"] == "1");
         }
 
+        void Update()
+        {
+            if(isCooldown)
+            {
+                cooldown();
+            }
+        }
+
         public void release()
         {
-            Global.hero.skillManager.releaseSkill(this);
+            if(skillManager.CanRelease(this))
+            {
+                skillManager.OnRelease(this);
+            }
+        }
+
+        void cooldown()
+        {
+            if (currentCoolDown < float.Parse(data["cooldown"]))
+            {
+                // 更新冷却
+                currentCoolDown += Time.deltaTime;
+
+                //每秒显示技能冷却时间
+                if (Time.time - second >= 1.0f)
+                {
+                    second = Time.time;
+                }
+
+                //当技能持续时间结束时
+                if (isInDuration && currentCoolDown >= float.Parse(data["duration"]))
+                {
+                    skillManager.OnDurationEnd(this);
+                }
+            }
+            else
+            {
+                currentCoolDown = 0;
+                isCooldown = false;
+            }
         }
     }
 }

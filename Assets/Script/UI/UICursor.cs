@@ -37,7 +37,7 @@ public class UICursor : MonoBehaviour {
 
     void setSkillSelecting()
     {
-        Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.Auto);
+        Cursor.SetCursor(cursorTexture, new Vector2(32/2, 32/2), CursorMode.Auto);
     }
 
     void resetCursor()

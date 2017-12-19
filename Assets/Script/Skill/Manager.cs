@@ -12,15 +12,11 @@ namespace SkillClass
     /// </summary>
     public class Manager : MonoBehaviour, ISkill
     {
-        // SkillManager单例
-        public static Manager _instance;
-
         public Skill selectedSkill;
 
-        void Awake()
-        {
-            _instance = this;
-        }
+        Ray ray;  
+        RaycastHit hit;  
+        LineRenderer lineRenderer;  
 
         void Start()
         {
@@ -31,6 +27,21 @@ namespace SkillClass
         {
             cooldown();
 
+            //if(Global.skillReleaseState == SkillReleaseState.selecting)
+            //{
+            //    lineRenderer = GetComponent<LineRenderer>();  
+            //    ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            //    if (Physics.Raycast(ray, out hit))
+            //    {
+            //        // 如果与物体发生碰撞，在Scene视图中绘制射线  
+            //        //Debug.DrawLine(ray.origin, hit.point, Color.green); 
+            //        lineRenderer.positionCount = 2;
+            //        lineRenderer.startWidth = 2f;
+            //        lineRenderer.endWidth = 2f;
+            //        lineRenderer.SetPosition (0, transform.position);  
+            //        lineRenderer.SetPosition (1, hit.point);  
+            //    } 
+            //}
             //keepUnactiveSkill();
         }
 
@@ -105,7 +116,7 @@ namespace SkillClass
         /// <param name="skill">Skill.</param>
         public bool CanSelected(Skill skill)
         {
-            Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray cameraRay = Global.mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit rayHit;
             float distance;
             float skillDistance = float.Parse(skill.data["skillDistance"]);
@@ -387,13 +398,17 @@ namespace SkillClass
         /// <param name="skill">Skill.</param>
         void treatment(Skill skill)
         {
+            
             string increateHp = skill.data["increateHp"];
-            if (increateHp != null)
+            if (increateHp != null && increateHp != "")
             {
                 //截取字符串，获得属性增加的值
                 float createValue = float.Parse(increateHp);
                 //使用治疗技能后，加上的血量
                 Global.hero.property.hp += createValue;
+
+                Color hpColor = new Color(90 / 255f, 160 / 255f, 55 / 255f, 1);
+                ParticleManager.vertical(Global.hero.gameObject, hpColor);
 
                 intensify(skill);
             }

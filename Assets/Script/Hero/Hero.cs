@@ -13,6 +13,8 @@ public class Hero : MonoBehaviour {
     public Property property{ get; set; }
     public Knowledge knowledge;
 
+    public ParticleSystem particle;
+
     public Rigidbody rigid;
     public Animator animator;
     public HeroController heroController;
@@ -39,7 +41,6 @@ public class Hero : MonoBehaviour {
                 DontDestroyOnLoad(gameObject);
 
                 _instance = gameObject.AddComponent<Hero>();
-                _instance.init();
 
                 _instance.heroController = gameObject.AddComponent<HeroController>();
                 _instance.charactersManager = gameObject.AddComponent<CharactersManager>();
@@ -51,14 +52,12 @@ public class Hero : MonoBehaviour {
                 _instance.rigid = gameObject.GetComponent<Rigidbody>();
                 _instance.animator = gameObject.GetComponent<Animator>();
                 _instance.rangeManager = gameObject.GetComponent<RangeManager>();
+                _instance.particle = gameObject.GetComponent<ParticleSystem>();
             }
             return _instance;
         }
     }
 
-    void init(){
-        
-    }
 
     void Awake()
     {

@@ -27,22 +27,7 @@ namespace SkillClass
         {
             cooldown();
 
-            //if(Global.skillReleaseState == SkillReleaseState.selecting)
-            //{
-            //    lineRenderer = GetComponent<LineRenderer>();  
-            //    ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            //    if (Physics.Raycast(ray, out hit))
-            //    {
-            //        // 如果与物体发生碰撞，在Scene视图中绘制射线  
-            //        //Debug.DrawLine(ray.origin, hit.point, Color.green); 
-            //        lineRenderer.positionCount = 2;
-            //        lineRenderer.startWidth = 2f;
-            //        lineRenderer.endWidth = 2f;
-            //        lineRenderer.SetPosition (0, transform.position);  
-            //        lineRenderer.SetPosition (1, hit.point);  
-            //    } 
-            //}
-            //keepUnactiveSkill();
+            unactiveSkill();
         }
 
 
@@ -326,67 +311,17 @@ namespace SkillClass
         }
 
         /// <summary>
-        /// 维持被动技能
+        /// 被动技能
         /// </summary>
-        void keepUnactiveSkill()
+        void unactiveSkill()
         {
-            foreach (Skill skill in Global.unactiveSkills)
+            foreach (Skill skill in Global.skills)
             {
-                if (skill.isInDuration == false)
+                //当技能是被动而且未开启时，开启被动技能
+                if (!skill.isActive && skill.isInDuration == false)
                 {
                     intensify(skill);
                 }
-            }
-        }
-
-
-
-        void inUseSkill(Skill skill)
-        {
-            //skill.isCooldown = true;
-
-            //Global.hero.property.mp -= float.Parse(skill.data["costEnergy"]);
-        }
-
-        void releaseAttackSkill(Skill skill)
-        {
-            //hasSelectedSkill = skill;
-
-            //beforeAttack(skill);
-        }
-
-        void beforeAttack(Skill skill)
-        {
-            //RangeManager rangeManager = GetComponent<RangeManager>();
-            //rangeManager.setSkillRange(skill);
-
-            //Global.skillReleaseState = SkillReleaseState.selecting;
-        }
-
-        void inAttackSkill(Skill skill)
-        {
-            ////获取英雄对象
-            //Transform player = GameObject.FindGameObjectWithTag("Player").transform;
-            ////获取HeroManager的属性
-            //Property property = player.GetComponent<HeroManager>().property;
-            //Knowledge knowledge = player.GetComponent<HeroManager>().knowledge;
-
-            ////动态获取当前的属性值
-            //int knowledgeValue = int.Parse(PropertyUtil.ReflectGetter(knowledge, skill.addlData["knowledgePromote"]).ToString());
-
-            //DamageType damageType = SkillEnum.getEnum<DamageType>(skill.addlData["damageType"]);
-            //SkillEffectType skillEffectType = SkillEnum.getEnum<SkillEffectType>(skill.addlData["skillEffectType"]);
-            //float damage =
-                //(float.Parse(skill.addlData["basicDamage"]) +
-                // property.strength * float.Parse(skill.addlData["strength"]) +
-                // property.agility * float.Parse(skill.addlData["agility"]) +
-                // property.intellect * float.Parse(skill.addlData["agility"])) *
-                //(1 + Math.Round((float)knowledgeValue / 10, 1));
-
-            bool isSuccessRelease = GetComponent<ShootManager>().handleSkill(skill);
-            if(isSuccessRelease)
-            {
-                inUseSkill(skill);
             }
         }
 
@@ -398,7 +333,6 @@ namespace SkillClass
         /// <param name="skill">Skill.</param>
         void treatment(Skill skill)
         {
-            
             string increateHp = skill.data["increateHp"];
             if (increateHp != null && increateHp != "")
             {

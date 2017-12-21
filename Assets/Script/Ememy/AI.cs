@@ -188,7 +188,6 @@ namespace EnemyClass
 
             if (distance <= attackDistance)
             {
-                Debug.Log(attackDistance);
                 DamageType damageType = PropertyUtil.GetEnum<DamageType>(_enemy.data["damageType"]);
 
                 DamageManager.CommonAttack<Enemy, Hero>(gameObject, Global.hero.gameObject, damageType);

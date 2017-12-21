@@ -27,6 +27,7 @@ public class FightManager : MonoBehaviour {
     {
         if(!isFight)
         {
+            Global.faceToMousePosition(gameObject);
             isFight = true;
             WeaponType weaponType = PropertyUtil.GetEnum<WeaponType>(Global.hero.equipmentManager.currentWeapon.data["weaponType"]);
             Global.hero.animator.SetFloat("weaponType", (float)weaponType);
@@ -40,6 +41,7 @@ public class FightManager : MonoBehaviour {
     void startAttack()
     {
         //Debug.Log("开始攻击");
+
     }
 
     /// <summary>
@@ -56,8 +58,6 @@ public class FightManager : MonoBehaviour {
         for (int i = 0; i < enemys.Count; i++)
         {
             DamageManager.CommonAttack<Hero, Enemy>(gameObject, enemys[i], PropertyUtil.GetEnum<DamageType>(equipment.data["damageType"]));
-
-            Debug.Log(enemys[i].GetComponent<Enemy>().property.hp);
         }
     }
 
@@ -66,9 +66,20 @@ public class FightManager : MonoBehaviour {
     /// </summary>
     void endAttack()
     {
-        Global.hero.animator.SetBool("attack", false);
+        bool isLongPress = Global.hero.gameObject.GetComponent<HeroController>().isLongPress;
 
-        isFight = false;
+        if(!isLongPress)
+        {
+            Debug.Log("停止攻击");
+            Global.hero.animator.SetBool("attack", false);
+
+            isFight = false;
+        }
+        else
+        {
+            Debug.Log("长安中");
+        }
+
     }
 }
 

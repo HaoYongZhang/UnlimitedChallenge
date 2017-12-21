@@ -4,12 +4,16 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Utility;
 using SkillClass;
+using System;
 
 public class HeroController : MonoBehaviour {
 
 	Rigidbody _rigidbody;
     Animator _animator;
 	public float rotationSpeed = 20;
+
+    DateTime t_MouseDown;
+    public bool isLongPress = false;
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +26,8 @@ public class HeroController : MonoBehaviour {
         //点击左键时
         if (Input.GetMouseButtonDown(0))
         {
+            isLongPress = true;
+
             //如果当前状态是正在选择释放技能目标时
             if (Global.skillReleaseState == SkillReleaseState.selecting)
             {
@@ -32,10 +38,14 @@ public class HeroController : MonoBehaviour {
                 //当前没有触摸在UI上
                 if (!EventSystem.current.IsPointerOverGameObject())
                 {
-                    Debug.Log("出发");
                     Global.hero.fightManager.fight();
                 }
             }
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            isLongPress = false;
         }
 
 

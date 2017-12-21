@@ -14,6 +14,21 @@ public class Global{
         }
     }
 
+    public static bool faceToMousePosition(GameObject self)
+    {
+        Ray mouseRay = Global.mainCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitInfo;
+        if (Physics.Raycast(mouseRay, out hitInfo))
+        {
+            Vector3 targerPosition = new Vector3(hitInfo.point.x, self.transform.position.y, hitInfo.point.z);
+            self.transform.LookAt(targerPosition);
+
+            return true;
+        }
+
+        return false;
+    }
+
     public static Camera mainCamera;
 
     public static Dictionary<string, Rank> ranks = new Dictionary<string, Rank>();

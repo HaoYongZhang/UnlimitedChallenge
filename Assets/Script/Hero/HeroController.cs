@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using Utility;
 using SkillClass;
 using System;
 
@@ -23,6 +22,11 @@ public class HeroController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if(Global.hero.isDeath)
+        {
+            return;
+        }
+
         //点击左键时
         if (Input.GetMouseButtonDown(0))
         {
@@ -68,54 +72,59 @@ public class HeroController : MonoBehaviour {
         //------技能栏快捷键
         if (Input.GetKeyDown(KeyCode.Alpha1))
 		{
-            SkillClass.UIButton skillBtn = UIScene.Instance.skillButtons[0];
+            SkillClass.UIButton skillBtn = UIScene.Instance.hotKeyBar.hotKeysBtns[0];
             Global.hero.skillManager.OnRelease(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SkillClass.UIButton skillBtn = UIScene.Instance.skillButtons[1];
+            SkillClass.UIButton skillBtn = UIScene.Instance.hotKeyBar.hotKeysBtns[1];
             Global.hero.skillManager.OnRelease(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            SkillClass.UIButton skillBtn = UIScene.Instance.skillButtons[2];
+            SkillClass.UIButton skillBtn = UIScene.Instance.hotKeyBar.hotKeysBtns[2];
             Global.hero.skillManager.OnRelease(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            SkillClass.UIButton skillBtn = UIScene.Instance.skillButtons[3];
+            SkillClass.UIButton skillBtn = UIScene.Instance.hotKeyBar.hotKeysBtns[3];
             Global.hero.skillManager.OnRelease(skillBtn.skill);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            SkillClass.UIButton skillBtn = UIScene.Instance.skillButtons[4];
+            SkillClass.UIButton skillBtn = UIScene.Instance.hotKeyBar.hotKeysBtns[4];
             Global.hero.skillManager.OnRelease(skillBtn.skill);
         }
 
 		if (Input.GetKeyDown(KeyCode.R))
 		{
-            if(UIScene.Instance.heroView.gameObject.activeSelf)
+            if(UIScene.Instance.heroInfoView.gameObject.activeSelf)
             {
-                UIScene.Instance.heroView.hide();
+                UIScene.Instance.heroInfoView.hide();
             }
             else
             {
-                UIScene.Instance.heroView.show();
+                UIScene.Instance.heroInfoView.show();
             }
 		}
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            UIScene.Instance.switchSkillBar();
+            UIScene.Instance.switchHotKeyBar();
         }
 	}
 
 	void FixedUpdate()
 	{
+        if (Global.hero.isDeath)
+        {
+            return;
+        }
+
         if (!Global.hero.fightManager.isFight)
         {
             MoveControlByTranslateGetAxis();

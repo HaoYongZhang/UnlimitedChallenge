@@ -8,12 +8,12 @@ namespace EquipmentClass
 {
 	public class UIButton : MonoBehaviour
 	{
-
 		public Equipment equipment;
 		public EquipmentPart part;
 		public Image icon;
         public Image bg;
         public int number;
+        public UIMouseDelegate mouseDelegate;
 
 		Sprite defaultIcon;
         Sprite defaultBG;
@@ -21,6 +21,7 @@ namespace EquipmentClass
 		public static UIButton NewInstantiate()
 		{
 			UIButton equipmentButton = Instantiate((GameObject)Resources.Load("UI/EquipmentButton")).GetComponent<UIButton>();
+            equipmentButton.mouseDelegate = equipmentButton.gameObject.GetComponent<UIMouseDelegate>();
 
 			return equipmentButton;
 		}

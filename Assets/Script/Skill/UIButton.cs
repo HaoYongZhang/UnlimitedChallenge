@@ -11,6 +11,7 @@ namespace SkillClass
         public Image skillImage;
         public Image cooldownImage;
         public Text cooldownText;
+        public UIMouseDelegate mouseDelegate;
 
         Sprite defaultSprite;
 
@@ -18,6 +19,7 @@ namespace SkillClass
         {
             UIButton skillButton = Instantiate((GameObject)Resources.Load("UI/SkillButton")).GetComponent<UIButton>();
             skillButton.defaultSprite = skillButton.skillImage.sprite;
+            skillButton.mouseDelegate = skillButton.gameObject.GetComponent<UIMouseDelegate>();
 
             return skillButton;
         }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Utility;
 using SkillClass;
 
 namespace EquipmentClass
@@ -30,9 +29,9 @@ namespace EquipmentClass
         {
             id = _id;
 
-            part = PropertyUtil.GetEnum<EquipmentPart>(id.Substring(0, 1));
+            part = EnumTool.GetEnum<EquipmentPart>(id.Substring(0, 1));
 
-            partName = PropertyUtil.GetEnumDescription(part);
+            partName = EnumTool.GetEnumDescription(part);
 
             data = DataManager.Instance.equipmentDatas.getEquipmentData(_id);
 

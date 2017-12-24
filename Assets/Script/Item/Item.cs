@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SkillClass;
-using Utility;
 
 namespace ItemClass
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.ComponentModel;
 using UnityEngine.EventSystems;
-using Utility;
+using UIHeroInfo;
 
 namespace EquipmentClass
 {
@@ -79,7 +79,7 @@ namespace EquipmentClass
             takeOnEquipment(body, GetEquipmentButton("30001"));
             takeOnEquipment(legs, GetEquipmentButton("40001"));
 
-            UIScene.Instance.heroView.itemsView.GetComponent<UIHeroItemView>().setItemsSet();
+            UIScene.Instance.heroInfoView.itemsView.setItemsSet();
         }
 
         // Update is called once per frame
@@ -117,7 +117,7 @@ namespace EquipmentClass
                     break;
                 case EquipmentPart.head:
                     {
-                        HeadPart headPart = PropertyUtil.GetEnum<HeadPart>(equipment.data["headPart"]);
+                        HeadPart headPart = EnumTool.GetEnum<HeadPart>(equipment.data["headPart"]);
                         GameObject equipmentObj = (GameObject)Instantiate(Resources.Load("Material/Equipment/equipment_" + equipment.id + "_" + headPart.ToString()));
 
                         //清空遗留的装备模型
@@ -246,7 +246,7 @@ namespace EquipmentClass
             //如果更换的装备是武器时，改变UI图标
             if (tagerEquiBtn.equipment.part == EquipmentPart.weapon)
             {
-                UIScene.Instance.fightBar.setWeaponBG(tagerEquiBtn.equipment);
+                UIScene.Instance.fightInfoView.setWeaponBG(tagerEquiBtn.equipment);
             }
         }
 
@@ -270,7 +270,7 @@ namespace EquipmentClass
                 case EquipmentPart.weapon:
                     {
                         Global.hero.charactersManager.replaceAvator(CharactersManager.left_weapon_name, null);
-                        UIScene.Instance.fightBar.setWeaponBG(null);
+                        UIScene.Instance.fightInfoView.setWeaponBG(null);
                     }
                     break;
                 case EquipmentPart.head:
@@ -305,7 +305,7 @@ namespace EquipmentClass
         void onDoubleClick(GameObject obj, PointerEventData eventData)
         {
             takeOffEquipment(obj.GetComponent<UIButton>());
-            UIScene.Instance.heroView.itemsView.GetComponent<UIHeroItemView>().setItemsSet();
+            UIScene.Instance.heroInfoView.itemsView.GetComponent<ItemView>().setItemsSet();
         }
 
         //开始拖拽
@@ -322,7 +322,7 @@ namespace EquipmentClass
 
             //代替品实例化
             dragTempObject = new GameObject("DragTempObject");
-            dragTempObject.transform.SetParent(UIScene.Instance.heroView.transform, false);
+            dragTempObject.transform.SetParent(UIScene.Instance.transform, false);
             dragTempObject.AddComponent<RectTransform>();
 
             EquipmentClass.UIButton temp = EquipmentClass.UIButton.NewInstantiate();
@@ -365,7 +365,7 @@ namespace EquipmentClass
                 Destroy(dragTempObject);
             }
 
-            UIScene.Instance.heroView.itemsView.GetComponent<UIHeroItemView>().setItemsSet();
+            UIScene.Instance.heroInfoView.itemsView.GetComponent<ItemView>().setItemsSet();
         }
 
         //接收被拖拽的物品

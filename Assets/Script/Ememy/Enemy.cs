@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Utility;
+
 
 namespace EnemyClass
 {
@@ -23,9 +23,9 @@ namespace EnemyClass
 
             foreach(KeyValuePair<string, string> pair in propertyData)
             {
-                if(PropertyUtil.isExist(property, pair.Key))
+                if(PropertyTool.isExist(property, pair.Key))
                 {
-                    PropertyUtil.ReflectSetter(property, pair.Key, float.Parse(pair.Value));
+                    PropertyTool.ReflectSetter(property, pair.Key, float.Parse(pair.Value));
                 }
             }
 

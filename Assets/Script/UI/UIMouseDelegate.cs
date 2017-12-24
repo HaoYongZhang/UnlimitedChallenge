@@ -25,6 +25,9 @@ public class UIMouseDelegate : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public OnEndDragDelegate onEndDragDelegate;
     public OnDropDelegate onDropDelegate;
 
+    //因为挂载此脚本的组件会默认调用全部鼠标方法，添加此标识表示组件只使用接受方法
+    public bool onlyDrop;
+
     // Use this for initialization
     void Start()
     {
@@ -130,9 +133,19 @@ public class UIMouseDelegate : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// <param name="eventData">Event data.</param>
     public void OnDrop(PointerEventData eventData)
     {
-        if (onDropDelegate != null)
+        UIMouseDelegate mouseDelegate = eventData.pointerDrag.GetComponent<UIMouseDelegate>();
+
+        //拖动物体的鼠标行为代理方法是只接收时，不执行代理
+        if(mouseDelegate.onlyDrop)
         {
-            onDropDelegate(gameObject, eventData);
+            return;
+        }
+        else
+        {
+            if (onDropDelegate != null)
+            {
+                onDropDelegate(gameObject, eventData);
+            }
         }
     }
 }

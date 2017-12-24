@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using SkillClass;
-using Utility;
 
 public class SkillDatas
 {
@@ -49,7 +48,7 @@ public class SkillDatas
     public Dictionary<string, string> getSkillData(string id)
     {
         
-        SkillType type = PropertyUtil.GetEnum<SkillType>(id.Substring(1, 1));
+        SkillType type = EnumTool.GetEnum<SkillType>(id.Substring(1, 1));
         CSVDataStruct csvStruct = data[type];
         Dictionary<string, string> skillData = new Dictionary<string, string>();
 

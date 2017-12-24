@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Utility;
 
 namespace SkillClass
 {
@@ -46,8 +45,8 @@ namespace SkillClass
             id = _id;
             data = DataManager.Instance.skillDatas.getSkillData(_id);
 
-            category = PropertyUtil.GetEnum<SkillCategory>(id.Substring(0, 1));
-            type = PropertyUtil.GetEnum<SkillType>(id.Substring(1, 1));
+            category = EnumTool.GetEnum<SkillCategory>(id.Substring(0, 1));
+            type = EnumTool.GetEnum<SkillType>(id.Substring(1, 1));
 
             if(type == SkillType.intensify || type == SkillType.defense || type == SkillType.treatment)
             {
@@ -55,7 +54,7 @@ namespace SkillClass
             }
             else
             {
-                effectRange = PropertyUtil.GetEnum<SkillEffectRange>(data["skillEffectRange"]);
+                effectRange = EnumTool.GetEnum<SkillEffectRange>(data["skillEffectRange"]);
             }
 
 

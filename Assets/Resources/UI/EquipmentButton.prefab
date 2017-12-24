@@ -57,8 +57,8 @@ GameObject:
   - component: {fileID: 222576807990891660}
   - component: {fileID: 114991692857422236}
   - component: {fileID: 114512037786945552}
-  - component: {fileID: 114832393006562810}
   - component: {fileID: 114314689300876074}
+  - component: {fileID: 114872377311821808}
   m_Layer: 5
   m_Name: EquipmentButton
   m_TagString: Untagged
@@ -225,6 +225,7 @@ MonoBehaviour:
   icon: {fileID: 114111928435967768}
   bg: {fileID: 114866132995337230}
   number: 0
+  mouseDelegate: {fileID: 0}
 --- !u!114 &114510946554379570
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -264,17 +265,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
---- !u!114 &114832393006562810
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1343900095604432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8899b5beda544f3f9b07b9e2297d639, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114866132995337230
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -302,6 +292,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114872377311821808
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1343900095604432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8899b5beda544f3f9b07b9e2297d639, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onlyDrop: 0
 --- !u!114 &114991692857422236
 MonoBehaviour:
   m_ObjectHideFlags: 1

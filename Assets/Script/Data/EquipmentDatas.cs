@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using EquipmentClass;
-using Utility;
 
 public class EquipmentDatas
 {
@@ -55,7 +54,7 @@ public class EquipmentDatas
 
     public Dictionary<string, string> getEquipmentData(string id)
     {
-        EquipmentPart part = PropertyUtil.GetEnum<EquipmentPart>(id.Substring(0, 1));
+        EquipmentPart part = EnumTool.GetEnum<EquipmentPart>(id.Substring(0, 1));
         CSVDataStruct csvStruct = data[part];
 
         Dictionary<string, string> equipmentData = new Dictionary<string, string>();

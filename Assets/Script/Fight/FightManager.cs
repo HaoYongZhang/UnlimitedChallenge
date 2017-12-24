@@ -5,7 +5,6 @@ using System;
 using System.Reflection;
 using System.ComponentModel;
 using EquipmentClass;
-using Utility;
 using EnemyClass;
 
 public class FightManager : MonoBehaviour {
@@ -27,9 +26,8 @@ public class FightManager : MonoBehaviour {
     {
         if(!isFight)
         {
-            Global.faceToMousePosition(gameObject);
             isFight = true;
-            WeaponType weaponType = PropertyUtil.GetEnum<WeaponType>(Global.hero.equipmentManager.currentWeapon.data["weaponType"]);
+            WeaponType weaponType = EnumTool.GetEnum<WeaponType>(Global.hero.equipmentManager.currentWeapon.data["weaponType"]);
             Global.hero.animator.SetFloat("weaponType", (float)weaponType);
             Global.hero.animator.SetBool("attack", true);
         }
@@ -40,8 +38,7 @@ public class FightManager : MonoBehaviour {
     /// </summary>
     void startAttack()
     {
-        //Debug.Log("开始攻击");
-
+        Global.faceToMousePosition(gameObject);
     }
 
     /// <summary>
@@ -53,11 +50,12 @@ public class FightManager : MonoBehaviour {
 
         float attackDistance = float.Parse(equipment.data["attackDistance"]);
 
-        List<GameObject> enemys = Global.hero.rangeManager.SearchRangeEnemys(attackDistance);
+        //List<GameObject> enemys = Global.hero.rangeManager.SearchRangeEnemys(Global.hero.transform, attackDistance);
+        List<GameObject> enemys = Global.hero.rangeManager.SearchRangeEnemys(Global.hero.transform, 30);
 
         for (int i = 0; i < enemys.Count; i++)
         {
-            DamageManager.CommonAttack<Hero, Enemy>(gameObject, enemys[i], PropertyUtil.GetEnum<DamageType>(equipment.data["damageType"]));
+            DamageManager.CommonAttack<Hero, Enemy>(gameObject, enemys[i], EnumTool.GetEnum<DamageType>(equipment.data["damageType"]));
         }
     }
 
@@ -70,16 +68,10 @@ public class FightManager : MonoBehaviour {
 
         if(!isLongPress)
         {
-            Debug.Log("停止攻击");
             Global.hero.animator.SetBool("attack", false);
 
             isFight = false;
         }
-        else
-        {
-            Debug.Log("长安中");
-        }
-
     }
 }
 

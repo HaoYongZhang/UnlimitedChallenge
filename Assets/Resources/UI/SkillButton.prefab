@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114356822419783418}
   - component: {fileID: 114727120149389890}
   - component: {fileID: 114657006088831758}
-  - component: {fileID: 114389609951694736}
+  - component: {fileID: 114437087565691380}
   m_Layer: 5
   m_Name: SkillButton
   m_TagString: Untagged
@@ -239,7 +239,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114389609951694736
+--- !u!114 &114437087565691380
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -250,6 +250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8899b5beda544f3f9b07b9e2297d639, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onlyDrop: 0
 --- !u!114 &114657006088831758
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -264,6 +265,7 @@ MonoBehaviour:
   skillImage: {fileID: 114012703418048196}
   cooldownImage: {fileID: 114885000095175118}
   cooldownText: {fileID: 114797871273807096}
+  mouseDelegate: {fileID: 0}
 --- !u!114 &114727120149389890
 MonoBehaviour:
   m_ObjectHideFlags: 1

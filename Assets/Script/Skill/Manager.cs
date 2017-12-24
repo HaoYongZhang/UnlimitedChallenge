@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Utility;
 using UnityEngine.EventSystems;
 
 namespace SkillClass
@@ -20,7 +19,7 @@ namespace SkillClass
 
         void Start()
         {
-            defaultSkillSetting();
+            
         }
 
         void Update()
@@ -179,7 +178,7 @@ namespace SkillClass
             {
                 case SkillType.attack:
                     {
-                        releaseAttackSkill(skill);
+                        
                     }
                     break;
                 case SkillType.defense:
@@ -286,30 +285,6 @@ namespace SkillClass
             }
         }
 
-
-        //技能的默认设置
-        void defaultSkillSetting()
-        {
-            for (int i = 0; i < UIScene.Instance.skillButtons.Count; i++)
-            {
-                SkillClass.UIButton btn = UIScene.Instance.skillButtons[i];
-
-                btn.gameObject.GetComponent<UIMouseDelegate>().onPointerClickDelegate = onClickSkillButton;
-            }
-        }
-
-        public void onClickSkillButton(GameObject obj, PointerEventData ed)
-        {
-            SkillClass.UIButton skillBtn = obj.GetComponent<SkillClass.UIButton>();
-
-            if(skillBtn.skill == null)
-            {
-                return;
-            }
-
-            OnRelease(skillBtn.skill);
-        }
-
         /// <summary>
         /// 被动技能
         /// </summary>
@@ -341,7 +316,9 @@ namespace SkillClass
                 //使用治疗技能后，加上的血量
                 Global.hero.property.hp += createValue;
 
-                Color hpColor = new Color(90 / 255f, 160 / 255f, 55 / 255f, 1);
+                //Color hpColor = new Color(90 / 255f, 160 / 255f, 55 / 255f, 1);
+
+                Color hpColor = ColorTool.getColor(90, 160, 55);
                 ParticleManager.vertical(Global.hero.gameObject, hpColor);
 
                 intensify(skill);
@@ -355,7 +332,7 @@ namespace SkillClass
         void intensify(Skill skill)
         {
             //添加强化的小图标
-            UIScene.Instance.addSkillStatusIcon(skill);
+            UIScene.Instance.addStatusIcon(skill);
             //开始技能的持续时间
             skill.isInDuration = true;
             //获取HeroManager的属性
@@ -363,14 +340,14 @@ namespace SkillClass
 
             foreach (KeyValuePair<string, string> dict in skill.data)
             {
-                if (PropertyUtil.isExist(property, dict.Key))
+                if (PropertyTool.isExist(property, dict.Key))
                 {
                     //截取字符串，获得属性增加的值
                     float createValue = float.Parse(dict.Value);
                     //动态获取当前的属性值
-                    float propertyValue = float.Parse(PropertyUtil.ReflectGetter(property, dict.Key).ToString());
+                    float propertyValue = float.Parse(PropertyTool.ReflectGetter(property, dict.Key).ToString());
                     //使用强化技能时间开始时，应该加上强化属性
-                    PropertyUtil.ReflectSetter(property, dict.Key, propertyValue + createValue);
+                    PropertyTool.ReflectSetter(property, dict.Key, propertyValue + createValue);
                 }
             }
         }
@@ -382,7 +359,7 @@ namespace SkillClass
         void endIntensify(Skill skill)
         {
             //删除强化的小图标
-            UIScene.Instance.removeSkillStatusIcon(skill);
+            UIScene.Instance.removeStatusIcon(skill);
             //结束技能的持续时间
             skill.isInDuration = false;
             //获取Hero的属性
@@ -390,14 +367,14 @@ namespace SkillClass
 
             foreach (KeyValuePair<string, string> dict in skill.data)
             {
-                if (PropertyUtil.isExist(property, dict.Key))
+                if (PropertyTool.isExist(property, dict.Key))
                 {
                     //截取字符串，获得属性增加的值
                     float createValue = float.Parse(dict.Value);
                     //动态获取当前的属性值
-                    float propertyValue = float.Parse(PropertyUtil.ReflectGetter(property, dict.Key).ToString());
+                    float propertyValue = float.Parse(PropertyTool.ReflectGetter(property, dict.Key).ToString());
                     //使用强化技能时间结束后，应该减去强化属性
-                    PropertyUtil.ReflectSetter(property, dict.Key, propertyValue - createValue);
+                    PropertyTool.ReflectSetter(property, dict.Key, propertyValue - createValue);
                 }
             }
         }

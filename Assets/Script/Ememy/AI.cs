@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Utility;
 
 namespace EnemyClass
 {
@@ -188,7 +187,7 @@ namespace EnemyClass
 
             if (distance <= attackDistance)
             {
-                DamageType damageType = PropertyUtil.GetEnum<DamageType>(_enemy.data["damageType"]);
+                DamageType damageType = EnumTool.GetEnum<DamageType>(_enemy.data["damageType"]);
 
                 DamageManager.CommonAttack<Enemy, Hero>(gameObject, Global.hero.gameObject, damageType);
             }

@@ -39,16 +39,6 @@ public class Global{
     public static List<Skill> skills = new List<Skill>();
 
     /// <summary>
-    /// 快捷技能栏1
-    /// </summary>
-    public static List<Skill> shortcutSkills_1 = new List<Skill>(5){null, null, null, null, null};
-
-    /// <summary>
-    /// 快捷技能栏2
-    /// </summary>
-    public static List<Skill> shortcutSkills_2 = new List<Skill>(5){null, null, null, null, null};
-
-    /// <summary>
     /// 拥有的主动技能列表
     /// </summary>
     /// <value>The active skills.</value>

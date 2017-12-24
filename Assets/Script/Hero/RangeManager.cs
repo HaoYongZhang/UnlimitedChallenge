@@ -5,23 +5,13 @@ using SkillClass;
 
 public class RangeManager : MonoBehaviour
 {
-
-    int pointCount = 50;
-    float angle;
-    List<Vector3> points = new List<Vector3>();
-    LineRenderer lineRenderer;
     //用于标识是否显示
     public bool rendering;
     public float radius = 10f;
                                     
     void Start()
     {
-        angle = 360f / pointCount;
-        lineRenderer = GetComponent<LineRenderer>();
-        if (!lineRenderer)
-        {
-            Debug.LogError("LineRender is NULL!");
-        }
+        
     }
 
     void Update()
@@ -33,18 +23,15 @@ public class RangeManager : MonoBehaviour
 
         if (rendering)
         {
-            //这里是设置圆的点数，加1是因为加了一个终点（起点）
-            lineRenderer.positionCount = pointCount + 1;
-            CalculationPoints();
-            DrowPoints();
+            //DrawTool.DrawCircle(transform, transform.position, 30);
+            DrawTool.DrawSector(transform, transform.position, 60, 30);
         }
         else
         {
-            //不显示时设置
-            lineRenderer.positionCount = 0;
+            DrawTool.clear(transform);
         }
 
-        ClearPoints();
+
     }
 
     /// <summary>
@@ -52,7 +39,7 @@ public class RangeManager : MonoBehaviour
     /// </summary>
     /// <returns>The attack range.</returns>
     /// <param name="attackDistance">攻击范围半径.</param>
-    public List<GameObject> SearchRangeEnemys(float attackDistance)
+    public List<GameObject> SearchRangeEnemys(Transform startTran,float attackDistance)
     {
         LayerMask layerMask = 1 << LayerMask.NameToLayer("Enemy");
 
@@ -62,23 +49,7 @@ public class RangeManager : MonoBehaviour
 
         for (int i = 0; i < colliders.Length; i++)
         {
-            Quaternion r = transform.rotation;
-            Vector3 f0 = (transform.position + (r * Vector3.forward) * attackDistance);
-            Debug.DrawLine(transform.position, f0, Color.red);
-
-            Quaternion r0 = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 60f, transform.rotation.eulerAngles.z);
-            Quaternion r1 = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 60f, transform.rotation.eulerAngles.z);
-
-            Vector3 f1 = (transform.position + (r0 * Vector3.forward) * attackDistance);
-            Vector3 f2 = (transform.position + (r1 * Vector3.forward) * attackDistance);
-
-            Debug.DrawLine(transform.position, f1, Color.red);
-            Debug.DrawLine(transform.position, f2, Color.red);
-            Debug.DrawLine(f1, f2, Color.red);
-
-            Vector3 point = colliders[i].transform.position;
-
-            if (Global.hero.rangeManager.IsInTriangle(point, transform.position, f1, f2))
+            if(isInSector(startTran, colliders[i].transform, attackDistance, 60f))
             {
                 enemys.Add(colliders[i].gameObject);
             }
@@ -87,67 +58,30 @@ public class RangeManager : MonoBehaviour
         return enemys;
     }
 
-
-    public bool IsInTriangle(Vector3 point, Vector3 v0, Vector3 v1, Vector3 v2)
+    public bool isInSector(Transform startTran, Transform endTran, float distance, float angle)
     {
-        float x = point.x;
-        float y = point.z;
+        Vector3 p_1 = new Vector3(startTran.position.x, 5, startTran.position.z);
+        Vector3 p_2 = new Vector3(endTran.position.x, 5, endTran.position.z);
 
-        float v0x = v0.x;
-        float v0y = v0.z;
-
-        float v1x = v1.x;
-        float v1y = v1.z;
-
-        float v2x = v2.x;
-        float v2y = v2.z;
-
-        float t = triangleArea(v0x, v0y, v1x, v1y, v2x, v2y);
-        float a = triangleArea(v0x, v0y, v1x, v1y, x, y) + triangleArea(v0x, v0y, x, y, v2x, v2y) + triangleArea(x, y, v1x, v1y, v2x, v2y);
-
-        if (Mathf.Abs(t - a) <= 0.01f)
+        //求出两点之间的距离
+        float pointsDistance = Vector3.Distance(p_1, p_2);
+        //start的正前方向量
+        Vector3 v_forward = startTran.rotation * Vector3.forward;
+        //p_1指向p_2的向量
+        Vector3 v_points = p_2 - p_1;
+        //计算两个向量间的夹角
+        float pointsAngle = Mathf.Acos(Vector3.Dot(v_forward.normalized, v_points.normalized)) * Mathf.Rad2Deg;
+        //当距离少于两点间距离时
+        if (pointsDistance <= distance)
         {
-            return true;
+            //当两点的向量间的夹角少于角度时
+            if (pointsAngle <= angle * 0.5f)
+            {
+                Debug.Log("在扇形范围内");
+                return true;
+            }
         }
-        else
-        {
-            return false;
-        }
-    }
 
-
-    float triangleArea(float v0x, float v0y, float v1x, float v1y, float v2x, float v2y)
-    {
-        return Mathf.Abs((v0x * v1y + v1x * v2y + v2x * v0y
-            - v1x * v0y - v2x * v1y - v0x * v2y) / 2f);
-    }
-
-    void CalculationPoints()
-    {
-        Vector3 newPosition = new Vector3(transform.position.x, 5, transform.position.z);
-        Vector3 v = newPosition + transform.forward * radius;
-        points.Add(v);
-        Quaternion r = transform.rotation;
-        for (int i = 1; i < pointCount; i++)
-        {
-            Quaternion q = Quaternion.Euler(r.eulerAngles.x, r.eulerAngles.y - (angle * i), r.eulerAngles.z);
-            v = newPosition + (q * Vector3.forward) * radius;
-            points.Add(v);
-        }
-    }
-
-    void DrowPoints()
-    {
-        for (int i = 0; i < points.Count; i++)
-        {
-            lineRenderer.SetPosition(i, points[i]);  //把所有点添加到positions里
-        }
-        if (points.Count > 0)   //这里要说明一下，因为圆是闭合的曲线，最后的终点也就是起点，
-            lineRenderer.SetPosition(pointCount, points[0]);
-    }
-
-    void ClearPoints()
-    {
-        points.Clear();  ///清除所有点
+        return false;
     }
 }

@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using Utility;
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
@@ -21,8 +20,8 @@ public class DamageManager
     /// <typeparam name="V">The 2nd type parameter.</typeparam>
     public static void CommonAttack<T, V>(GameObject attacker, GameObject victim, DamageType damageType)
     {   
-        Property attackerProperty = (Property)PropertyUtil.ReflectGetter(attacker.GetComponent<T>(), "property");
-        Property victimProperty = (Property)PropertyUtil.ReflectGetter(victim.GetComponent<V>(), "property");
+        Property attackerProperty = (Property)PropertyTool.ReflectGetter(attacker.GetComponent<T>(), "property");
+        Property victimProperty = (Property)PropertyTool.ReflectGetter(victim.GetComponent<V>(), "property");
 
         float damage = 0;
         switch(damageType)
@@ -32,7 +31,7 @@ public class DamageManager
                     //伤害倍率 = 1 - 物理抗性
                     float damageRate = 1 - victimProperty.physicalReduction;
                     //实际伤害
-                    damage = Utility.Math.Round(attackerProperty.attack * damageRate, 1);
+                    damage = MathTool.Round(attackerProperty.attack * damageRate, 1);
 
                     //Debug.Log("伤害倍率=" + damageRate);
                     //Debug.Log("实际伤害=" + damage);
@@ -52,9 +51,9 @@ public class DamageManager
         }
 
         //伤害波动范围为80% ~ 120%
-        float damageRange = RandomUtil.RandomNumber(damageRangeMin, damageRangeMax);
+        float damageRange = RandomTool.RandomNumber(damageRangeMin, damageRangeMax);
 
-        victimProperty.hp -= Utility.Math.Round(damage * damageRange, 1);
+        victimProperty.hp -= MathTool.Round(damage * damageRange, 1);
     }
 }
 

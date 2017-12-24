@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using SkillClass;
 using EquipmentClass;
-using Utility;
 
 public class Hero : MonoBehaviour {
 
     public static Hero _instance;
     public Normal normal = new Normal();
+    public bool isDeath;
 
     public Property property{ get; set; }
     public Knowledge knowledge;
@@ -84,26 +84,31 @@ public class Hero : MonoBehaviour {
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("40020")));
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("40020")));
 
-        Global.shortcutSkills_1[0] = SkillClass.Manager.GetOneSkillByID(normal.talentSkillID);
-        Global.shortcutSkills_1[1] = SkillClass.Manager.GetOneSkillByID("310030");
-        Global.shortcutSkills_1[2] = SkillClass.Manager.GetOneSkillByID("630001");
+        UIScene.Instance.setHotKey(0, SkillClass.Manager.GetOneSkillByID(normal.talentSkillID));
+        UIScene.Instance.setHotKey(1, SkillClass.Manager.GetOneSkillByID("310030"));
+        UIScene.Instance.setHotKey(2, SkillClass.Manager.GetOneSkillByID("630001"));
 
-        InvokeRepeating("RegenerationPerSecond", 0, 1f);
-
-        //for (int i = 0; i < 10; i ++)
-        //{
-        //    float damageRange = RandomUtil.RandomNumber(0.8f, 1.2f);
-        //    Debug.Log(damageRange);
-        //}
+        InvokeRepeating("RegenerationPerSecond", 0, 1f);   
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        if(isDeath)
+        {
+            return;
+        }
+
         if (hasLoadController == false)
         {
             RuntimeAnimatorController _c = (RuntimeAnimatorController)Resources.Load("Avatar/Hero/HeroController");
             Global.hero.GetComponent<Animator>().runtimeAnimatorController = Instantiate(_c);
             hasLoadController = true;
+        }
+
+        if(property.hp <= 0)
+        {
+            animator.SetBool("death", true);
+            isDeath = true;
         }
 	}
 
@@ -115,7 +120,7 @@ public class Hero : MonoBehaviour {
         //当生命值不是最大值时
         if (property.hp <= property.hpMax)
         {
-            float afterRegeneration = Math.Round(property.hp + property.hpRegeneration, 1);
+            float afterRegeneration = MathTool.Round(property.hp + property.hpRegeneration, 1);
             //当回复生命值后将会溢出最大值时
             if (afterRegeneration > property.hpMax)
             {
@@ -123,7 +128,7 @@ public class Hero : MonoBehaviour {
             }
             else
             {
-                property.hp = Math.Round(property.hp + property.hpRegeneration, 1);
+                property.hp = MathTool.Round(property.hp + property.hpRegeneration, 1);
             }
         }
 
@@ -131,13 +136,13 @@ public class Hero : MonoBehaviour {
         if (property.mp <= property.mpMax)
         {
             //当回复能量值后将会溢出最大值时
-            if (Math.Round(property.mp + property.mpRegeneration, 1) > property.mpMax)
+            if (MathTool.Round(property.mp + property.mpRegeneration, 1) > property.mpMax)
             {
                 property.mp = property.mpMax;
             }
             else
             {
-                property.mp = Math.Round(property.mp + property.mpRegeneration, 1);
+                property.mp = MathTool.Round(property.mp + property.mpRegeneration, 1);
             }
         }
     }

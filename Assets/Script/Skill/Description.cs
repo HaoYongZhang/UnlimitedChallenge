@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SkillClass;
-using Utility;
 
 namespace SkillClass
 {
@@ -86,7 +85,7 @@ namespace SkillClass
 
             foreach (KeyValuePair<string, string> dict in skill.data)
             {
-                if (PropertyUtil.isExist(property, dict.Key))
+                if (PropertyTool.isExist(property, dict.Key))
                 {
                     //截取字符串，获得+/-符号
                     string symbol = dict.Value.Substring(0, 1);
@@ -155,7 +154,7 @@ namespace SkillClass
 
             foreach (KeyValuePair<string, string> dict in skill.data)
             {
-                if (PropertyUtil.isExist(property, dict.Key))
+                if (PropertyTool.isExist(property, dict.Key))
                 {
                     //截取字符串，获得+/-符号
                     string symbol = dict.Value.Substring(0, 1);
@@ -175,7 +174,7 @@ namespace SkillClass
                         increateValue = rate * 100 + "%";
                     }
 
-                    string descriptionName = PropertyUtil.ReflectDescription(property, dict.Key);
+                    string descriptionName = PropertyTool.ReflectDescription(property, dict.Key);
                     string s = "@" + i;
                     originalDescription = originalDescription.Replace(s, "\n" + increateColor + descriptionName + increateStr + increateValue + "</color>");
                     i++;

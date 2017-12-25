@@ -112,7 +112,7 @@ namespace EquipmentClass
             {
                 case EquipmentPart.weapon:{
                         GameObject equipmentObj = (GameObject)Instantiate(Resources.Load("Material/Equipment/equipment_" + equipment.id));
-                        Global.hero.charactersManager.replaceAvator(CharactersManager.left_weapon_name, equipmentObj);
+                        Global.hero.charactersManager.replaceAvator(CharactersManager.right_weapon_name, equipmentObj);
                     }
                     break;
                 case EquipmentPart.head:

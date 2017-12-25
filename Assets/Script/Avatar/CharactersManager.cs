@@ -31,9 +31,9 @@ public class CharactersManager : MonoBehaviour
     public static string hand_right_arm_name = "RightArm";
     public static string hand_right_forearm_name = "RightForeArm";
     public static string leg_left_thigh_name = "LeftUpLeg";
-    public static string leg_left_shin_name = "LeftLeg";
+    public static string leg_left_shin_name = "LeftShin";
     public static string leg_right_thigh_name = "RightUpLeg";
-    public static string leg_right_shin_name = "RightLeg";
+    public static string leg_right_shin_name = "RightShin";
 
     public static string left_weapon_name = "LeftWeapon";
     public static string right_weapon_name = "RightWeapon";

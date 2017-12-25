@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: c762eb545c54b475aa7653534afdc9e1
-timeCreated: 1514192604
+guid: 4d589489d639a4df8a68ccff663e8f47
+timeCreated: 1514210018
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -68,7 +68,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: palettemat
-    second: {fileID: 2100000, guid: 770c8358802c04980a7936d1d720e0ce, type: 2}
+    second: {fileID: 2100000, guid: d2c69e5f9893f48f3b0ba13d38e2bf38, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

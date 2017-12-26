@@ -108,6 +108,7 @@ public class CharactersManager : MonoBehaviour
         currentAvatarDict.Add(head_face_name, null);
         currentAvatarDict.Add(left_weapon_name, leftWeapon);
         currentAvatarDict.Add(right_weapon_name, rightWeapon);
+
     }
 
     void combineSkinnedMeshRenderer(string rootBoneName, GameObject obj)

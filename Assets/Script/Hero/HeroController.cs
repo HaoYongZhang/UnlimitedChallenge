@@ -11,8 +11,7 @@ public class HeroController : MonoBehaviour {
     Animator _animator;
 	public float rotationSpeed = 20;
 
-    DateTime t_MouseDown;
-    public bool isLongPress = false;
+    public bool isLongPress;
 
 	// Use this for initialization
 	void Start () {
@@ -140,14 +139,14 @@ public class HeroController : MonoBehaviour {
 
         if(horizontal != 0f || vertical != 0f)
 		{
-            _animator.SetBool("Running", true);
+            _animator.SetBool("move", true);
 			Rotating(horizontal, vertical);
 
             Vector3 position = RotateRound(new Vector3(horizontal, 0, vertical), -45);
             _rigidbody.MovePosition(transform.position + position * speed * Time.deltaTime);
 		}
         else{
-            _animator.SetBool("Running", false);
+            _animator.SetBool("move", false);
         }
 	}
 

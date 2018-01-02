@@ -27,9 +27,8 @@ public class FightManager : MonoBehaviour {
         if(!isFight)
         {
             isFight = true;
-            WeaponType weaponType = EnumTool.GetEnum<WeaponType>(Global.hero.equipmentManager.currentWeapon.data["weaponType"]);
-            Global.hero.animator.SetFloat("weaponType", (float)weaponType);
-            Global.hero.animator.SetBool("attack", true);
+            AttackAnimation attackAnimation = EnumTool.GetEnum<AttackAnimation>(Global.hero.equipmentManager.currentWeapon.data["attackAnimation"]);
+            Global.hero.animationManager.Attack(attackAnimation);
         }
     }
 
@@ -38,7 +37,10 @@ public class FightManager : MonoBehaviour {
     /// </summary>
     void startAttack()
     {
-        Global.faceToMousePosition(gameObject);
+        if(Global.hero.animationManager.isAttacking)
+        {
+            Global.faceToMousePosition(gameObject);
+        }
     }
 
     /// <summary>
@@ -50,8 +52,7 @@ public class FightManager : MonoBehaviour {
 
         float attackDistance = float.Parse(equipment.data["attackDistance"]);
 
-        //List<GameObject> enemys = Global.hero.rangeManager.SearchRangeEnemys(Global.hero.transform, attackDistance);
-        List<GameObject> enemys = Global.hero.rangeManager.SearchRangeEnemys(Global.hero.transform, 30);
+        List<GameObject> enemys = Global.hero.rangeManager.SearchRangeEnemys(Global.hero.transform, attackDistance);
 
         for (int i = 0; i < enemys.Count; i++)
         {
@@ -68,7 +69,7 @@ public class FightManager : MonoBehaviour {
 
         if(!isLongPress)
         {
-            Global.hero.animator.SetBool("attack", false);
+            Global.hero.animationManager.StopAttack();
 
             isFight = false;
         }

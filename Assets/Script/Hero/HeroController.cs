@@ -139,14 +139,17 @@ public class HeroController : MonoBehaviour {
 
         if(horizontal != 0f || vertical != 0f)
 		{
-            _animator.SetBool("move", true);
+            Global.hero.animationManager.Move();
 			Rotating(horizontal, vertical);
 
             Vector3 position = RotateRound(new Vector3(horizontal, 0, vertical), -45);
             _rigidbody.MovePosition(transform.position + position * speed * Time.deltaTime);
 		}
         else{
-            _animator.SetBool("move", false);
+            if(Global.hero.animationManager.isMoving)
+            {
+                Global.hero.animationManager.StopMove();
+            }
         }
 	}
 

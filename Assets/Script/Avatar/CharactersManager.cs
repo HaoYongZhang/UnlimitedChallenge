@@ -21,6 +21,8 @@ public class CharactersManager : MonoBehaviour
     GameObject leftWeapon;
     GameObject rightWeapon;
 
+    GameObject leftPoint;
+
     public static string prefixBoneName = "mixamorig:";
     public static string head_name = "Head";
     public static string headdress_name = "Headdress";
@@ -37,6 +39,8 @@ public class CharactersManager : MonoBehaviour
 
     public static string left_weapon_name = "LeftWeapon";
     public static string right_weapon_name = "RightWeapon";
+
+    public static string left_point_name = "LeftPoint";
 
     List<Transform> boneTransforms;
     Dictionary<string, GameObject> currentAvatarDict = new Dictionary<string, GameObject>();
@@ -77,6 +81,8 @@ public class CharactersManager : MonoBehaviour
         leg_left_shin = (GameObject)Instantiate(Resources.Load(path + "leg_left_shin"));
         leg_right_thigh = (GameObject)Instantiate(Resources.Load(path + "leg_right_thigh"));
         leg_right_shin = (GameObject)Instantiate(Resources.Load(path + "leg_right_shin"));
+
+        leftPoint = new GameObject("left_point");
 
         leftWeapon = new GameObject();
         rightWeapon = new GameObject();

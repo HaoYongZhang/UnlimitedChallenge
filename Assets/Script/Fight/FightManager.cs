@@ -6,11 +6,11 @@ using System.Reflection;
 using System.ComponentModel;
 using EquipmentClass;
 using EnemyClass;
+using SkillClass;
 
 public class FightManager : MonoBehaviour {
-    
-    public bool isFight;
     public CombatType type;
+    public bool isNormalAttacking;
 
 	// Use this for initialization
 	void Start () {
@@ -22,12 +22,22 @@ public class FightManager : MonoBehaviour {
 		
 	}
 
-    public void fight()
+    public void normalAttack()
     {
-        if(!isFight)
+        if(!Global.hero.animationManager.isAttacking)
         {
-            isFight = true;
+            isNormalAttacking = true;
             AttackAnimation attackAnimation = EnumTool.GetEnum<AttackAnimation>(Global.hero.equipmentManager.currentWeapon.data["attackAnimation"]);
+            Global.hero.animationManager.Attack(attackAnimation);
+        }
+    }
+
+    public void skillAttack(Skill skill)
+    {
+        if (!Global.hero.animationManager.isAttacking)
+        {
+            isNormalAttacking = false;
+            AttackAnimation attackAnimation = AttackAnimation.skill_1;
             Global.hero.animationManager.Attack(attackAnimation);
         }
     }
@@ -37,7 +47,8 @@ public class FightManager : MonoBehaviour {
     /// </summary>
     void startAttack()
     {
-        if(Global.hero.animationManager.isAttacking)
+        Debug.Log("开始");
+        if (Global.hero.animationManager.isAttacking)
         {
             Global.faceToMousePosition(gameObject);
         }
@@ -48,15 +59,35 @@ public class FightManager : MonoBehaviour {
     /// </summary>
     void inAttack()
     {
-        Equipment equipment = Global.hero.equipmentManager.currentWeapon;
-
-        float attackDistance = float.Parse(equipment.data["attackDistance"]);
-
-        List<GameObject> enemys = Global.hero.rangeManager.SearchRangeEnemys(Global.hero.transform, attackDistance);
-
-        for (int i = 0; i < enemys.Count; i++)
+        if(isNormalAttacking)
         {
-            DamageManager.CommonAttack<Hero, Enemy>(gameObject, enemys[i], EnumTool.GetEnum<DamageType>(equipment.data["damageType"]));
+            Equipment equipment = Global.hero.equipmentManager.currentWeapon;
+
+            float attackDistance = float.Parse(equipment.data["attackDistance"]);
+
+            List<GameObject> enemys = Global.hero.rangeManager.SearchRangeEnemys(Global.hero.transform, attackDistance);
+
+            for (int i = 0; i < enemys.Count; i++)
+            {
+                DamageManager.CommonAttack<Hero, Enemy>(gameObject, enemys[i], EnumTool.GetEnum<DamageType>(equipment.data["damageType"]));
+            }
+        }
+        else
+        {
+            Transform point;
+            GameObject bult = Resources.Load("Material/Effects/Bullets/VulcanBullet") as GameObject;
+
+            for (int i = 0; i < Global.hero.charactersManager.boneTransforms.Count; i++)
+            {
+                if (Global.hero.charactersManager.boneTransforms[i].name == (CharactersManager.prefixBoneName + CharactersManager.left_point_name))
+                {
+                    point = Global.hero.charactersManager.boneTransforms[i];
+                    bult = Instantiate(bult);
+                    bult.transform.position = point.position;
+                    bult.transform.rotation = Quaternion.Euler(90, Global.hero.transform.rotation.eulerAngles.y, 0);
+                    break;
+                }
+            }
         }
     }
 
@@ -67,11 +98,9 @@ public class FightManager : MonoBehaviour {
     {
         bool isLongPress = Global.hero.gameObject.GetComponent<HeroController>().isLongPress;
 
-        if(!isLongPress)
+        if (!isLongPress)
         {
             Global.hero.animationManager.StopAttack();
-
-            isFight = false;
         }
     }
 }

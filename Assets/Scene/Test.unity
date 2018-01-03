@@ -320,7 +320,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &328050288
 Animator:
   serializedVersion: 3
@@ -378,8 +378,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3f476de10cf84cd893ca8a7883a6f72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isFight: 0
   type: 0
+  isNormalAttacking: 0
 --- !u!4 &346551517 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4526705416325894, guid: fd058b9ec2fc24797820ab40c36aa8f6,
@@ -1589,6 +1589,48 @@ SkinnedMeshRenderer:
     m_Center: {x: 0, y: 2, z: 0}
     m_Extent: {x: 1, y: 2, z: 0.6}
   m_DirtyAABB: 0
+--- !u!1001 &1513111447
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: 8e7c85cbe7a3648f49f47669a2521495, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 8e7c85cbe7a3648f49f47669a2521495, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 8e7c85cbe7a3648f49f47669a2521495, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 8e7c85cbe7a3648f49f47669a2521495, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 8e7c85cbe7a3648f49f47669a2521495, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 8e7c85cbe7a3648f49f47669a2521495, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 8e7c85cbe7a3648f49f47669a2521495, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 8e7c85cbe7a3648f49f47669a2521495, type: 2}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 8e7c85cbe7a3648f49f47669a2521495, type: 2}
+  m_IsPrefabParent: 0
 --- !u!4 &1541819762 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4920261713168916, guid: 6ccd253fd6c9e4019810aef00caa5b0a,

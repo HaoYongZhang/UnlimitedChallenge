@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EquipmentClass;
+using EnemyClass;
+using SkillClass;
 
 public class AnimationManager : MonoBehaviour {
 
@@ -49,6 +52,7 @@ public class AnimationManager : MonoBehaviour {
     {
         animator.SetBool("death", true);
     }
+   
 }
 
 public enum AttackAnimation

@@ -42,7 +42,7 @@ public class CharactersManager : MonoBehaviour
 
     public static string left_point_name = "LeftPoint";
 
-    List<Transform> boneTransforms;
+    public List<Transform> boneTransforms;
     Dictionary<string, GameObject> currentAvatarDict = new Dictionary<string, GameObject>();
     Dictionary<string, GameObject> defaultAvatarDict = new Dictionary<string, GameObject>();
 

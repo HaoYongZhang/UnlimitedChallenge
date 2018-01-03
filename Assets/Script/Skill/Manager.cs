@@ -178,7 +178,7 @@ namespace SkillClass
             {
                 case SkillType.attack:
                     {
-                        
+                        Global.hero.fightManager.skillAttack(skill);
                     }
                     break;
                 case SkillType.defense:

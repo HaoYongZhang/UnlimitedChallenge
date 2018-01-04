@@ -13,10 +13,6 @@ namespace SkillClass
     {
         public Skill selectedSkill;
 
-        Ray ray;  
-        RaycastHit hit;  
-        LineRenderer lineRenderer;  
-
         void Start()
         {
             

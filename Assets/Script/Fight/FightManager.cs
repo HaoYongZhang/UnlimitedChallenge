@@ -11,6 +11,7 @@ using SkillClass;
 public class FightManager : MonoBehaviour {
     public CombatType type;
     public bool isNormalAttacking;
+    public Skill currentSkill;
 
 	// Use this for initialization
 	void Start () {
@@ -39,6 +40,7 @@ public class FightManager : MonoBehaviour {
             isNormalAttacking = false;
             AttackAnimation attackAnimation = AttackAnimation.skill_1;
             Global.hero.animationManager.Attack(attackAnimation);
+            currentSkill = skill;
         }
     }
 
@@ -75,16 +77,17 @@ public class FightManager : MonoBehaviour {
         else
         {
             Transform point;
-            GameObject bult = Resources.Load("Material/Effects/Bullets/VulcanBullet") as GameObject;
 
             for (int i = 0; i < Global.hero.charactersManager.boneTransforms.Count; i++)
             {
                 if (Global.hero.charactersManager.boneTransforms[i].name == (CharactersManager.prefixBoneName + CharactersManager.left_point_name))
                 {
                     point = Global.hero.charactersManager.boneTransforms[i];
-                    bult = Instantiate(bult);
-                    bult.transform.position = point.position;
-                    bult.transform.rotation = Quaternion.Euler(90, Global.hero.transform.rotation.eulerAngles.y, 0);
+
+                    SkillEffect skillEffect = SkillEffect.NewInstantiate(point.position, Global.hero.transform.rotation, currentSkill);
+                    skillEffect.onSkillEnterDelegate = inSkill;
+                    currentSkill = null;
+
                     break;
                 }
             }
@@ -101,6 +104,20 @@ public class FightManager : MonoBehaviour {
         if (!isLongPress)
         {
             Global.hero.animationManager.StopAttack();
+        }
+    }
+
+
+    void inSkill(Collider _collider, Skill skill)
+    {
+        GameObject target = _collider.gameObject;
+        if(target.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            DamageManager.SkillAttack<Hero, Enemy>(gameObject, target, skill);
+        }
+        else
+        {
+            Debug.Log("不是敌人");
         }
     }
 }

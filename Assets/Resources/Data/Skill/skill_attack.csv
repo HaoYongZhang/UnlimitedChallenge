@@ -1,2 +1,2 @@
 id,name,type,description,isActive,damageType,skillEffectRange,duration,cooldown,costEnergy,skillDistance,skillRange,skillPrefab,knowledgePromote,weaponPromote,basicDamage,strength,agility,intellect
-310030,一阳指,伤害,把强大的内力聚于手指，以此射击远方的敌人.,1,energy,line,0,10,50,80,10,BulletOrange,shot,,100,0.3,0,0.7
+310030,一阳指,伤害,把强大的内力聚于手指，以此射击远方的敌人.,1,magic,line,0,10,50,80,10,Bullets/VulcanBullet,shot,,100,1.2,1,0.5

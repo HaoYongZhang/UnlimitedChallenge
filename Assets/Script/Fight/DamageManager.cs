@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
+using SkillClass;
 
 public delegate void AttackDamageDelegate();
 
@@ -23,29 +24,20 @@ public class DamageManager
         Property attackerProperty = (Property)PropertyTool.ReflectGetter(attacker.GetComponent<T>(), "property");
         Property victimProperty = (Property)PropertyTool.ReflectGetter(victim.GetComponent<V>(), "property");
 
-        float damage = 0;
+        float damage = attackerProperty.attack;
+        float damageRate = 1;
         switch(damageType)
         {
             case DamageType.physics:
                 {
                     //伤害倍率 = 1 - 物理抗性
-                    float damageRate = 1 - victimProperty.physicalReduction;
-                    //实际伤害
-                    damage = MathTool.Round(attackerProperty.attack * damageRate, 1);
-
-                    //Debug.Log("伤害倍率=" + damageRate);
-                    //Debug.Log("实际伤害=" + damage);
+                    damageRate = 1 - victimProperty.physicalReduction;
                 }
                 break;
             case DamageType.magic:
                 {
                     //伤害倍率 = 1 - 法术抗性
-                    float damageRate = 1 - victimProperty.magicReduction;
-                    //实际伤害
-                    damage = attackerProperty.attack * damageRate;
-
-                    Debug.Log("伤害倍率=" + damageRate);
-                    Debug.Log("实际伤害=" + damage);
+                    damageRate = 1 - victimProperty.magicReduction;
                 }
                 break;
         }
@@ -53,7 +45,48 @@ public class DamageManager
         //伤害波动范围为80% ~ 120%
         float damageRange = RandomTool.RandomNumber(damageRangeMin, damageRangeMax);
 
-        victimProperty.hp -= MathTool.Round(damage * damageRange, 1);
+        victimProperty.hp -= MathTool.Round(damage * damageRate * damageRange, 1);
+    }
+
+
+    public static void SkillAttack<T, V>(GameObject attacker, GameObject victim, Skill skill)
+    {
+        Property attackerProperty = (Property)PropertyTool.ReflectGetter(attacker.GetComponent<T>(), "property");
+        Property victimProperty = (Property)PropertyTool.ReflectGetter(victim.GetComponent<V>(), "property");
+
+        DamageType damageType = EnumTool.GetEnum<DamageType>(skill.data["damageType"]);
+        Debug.Log(skill.id);
+
+        float basicDamage = float.Parse(skill.data["basicDamage"]);
+        float strengthDamage = float.Parse(skill.data["strength"]) * attackerProperty.strength;
+        float agilityDamage = float.Parse(skill.data["agility"]) * attackerProperty.agility;
+        float intellectDamage = float.Parse(skill.data["intellect"]) * attackerProperty.intellect;
+
+        float damage = basicDamage + strengthDamage + agilityDamage + intellectDamage;
+        float damageRate = 1f;
+        switch (damageType)
+        {
+            case DamageType.physics:
+                {
+                    //伤害倍率 = 1 - 物理抗性
+                    damageRate = 1 - victimProperty.physicalReduction;
+                }
+                break;
+            case DamageType.magic:
+                {
+                    //伤害倍率 = 1 - 法术抗性
+                    damageRate = 1 - victimProperty.magicReduction;
+                }
+                break;
+        }
+
+        //伤害波动范围为80% ~ 120%
+        float damageRange = RandomTool.RandomNumber(damageRangeMin, damageRangeMax);
+
+        victimProperty.hp -= MathTool.Round(damage * damageRate * damageRange, 1);
+
+        Debug.Log("魔抗=" + victimProperty.magicReduction);
+        Debug.Log("伤害=" + damage);
     }
 }
 

@@ -64,5 +64,6 @@ public enum AttackAnimation
     split_2 = 21,
     split_3 = 22,
     pistol_1 = 30,
-    skill_1 = 60
+    skill_1 = 60,
+    skill_2 = 61
 }

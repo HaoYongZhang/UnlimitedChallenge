@@ -18,7 +18,8 @@ namespace EnemyClass
             data = DataManager.Instance.enemyDatas.getData(enemyId);
 
             //设置属性
-            property = new Property();
+            property = GetComponent<Property>();
+
             Dictionary<string, string> propertyData = DataManager.Instance.enemyDatas.getPropertyData(enemyId);
 
             foreach(KeyValuePair<string, string> pair in propertyData)

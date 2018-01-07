@@ -24,7 +24,6 @@ public class RangeManager : MonoBehaviour
         if (rendering)
         {
             DrawTool.DrawCircle(transform, transform.position, radius);
-            //DrawTool.DrawSector(transform, transform.position, 60, 30);
         }
         else
         {

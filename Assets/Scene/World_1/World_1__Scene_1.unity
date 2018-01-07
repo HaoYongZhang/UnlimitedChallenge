@@ -1672,6 +1672,21 @@ Prefab:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 54513407639307698, guid: 11fbea50c49ff4112b1f20708b27fa4a,
+        type: 2}
+      propertyPath: m_Drag
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 54513407639307698, guid: 11fbea50c49ff4112b1f20708b27fa4a,
+        type: 2}
+      propertyPath: m_AngularDrag
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 54513407639307698, guid: 11fbea50c49ff4112b1f20708b27fa4a,
+        type: 2}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 11fbea50c49ff4112b1f20708b27fa4a, type: 2}
   m_IsPrefabParent: 0

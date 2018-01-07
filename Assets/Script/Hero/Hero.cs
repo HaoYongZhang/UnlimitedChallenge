@@ -10,11 +10,12 @@ public class Hero : MonoBehaviour {
     public Normal normal = new Normal();
     public bool isDeath;
 
-    public Property property{ get; set; }
+
     public Knowledge knowledge;
 
     public ParticleSystem particle;
 
+    public Property property;
     public Rigidbody rigid;
     public Animator animator;
     public HeroController heroController;
@@ -50,11 +51,13 @@ public class Hero : MonoBehaviour {
                 _instance.fightManager = gameObject.AddComponent<FightManager>();
                 _instance.equipmentManager = gameObject.AddComponent<EquipmentClass.Manager>();
                 _instance.animationManager = gameObject.AddComponent<AnimationManager>();
+
                              
                 _instance.rigid = gameObject.GetComponent<Rigidbody>();
                 _instance.animator = gameObject.GetComponent<Animator>();
                 _instance.rangeManager = gameObject.GetComponent<RangeManager>();
                 _instance.particle = gameObject.GetComponent<ParticleSystem>();
+                _instance.property = gameObject.GetComponent<Property>();
             }
             return _instance;
         }
@@ -68,13 +71,14 @@ public class Hero : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        property = normal.property;
         knowledge = normal.knowledge;
 
-        Global.skills.Add(new Skill(normal.talentSkillID));
-        Global.skills.Add(new Skill("140001"));
-        Global.skills.Add(new Skill("310030"));
-        Global.skills.Add(new Skill("630001"));
+        Global.skills.Add(new Skill("60103"));
+        Global.skills.Add(new Skill("40002"));
+        Global.skills.Add(new Skill("10030"));
+        Global.skills.Add(new Skill("10105"));
+        Global.skills.Add(new Skill("40102"));
+        Global.skills.Add(new Skill("40104"));
 
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("11010")));
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("14001")));
@@ -86,11 +90,22 @@ public class Hero : MonoBehaviour {
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("40020")));
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("40020")));
 
-        UIScene.Instance.setHotKey(0, SkillClass.Manager.GetOneSkillByID(normal.talentSkillID));
-        UIScene.Instance.setHotKey(1, SkillClass.Manager.GetOneSkillByID("310030"));
-        UIScene.Instance.setHotKey(2, SkillClass.Manager.GetOneSkillByID("630001"));
+        UIScene.Instance.setHotKey(0, SkillClass.Manager.GetOneSkillByID("60103"));
+        UIScene.Instance.setHotKey(1, SkillClass.Manager.GetOneSkillByID("10030"));
+        UIScene.Instance.setHotKey(2, SkillClass.Manager.GetOneSkillByID("10105"));
+        UIScene.Instance.setHotKey(3, SkillClass.Manager.GetOneSkillByID("40102"));
 
         InvokeRepeating("RegenerationPerSecond", 0, 1f);   
+
+        property.basStrength = 10;
+        property.basAgility = 10;
+        property.basIntellect = 10;
+
+        property.hp = property.hpMax;
+        property.mp = property.mpMax;
+        property.basMoveSpeed = 20;
+
+        property.basAttack = 200;
 	}
 	
 	// Update is called once per frame

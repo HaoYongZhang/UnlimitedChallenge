@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
+using UnityEngine;
 
-public class Property {
+public class Property : MonoBehaviour {
 	//------基础的（basic）
 	//基础最大生命值
     public float basHpMax{ get; set; }
@@ -256,7 +257,7 @@ public class Property {
     //魔法伤害格挡
     public float magicDamageBlock;
 
-	public Property()
+    void Awake()
     {
 		basAttackTime = 1.7f;
 		basHpMax = 200f;

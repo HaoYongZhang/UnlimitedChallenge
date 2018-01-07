@@ -95,6 +95,12 @@ public class Global{
                     state = SkillReleaseState.selecting;
                     break;
                 }
+
+                if(skills[i].releaseState == SkillReleaseState.selected)
+                {
+                    state = SkillReleaseState.selected;
+                    break;
+                }
             }
             return state;
         }

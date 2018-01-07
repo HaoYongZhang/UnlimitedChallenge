@@ -1,2 +1,2 @@
-id,name,senseDistance,attackDistance,damageType
-zombie,病毒丧尸,50,15,physics
+id,mName,damageType,senseDistance,attackDistance
+zombie,病毒丧尸,physics,50,15

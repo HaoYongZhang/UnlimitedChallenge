@@ -15,7 +15,7 @@ namespace EquipmentClass
         //装备类型名称
         public string partName;
         //武器属性
-        public Property property = new Property();
+        public Property property;
         //装备图片
         public Sprite imageSprite;
         //装备技能

@@ -12,6 +12,7 @@ namespace SkillClass
     public class Manager : MonoBehaviour, ISkill
     {
         public Skill selectedSkill;
+        public Vector3 selectedPosition;
 
         void Start()
         {
@@ -39,8 +40,20 @@ namespace SkillClass
                 return false;
             }
 
-            //如果当前有技能正在释放时，不能同时点其他技能
-            if (Global.skillReleaseState != SkillReleaseState.available)
+            //正在进行攻击动画时，不能释放技能
+            if(Global.hero.animationManager.isAttacking)
+            {
+                return false;
+            }
+
+            //如果当前有技能正在选择目标时，不能同时点其他技能
+            if (Global.skillReleaseState == SkillReleaseState.selecting)
+            {
+                return false;
+            }
+
+            //如果当前有技能正在选择释放时，不能同时点其他技能
+            if (Global.skillReleaseState == SkillReleaseState.selected)
             {
                 return false;
             }
@@ -73,6 +86,7 @@ namespace SkillClass
         public void OnSelecting(Skill skill)
         {
             selectedSkill = skill;
+            skill.releaseState = SkillReleaseState.selecting;
             Global.hero.rangeManager.radius = float.Parse(skill.data["skillDistance"]);
             Global.hero.rangeManager.rendering = true;
         }
@@ -82,10 +96,14 @@ namespace SkillClass
         /// </summary>
         public void OnSelected()
         {
-            selectedSkill.releaseState = SkillReleaseState.selected;
             if(CanSelected(selectedSkill))
             {
+                selectedSkill.releaseState = SkillReleaseState.selected;
                 OnImplemented(selectedSkill);
+            }
+            else
+            {
+                selectedSkill.releaseState = SkillReleaseState.available;
             }
         }
 
@@ -102,25 +120,20 @@ namespace SkillClass
             float skillDistance = float.Parse(skill.data["skillDistance"]);
             if (Physics.Raycast(cameraRay, out rayHit))
             {
-                Vector3 heroPosition = new Vector3(transform.position.x, 5, transform.position.z);
-                Vector3 rayPosition = new Vector3(rayHit.point.x, 5, rayHit.point.z);
+                Vector3 heroPosition = new Vector3(transform.position.x, 2.5f, transform.position.z);
+                Vector3 rayPosition = new Vector3(rayHit.point.x, 2.5f, rayHit.point.z);
                 //人物到鼠标点击位置的实际直线距离
                 distance = (heroPosition - rayPosition).magnitude;
-
-                Debug.Log("heroPosition =" + heroPosition);
-                Debug.Log("rayHit =" + rayPosition);
-                Debug.Log("distance =" + distance);
-                Debug.Log("skillDistance =" + skillDistance);
 
                 //点击位置大于施法距离
                 if (distance > skillDistance)
                 {
-                    Debug.Log("点击位置大于施法距离");
                     return false;
                 }
                 //点击位置小于施法距离，成功施法
                 else
                 {
+                    selectedPosition = new Vector3(rayPosition.x, 2.5f, rayPosition.z);
                     return true;
                 }
 
@@ -151,7 +164,6 @@ namespace SkillClass
                 //如果技能不是作用于自身时，选择释放地点
                 else
                 {
-                    skill.releaseState = SkillReleaseState.selecting;
                     OnSelecting(skill);
                 }
             }
@@ -167,8 +179,6 @@ namespace SkillClass
         public void OnImplemented(Skill skill)
         {
             Global.hero.property.mp -= float.Parse(skill.data["costEnergy"]);
-
-            skill.releaseState = SkillReleaseState.cooldown;
 
             switch (skill.type)
             {
@@ -198,10 +208,15 @@ namespace SkillClass
                     break;
                 case SkillType.specialty:
                     {
-
+                        Global.hero.fightManager.skillAttack(skill);
                     }
                     break;
             }
+        }
+
+        public void OnFinished(Skill skill)
+        {
+            skill.releaseState = SkillReleaseState.cooldown;
         }
 
         /// <summary>
@@ -319,6 +334,8 @@ namespace SkillClass
 
                 intensify(skill);
             }
+
+            OnFinished(skill);
         }
 
         /// <summary>
@@ -346,6 +363,8 @@ namespace SkillClass
                     PropertyTool.ReflectSetter(property, dict.Key, propertyValue + createValue);
                 }
             }
+
+            OnFinished(skill);
         }
 
         /// <summary>
@@ -390,6 +409,12 @@ namespace SkillClass
             }
 
             return null;
+        }
+
+        public void SkillEffect(GameObject effect)
+        {
+            effect = Instantiate(effect);
+            effect.transform.SetParent(transform, false);
         }
     }
 }

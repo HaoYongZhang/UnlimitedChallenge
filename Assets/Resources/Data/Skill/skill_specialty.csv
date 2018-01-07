@@ -1,0 +1,2 @@
+id,mName,description,isActive,duration,cooldown,costEnergy,skillDistance,skillAnimation,skillPrefab,specialtyAction
+60103,剃,海军六式之一：瞬间踩踏地面10次以上，利用反作用力产生的爆发性速度来移动。/可以瞬间移动到某一位置。,1,0,15,20,40,skill_2,,telesport

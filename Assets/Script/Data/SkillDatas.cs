@@ -43,12 +43,19 @@ public class SkillDatas
         csvData_4.RemoveAt(0);
         List<List<string>> dataList_4 = csvData_4;
         data.Add(SkillType.intensify, new CSVDataStruct(head_4, dataList_4));
+
+        //强化数据
+        List<List<string>> csvData_6 = CSV.Instance.loadFile(path, "skill_specialty.csv");
+        List<string> head_6 = csvData_6[0];
+        csvData_6.RemoveAt(0);
+        List<List<string>> dataList_6 = csvData_6;
+        data.Add(SkillType.specialty, new CSVDataStruct(head_6, dataList_6));
     }
 
     public Dictionary<string, string> getSkillData(string id)
     {
         
-        SkillType type = EnumTool.GetEnum<SkillType>(id.Substring(1, 1));
+        SkillType type = EnumTool.GetEnum<SkillType>(id.Substring(0, 1));
         CSVDataStruct csvStruct = data[type];
         Dictionary<string, string> skillData = new Dictionary<string, string>();
 

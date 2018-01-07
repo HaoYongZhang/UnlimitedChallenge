@@ -38,7 +38,7 @@ public class FightManager : MonoBehaviour {
         if (!Global.hero.animationManager.isAttacking)
         {
             isNormalAttacking = false;
-            AttackAnimation attackAnimation = AttackAnimation.skill_1;
+            AttackAnimation attackAnimation = skill.attackAnimation;
             Global.hero.animationManager.Attack(attackAnimation);
             currentSkill = skill;
         }
@@ -76,20 +76,26 @@ public class FightManager : MonoBehaviour {
         }
         else
         {
-            Transform point;
-
-            for (int i = 0; i < Global.hero.charactersManager.boneTransforms.Count; i++)
+            if(currentSkill.type != SkillType.specialty)
             {
-                if (Global.hero.charactersManager.boneTransforms[i].name == (CharactersManager.prefixBoneName + CharactersManager.left_point_name))
+                Transform point;
+
+                for (int i = 0; i < Global.hero.charactersManager.boneTransforms.Count; i++)
                 {
-                    point = Global.hero.charactersManager.boneTransforms[i];
+                    if (Global.hero.charactersManager.boneTransforms[i].name == (CharactersManager.prefixBoneName + CharactersManager.left_point_name))
+                    {
+                        point = Global.hero.charactersManager.boneTransforms[i];
 
-                    SkillEffect skillEffect = SkillEffect.NewInstantiate(point.position, Global.hero.transform.rotation, currentSkill);
-                    skillEffect.onSkillEnterDelegate = inSkill;
-                    currentSkill = null;
+                        SkillEffect skillEffect = SkillEffect.NewInstantiate(point.position, Global.hero.transform.rotation, currentSkill);
+                        skillEffect.onSkillEnterDelegate = inSkill;
 
-                    break;
+                        break;
+                    }
                 }
+            }
+            else
+            {
+                SpecialtySkillImplement.Implemented(currentSkill);
             }
         }
     }
@@ -101,9 +107,19 @@ public class FightManager : MonoBehaviour {
     {
         bool isLongPress = Global.hero.gameObject.GetComponent<HeroController>().isLongPress;
 
-        if (!isLongPress)
+        //当前攻击动画是普通攻击时才能长按持续动画
+        if (isNormalAttacking)
+        {
+            if(!isLongPress)
+            {
+                Global.hero.animationManager.StopAttack();
+            }
+        }
+        else
         {
             Global.hero.animationManager.StopAttack();
+            Global.hero.skillManager.OnFinished(currentSkill);
+            currentSkill = null;
         }
     }
 

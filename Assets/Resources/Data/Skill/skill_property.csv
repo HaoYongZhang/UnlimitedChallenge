@@ -1,5 +1,7 @@
 id,addlHpMax,addlMpMax,addlHpRegeneration,addlMpRegeneration,addlStrength,addlAgility,addlIntellect,addlArmor,addlMoveSpeed,addlAttack,addlAttackSpeed,physicalResistance,magicResistance,physicalDamageBlock,magicDamageBlock,rateHpMax,rateMpMax,rateHpRegeneration,rateMpRegeneration,rateStrength,rateAgility,rateIntellect,rateArmor,rateMoveSpeed,rateAttack,rateAttackSpeed
-140001,,,,,+10,,,,,,,,,,,,,-0.1,,+0.2,,,,-0.1,,
-310030,,,,,,,,,,,,,,,,,,,,,,,,,,
-340001,,,,,,,,,+30,,,,,,,,,,,,,,,,,
-630001,,,+10,,,,,,,,,,,,,,,,,,,,,,,
+40002,,,,,+10,,,,,,,,,,,,,-0.1,,+0.2,,,,-0.1,,
+10030,,,,,,,,,,,,,,,,,,,,,,,,,,
+40001,,,,,,,,,+30,,,,,,,,,,,,,,,,,
+30001,,,+10,,,,,,,,,,,,,,,,,,,,,,,
+40102,,,,,,,,+20,,,,,,,,,,,,,,,,-0.3,,
+40104,,,,,,,,,+10,,,,,,,,,,,,+0.1,,,,,

@@ -143,6 +143,8 @@ public class HeroController : MonoBehaviour {
 			Rotating(horizontal, vertical);
 
             Vector3 position = RotateRound(new Vector3(horizontal, 0, vertical), -45);
+
+            //transform.Translate(horizontal, 0, vertical);
             _rigidbody.MovePosition(transform.position + position * speed * Time.deltaTime);
 		}
         else{

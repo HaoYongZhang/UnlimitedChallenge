@@ -9839,7 +9839,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_GenerateMotionCurves: 0
   m_Events:
-  - time: 0
+  - time: 0.033333335
     functionName: startAttack
     data: 
     objectReferenceParameter: {fileID: 0}
@@ -9853,7 +9853,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.1666666
+  - time: 1.1333333
     functionName: endAttack
     data: 
     objectReferenceParameter: {fileID: 0}

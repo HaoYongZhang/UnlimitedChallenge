@@ -21,8 +21,8 @@ public class DamageManager
     /// <typeparam name="V">The 2nd type parameter.</typeparam>
     public static void CommonAttack<T, V>(GameObject attacker, GameObject victim, DamageType damageType)
     {   
-        Property attackerProperty = (Property)PropertyTool.ReflectGetter(attacker.GetComponent<T>(), "property");
-        Property victimProperty = (Property)PropertyTool.ReflectGetter(victim.GetComponent<V>(), "property");
+        Property attackerProperty = attacker.GetComponent<Property>();
+        Property victimProperty = victim.GetComponent<Property>();
 
         float damage = attackerProperty.attack;
         float damageRate = 1;
@@ -51,8 +51,12 @@ public class DamageManager
 
     public static void SkillAttack<T, V>(GameObject attacker, GameObject victim, Skill skill)
     {
-        Property attackerProperty = (Property)PropertyTool.ReflectGetter(attacker.GetComponent<T>(), "property");
-        Property victimProperty = (Property)PropertyTool.ReflectGetter(victim.GetComponent<V>(), "property");
+        //Property attackerProperty = (Property)PropertyTool.ReflectGetter(attacker.GetComponent<T>(), "property");
+        //Property victimProperty = (Property)PropertyTool.ReflectGetter(victim.GetComponent<V>(), "property");
+
+        Property attackerProperty = attacker.GetComponent<Property>();
+        Property victimProperty = victim.GetComponent<Property>();
+
 
         DamageType damageType = EnumTool.GetEnum<DamageType>(skill.data["damageType"]);
         Debug.Log(skill.id);

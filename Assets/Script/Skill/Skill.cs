@@ -9,6 +9,8 @@ namespace SkillClass
     {
         //技能id
         public string id;
+        //名字
+        public string name;
         //是否主动技能
         public bool isActive;
         //技能图片
@@ -40,26 +42,59 @@ namespace SkillClass
         //每秒实际CD间隔时间
         public float second = Time.time;
 
+        public AttackAnimation attackAnimation;
+
         public Skill(string _id)
         {
             id = _id;
             data = DataManager.Instance.skillDatas.getSkillData(_id);
 
-            category = EnumTool.GetEnum<SkillCategory>(id.Substring(0, 1));
-            type = EnumTool.GetEnum<SkillType>(id.Substring(1, 1));
-
-            if(type == SkillType.intensify || type == SkillType.defense || type == SkillType.treatment)
-            {
-                effectRange = SkillEffectRange.self;
-            }
-            else
-            {
-                effectRange = EnumTool.GetEnum<SkillEffectRange>(data["skillEffectRange"]);
-            }
-
+            //category = EnumTool.GetEnum<SkillCategory>(id.Substring(0, 1));
+            type = EnumTool.GetEnum<SkillType>(id.Substring(0, 1));
 
             imageSprite = Resources.Load("Image/Skill/skill_" + id, typeof(Sprite)) as Sprite;
             isActive = (data["isActive"] == "1");
+
+            InitTypePropert();
+        }
+
+        void InitTypePropert()
+        {
+            switch(type)
+            {
+                case SkillType.attack:
+                    {
+                        effectRange = EnumTool.GetEnum<SkillEffectRange>(data["skillEffectRange"]);
+                        attackAnimation = EnumTool.GetEnum<AttackAnimation>(data["skillAnimation"]);
+                    }
+                    break;
+                case SkillType.defense:
+                    {
+                        effectRange = SkillEffectRange.self;
+                    }
+                    break;
+                case SkillType.treatment:
+                    {
+                        effectRange = SkillEffectRange.self;
+                    }
+                    break;
+                case SkillType.intensify:
+                    {
+                        effectRange = SkillEffectRange.self;
+                    }
+                    break;
+                case SkillType.complex:
+                    {
+
+                    }
+                    break;
+                case SkillType.specialty:
+                    {
+                        effectRange = SkillEffectRange.line;
+                        attackAnimation = EnumTool.GetEnum<AttackAnimation>(data["skillAnimation"]);
+                    }
+                    break;
+            }
         }
     }
 }

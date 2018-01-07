@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400000}
   - component: {fileID: 13500000}
-  - component: {fileID: 114185607106838602}
+  - component: {fileID: 114275751318968842}
   m_Layer: 8
   m_Name: VulcanBullet
   m_TagString: Untagged
@@ -57,9 +57,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0.6984615, y: 0.11023416, z: -0.11023416, w: 0.6984615}
-  m_LocalPosition: {x: 45.612537, y: 10.165933, z: -40.40446}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.70575535, y: 0.043696232, z: -0.043696232, w: -0.70575535}
+  m_LocalPosition: {x: -132.68323, y: 10.163997, z: 14.161825}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
   - {fileID: 400004}
   m_Father: {fileID: 0}
@@ -85,7 +85,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.13561821, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -163,8 +163,8 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 2
-  randomSeed: -1792600658
+  scalingMode: 0
+  randomSeed: -1946904718
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -1264,7 +1264,7 @@ ParticleSystem:
     y:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.3
+      scalar: 0.01
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -3480,8 +3480,8 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 2
-  randomSeed: -956177873
+  scalingMode: 0
+  randomSeed: -1588783966
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -6780,7 +6780,7 @@ ParticleSystemRenderer:
   m_MaxParticleSize: 0.5
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
-  m_LengthScale: 8
+  m_LengthScale: 4
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_RenderAlignment: 0
@@ -6834,7 +6834,7 @@ ParticleSystemRenderer:
   m_MaxParticleSize: 0.5
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
-  m_LengthScale: 40
+  m_LengthScale: 18
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_RenderAlignment: 0
@@ -6857,7 +6857,7 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100000}
   m_IsPrefabParent: 1
---- !u!114 &114185607106838602
+--- !u!114 &114275751318968842
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -6868,4 +6868,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83352fbcbb685456a8c728fcca696283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosion: {fileID: 100010, guid: 4c2010562e7ba447e81ef0fd463737d8, type: 2}
   moveSpeed: 150
+  height: 0

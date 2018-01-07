@@ -77,17 +77,12 @@ namespace SkillClass
         aoe
     }
 
-    /// <summary>
-    /// 伤害类型
-    /// </summary>
-    public enum DamageType
+    public enum SpecialtyAction
     {
-        [Description("物理伤害")]
-        physics,
-        [Description("能量伤害")]
-        energy
+        [Description("自定义")]
+        custom,
+        [Description("瞬间移动")]
+        telesport
     }
-
-
 }
 

@@ -66,7 +66,7 @@ namespace UISkillInfo
             string isActiveStr = skill.isActive ? "主动技能" : "被动技能";
             float contentHeight = 0;
 
-            title.text = skill.data["name"] + "\n" + "<size=34>" + isActiveStr + "</size>";
+            title.text = skill.data["mName"] + "\n" + "<size=34>" + isActiveStr + "</size>";
             content.text = info;
             //技能描述的实际高度 + 图标高度 + top&bottom的边距 + 间隔
             contentHeight = content.preferredHeight + 120 + 30 * 2;

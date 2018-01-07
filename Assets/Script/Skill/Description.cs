@@ -45,7 +45,7 @@ namespace SkillClass
                     }
                 case SkillType.specialty:
                     {
-                        return "";
+                        return getSpecialtyDescription(skill);
                     }
                 default:
                     {
@@ -64,10 +64,10 @@ namespace SkillClass
         {
             string originalDescription = skill.data["description"];
 
-            string strength = skill.data["strength"] != "0" ? "力量*" + skill.data["strength"] + "+" : "";
-            string agility = skill.data["agility"] != "0" ? "敏捷*" + skill.data["agility"] + "+" : "";
-            string intellect = skill.data["intellect"] != "0" ? "内力*" + skill.data["intellect"] : "";
-            string damageFormula = "伤害：" + skill.data["basicDamage"] + "+" + strength + agility + intellect;
+            string strength = skill.data["strength"] != "0" ? "+" + "力量*" + skill.data["strength"] : "";
+            string agility = skill.data["agility"] != "0" ? "+" +"敏捷*" + skill.data["agility"] : "";
+            string intellect = skill.data["intellect"] != "0" ? "+" +"内力*" + skill.data["intellect"] : "";
+            string damageFormula = "伤害：" + skill.data["basicDamage"] + strength + agility + intellect;
 
             return originalDescription + "\n" + "<color=orange>" + damageFormula + "</color>";
         }
@@ -81,7 +81,7 @@ namespace SkillClass
         {
             string originalDescription = skill.data["description"];
             int i = 0;
-            Property property = new Property();
+            Property property = Global.hero.property;
 
             foreach (KeyValuePair<string, string> dict in skill.data)
             {
@@ -148,7 +148,7 @@ namespace SkillClass
         /// <param name="skill">Skill.</param>
         static string getIntensifyDescription(Skill skill)
         {
-            Property property = new Property();
+            Property property = Global.hero.property;
             int i = 0;
             string originalDescription = skill.data["description"];
 
@@ -176,12 +176,22 @@ namespace SkillClass
 
                     string descriptionName = PropertyTool.ReflectDescription(property, dict.Key);
                     string s = "@" + i;
-                    originalDescription = originalDescription.Replace(s, "\n" + increateColor + descriptionName + increateStr + increateValue + "</color>");
+                    originalDescription = originalDescription.Replace(s, "\n" + increateColor + descriptionName + "  " + increateStr + increateValue + "</color>");
                     i++;
                 }
             }
 
             return originalDescription;
+        }
+
+        static string getSpecialtyDescription(Skill skill)
+        {
+            string originalDescription = skill.data["description"];
+            string[] strList = originalDescription.Split('/');
+            string description = strList[0] + "\n" + "<color=#7BA5C0>" + strList[1] + "</color>";
+
+
+            return description;
         }
     }
 

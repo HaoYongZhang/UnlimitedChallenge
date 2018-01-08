@@ -41,6 +41,8 @@ namespace SkillClass
         public int currentLevel = 1;
         //每秒实际CD间隔时间
         public float second = Time.time;
+        //持续时间
+        public float duration;
 
         public AttackAnimation attackAnimation;
 
@@ -54,6 +56,11 @@ namespace SkillClass
 
             imageSprite = Resources.Load("Image/Skill/skill_" + id, typeof(Sprite)) as Sprite;
             isActive = (data["isActive"] == "1");
+
+            if(data.ContainsKey("duration"))
+            {
+                duration = float.Parse(data["duration"]);
+            }
 
             InitTypePropert();
         }

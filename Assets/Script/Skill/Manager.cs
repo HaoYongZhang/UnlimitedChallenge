@@ -9,7 +9,7 @@ namespace SkillClass
     /// <summary>
     /// 技能管理中心
     /// </summary>
-    public class Manager : MonoBehaviour, ISkill
+    public class Manager : MonoBehaviour
     {
         public Skill selectedSkill;
         public Vector3 selectedPosition;
@@ -180,83 +180,12 @@ namespace SkillClass
         {
             Global.hero.property.mp -= float.Parse(skill.data["costEnergy"]);
 
-            switch (skill.type)
-            {
-                case SkillType.attack:
-                    {
-                        Global.hero.fightManager.skillAttack(skill);
-                    }
-                    break;
-                case SkillType.defense:
-                    {
-                    }
-                    break;
-                case SkillType.treatment:
-                    {
-                        treatment(skill);
-                    }
-                    break;
-                case SkillType.intensify:
-                    {
-                        intensify(skill);
-                    }
-                    break;
-                case SkillType.complex:
-                    {
-
-                    }
-                    break;
-                case SkillType.specialty:
-                    {
-                        Global.hero.fightManager.skillAttack(skill);
-                    }
-                    break;
-            }
+            SkillImplementation.Implement(gameObject, skill);
         }
 
         public void OnFinished(Skill skill)
         {
             skill.releaseState = SkillReleaseState.cooldown;
-        }
-
-        /// <summary>
-        /// 技能持续效果结束
-        /// </summary>
-        /// <param name="skill">Skill.</param>
-        public void OnDurationEnd(Skill skill)
-        {
-            switch (skill.type)
-            {
-                case SkillType.attack:
-                    {
-
-                    }
-                    break;
-                case SkillType.defense:
-                    {
-                    }
-                    break;
-                case SkillType.treatment:
-                    {
-                        endIntensify(skill);
-                    }
-                    break;
-                case SkillType.intensify:
-                    {
-                        endIntensify(skill);
-                    }
-                    break;
-                case SkillType.complex:
-                    {
-
-                    }
-                    break;
-                case SkillType.specialty:
-                    {
-                    }
-                    break;
-
-            }
         }
 
         /// <summary>
@@ -281,9 +210,9 @@ namespace SkillClass
                         }
 
                         //当技能持续时间结束时
-                        if (oneSkill.isInDuration && oneSkill.currentCoolDown >= float.Parse(oneSkill.data["duration"]))
+                        if (oneSkill.isInDuration && oneSkill.currentCoolDown >= oneSkill.duration)
                         {
-                            OnDurationEnd(oneSkill);
+                            SkillImplementation.DurationEnd(gameObject, oneSkill);
                         }
                     }
                     else
@@ -306,90 +235,7 @@ namespace SkillClass
                 //当技能是被动而且未开启时，开启被动技能
                 if (!skill.isActive && skill.isInDuration == false)
                 {
-                    intensify(skill);
-                }
-            }
-        }
-
-
-        /// <summary>
-        /// 使用治疗技能
-        /// </summary>
-        /// <returns>The treatment.</returns>
-        /// <param name="skill">Skill.</param>
-        void treatment(Skill skill)
-        {
-            string increateHp = skill.data["increateHp"];
-            if (increateHp != null && increateHp != "")
-            {
-                //截取字符串，获得属性增加的值
-                float createValue = float.Parse(increateHp);
-                //使用治疗技能后，加上的血量
-                Global.hero.property.hp += createValue;
-
-                //Color hpColor = new Color(90 / 255f, 160 / 255f, 55 / 255f, 1);
-
-                Color hpColor = ColorTool.getColor(90, 160, 55);
-                ParticleManager.vertical(Global.hero.gameObject, hpColor);
-
-                intensify(skill);
-            }
-
-            OnFinished(skill);
-        }
-
-        /// <summary>
-        /// 使用强化技能
-        /// </summary>
-        /// <param name="skill">Skill.</param>
-        void intensify(Skill skill)
-        {
-            //添加强化的小图标
-            UIScene.Instance.addStatusIcon(skill);
-            //开始技能的持续时间
-            skill.isInDuration = true;
-            //获取HeroManager的属性
-            Property property = Global.hero.property;
-
-            foreach (KeyValuePair<string, string> dict in skill.data)
-            {
-                if (PropertyTool.isExist(property, dict.Key))
-                {
-                    //截取字符串，获得属性增加的值
-                    float createValue = float.Parse(dict.Value);
-                    //动态获取当前的属性值
-                    float propertyValue = float.Parse(PropertyTool.ReflectGetter(property, dict.Key).ToString());
-                    //使用强化技能时间开始时，应该加上强化属性
-                    PropertyTool.ReflectSetter(property, dict.Key, propertyValue + createValue);
-                }
-            }
-
-            OnFinished(skill);
-        }
-
-        /// <summary>
-        /// 强化技能的持续时间结束
-        /// </summary>
-        /// <param name="skill">Skill.</param>
-        void endIntensify(Skill skill)
-        {
-            //删除强化的小图标
-            UIScene.Instance.removeStatusIcon(skill);
-            //结束技能的持续时间
-            skill.isInDuration = false;
-            //获取Hero的属性
-            Property property = Global.hero.property;
-
-            foreach (KeyValuePair<string, string> dict in skill.data)
-            {
-                if (PropertyTool.isExist(property, dict.Key))
-                {
-                    //截取字符串，获得属性增加的值
-                    float createValue = float.Parse(dict.Value);
-                    //动态获取当前的属性值
-                    float propertyValue = float.Parse(PropertyTool.ReflectGetter(property, dict.Key).ToString());
-                    //使用强化技能时间结束后，应该减去强化属性
-                    PropertyTool.ReflectSetter(property, dict.Key, propertyValue - createValue);
+                    SkillImplementation.Implement(gameObject, skill);
                 }
             }
         }

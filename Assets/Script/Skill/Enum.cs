@@ -84,5 +84,14 @@ namespace SkillClass
         [Description("瞬间移动")]
         telesport
     }
+
+    public enum SkillRank
+    {
+        S,
+        A,
+        B,
+        C,
+        D
+    }
 }
 

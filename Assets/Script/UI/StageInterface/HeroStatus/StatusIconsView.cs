@@ -28,16 +28,13 @@ namespace UIHeroStatus
         /// <param name="skill">Skill.</param>
         public void addStatusIcon(Skill skill)
         {
-            GameObject statusObj = Instantiate((GameObject)Resources.Load("UI/UIHeroStatusIcon"));
-            statusObj.transform.SetParent(transform, false);
+            StatusIcon statusIcon = StatusIcon.NewInstantiate(skill);
 
-            StatusIcon statusIcon = statusObj.GetComponent<StatusIcon>();
-            statusIcon.image.sprite = skill.imageSprite;
-            statusIcon.id = skill.id;
+            statusIcon.transform.SetParent(transform, false);
 
             statusIconList.Add(statusIcon);
 
-            UIMouseDelegate mouseDelegate = statusObj.GetComponent<UIMouseDelegate>();
+            UIMouseDelegate mouseDelegate = statusIcon.gameObject.GetComponent<UIMouseDelegate>();
             mouseDelegate.onPointerEnterDelegate = UIScene.Instance.pointToStatusIcon;
             mouseDelegate.onPointerExitDelegate = UIScene.Instance.pointOutStatusIcon;
         }

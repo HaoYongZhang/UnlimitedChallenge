@@ -33,7 +33,7 @@ public class FightManager : MonoBehaviour {
         }
     }
 
-    public void skillAttack(Skill skill)
+    public void SkillAttack(Skill skill)
     {
         if (!Global.hero.animationManager.isAttacking)
         {
@@ -76,27 +76,9 @@ public class FightManager : MonoBehaviour {
         }
         else
         {
-            if(currentSkill.type != SkillType.specialty)
-            {
-                Transform point;
-
-                for (int i = 0; i < Global.hero.charactersManager.boneTransforms.Count; i++)
-                {
-                    if (Global.hero.charactersManager.boneTransforms[i].name == (CharactersManager.prefixBoneName + CharactersManager.left_point_name))
-                    {
-                        point = Global.hero.charactersManager.boneTransforms[i];
-
-                        SkillEffect skillEffect = SkillEffect.NewInstantiate(point.position, Global.hero.transform.rotation, currentSkill);
-                        skillEffect.onSkillEnterDelegate = inSkill;
-
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                SpecialtySkillImplement.Implemented(currentSkill);
-            }
+            currentSkill.releasingDelegate(currentSkill);
+            Global.hero.skillManager.OnFinished(currentSkill);
+            currentSkill = null;
         }
     }
 
@@ -118,22 +100,6 @@ public class FightManager : MonoBehaviour {
         else
         {
             Global.hero.animationManager.StopAttack();
-            Global.hero.skillManager.OnFinished(currentSkill);
-            currentSkill = null;
-        }
-    }
-
-
-    void inSkill(Collider _collider, Skill skill)
-    {
-        GameObject target = _collider.gameObject;
-        if(target.layer == LayerMask.NameToLayer("Enemy"))
-        {
-            DamageManager.SkillAttack<Hero, Enemy>(gameObject, target, skill);
-        }
-        else
-        {
-            Debug.Log("不是敌人");
         }
     }
 }

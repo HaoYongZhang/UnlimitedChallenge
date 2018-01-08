@@ -79,6 +79,7 @@ public class Hero : MonoBehaviour {
         Global.skills.Add(new Skill("10105"));
         Global.skills.Add(new Skill("40102"));
         Global.skills.Add(new Skill("40104"));
+        Global.skills.Add(new Skill("40001"));
 
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("11010")));
         Global.items.Add(EquipmentClass.UIButton.NewInstantiate(new Equipment("14001")));

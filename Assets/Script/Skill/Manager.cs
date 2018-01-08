@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using EnemyClass;
 
 namespace SkillClass
 {
@@ -23,9 +24,31 @@ namespace SkillClass
         {
             cooldown();
 
-            unactiveSkill();
+            UnactiveSkill();
         }
 
+        /// <summary>
+        /// 释放技能
+        /// </summary>
+        /// <param name="_skill">Skill.</param>
+        public void OnRelease(Skill _skill)
+        {
+            Skill skill = GetOneSkillByID(_skill.id);
+            ///判断能否释放技能
+            if (CanRelease(skill))
+            {
+                //如果技能作用于自身时，直接释放
+                if (skill.effectRange == SkillEffectRange.self)
+                {
+                    OnImplemented(skill);
+                }
+                //如果技能不是作用于自身时，选择释放地点
+                else
+                {
+                    OnSelecting(skill);
+                }
+            }
+        }
 
         /// <summary>
         /// 判断能否释放技能
@@ -147,32 +170,6 @@ namespace SkillClass
 
 
         /// <summary>
-        /// 释放技能
-        /// </summary>
-        /// <param name="_skill">Skill.</param>
-        public void OnRelease(Skill _skill)
-        {
-            Skill skill = GetOneSkillByID(_skill.id);
-            ///判断能否释放技能
-            if (CanRelease(skill))
-            {
-                //如果技能作用于自身时，直接释放
-                if (skill.effectRange == SkillEffectRange.self)
-                {
-                    OnImplemented(skill);
-                }
-                //如果技能不是作用于自身时，选择释放地点
-                else
-                {
-                    OnSelecting(skill);
-                }
-            }
-
-
-        }
-
-
-        /// <summary>
         /// 实现技能释放
         /// </summary>
         /// <param name="skill">Skill.</param>
@@ -180,7 +177,20 @@ namespace SkillClass
         {
             Global.hero.property.mp -= float.Parse(skill.data["costEnergy"]);
 
-            SkillImplementation.Implement(gameObject, skill);
+            SkillImplementation.Implement(gameObject, skill, selectedPosition);
+        }
+
+        public void OnSkill(Collider _collider, Skill skill)
+        {
+            GameObject target = _collider.gameObject;
+            if (target.layer == LayerMask.NameToLayer("Enemy"))
+            {
+                DamageManager.SkillAttack<Hero, Enemy>(gameObject, target, skill);
+            }
+            else
+            {
+                Debug.Log("不是敌人");
+            }
         }
 
         public void OnFinished(Skill skill)
@@ -228,14 +238,14 @@ namespace SkillClass
         /// <summary>
         /// 被动技能
         /// </summary>
-        void unactiveSkill()
+        void UnactiveSkill()
         {
             foreach (Skill skill in Global.skills)
             {
                 //当技能是被动而且未开启时，开启被动技能
                 if (!skill.isActive && skill.isInDuration == false)
                 {
-                    SkillImplementation.Implement(gameObject, skill);
+                    SkillImplementation.Implement(gameObject, skill, Vector3.zero);
                 }
             }
         }

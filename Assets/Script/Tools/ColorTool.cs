@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Globalization;
 using System;
+using SkillClass;
 
 public class ColorTool
 {
@@ -39,5 +40,41 @@ public class ColorTool
         Color color = new Color(r / 255f, g / 255f, b / 255f, 1);
 
         return color;
+    }
+
+    public static Color GetSkillColor(SkillRank rank)
+    {
+        switch (rank)
+        {
+            case SkillRank.S:
+                {
+                    //黄金
+                    return ColorTool.getColor("#ffd700");
+                }
+            case SkillRank.A:
+                {
+                    //紫色
+                    return ColorTool.getColor(140, 105, 210);
+                }
+            case SkillRank.B:
+                {
+                    //褐色
+                    return ColorTool.getColor(99, 63, 63);
+                }
+            case SkillRank.C:
+                {
+                    //钢铁蓝
+                    return ColorTool.getColor("#4682b4");
+                }
+            case SkillRank.D:
+                {
+                    //青色
+                    return ColorTool.getColor("#2e8b57");
+                }
+            default:
+                {
+                    return ColorTool.getColor("#000000");
+                }
+        }
     }
 }

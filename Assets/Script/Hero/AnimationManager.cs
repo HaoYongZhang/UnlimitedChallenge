@@ -58,12 +58,13 @@ public class AnimationManager : MonoBehaviour {
 public enum AttackAnimation
 {
     punch_1 = 0,
-    kick_1 = 10,
-    kick_2 = 11,
-    split_1 = 20,
-    split_2 = 21,
-    split_3 = 22,
-    pistol_1 = 30,
-    skill_1 = 60,
-    skill_2 = 61
+    kick_1 = 1,
+    kick_2 = 2,
+    split_1 = 3,
+    split_2 = 4,
+    split_3 = 5,
+    pistol_1 = 6,
+    skill_1 = 7,
+    skill_2 = 8,
+    skill_3 = 9
 }

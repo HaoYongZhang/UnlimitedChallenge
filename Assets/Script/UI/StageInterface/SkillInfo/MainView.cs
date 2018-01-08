@@ -8,7 +8,8 @@ namespace UISkillInfo
 {
     public class MainView : MonoBehaviour
     {
-        public Image icon;
+        public Image skillImage;
+        public Image background;
         public Text title;
         public Text content;
 
@@ -34,7 +35,8 @@ namespace UISkillInfo
         {
             currentShowInfoSkill = skill;
 
-            icon.sprite = skill.imageSprite;
+            skillImage.sprite = skill.imageSprite;
+            background.color = ColorTool.GetSkillColor(skill.rank);
 
             string info = "";
 

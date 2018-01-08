@@ -5,13 +5,14 @@ using SkillClass;
 
 public class SkillImplementation
 {
-    public static void Implement(GameObject obj, Skill skill)
+    public static void Implement(GameObject obj, Skill skill, Vector3 selectedPosition)
     {
         switch (skill.type)
         {
             case SkillType.attack:
                 {
-                    //Global.hero.fightManager.skillAttack(skill);
+                    skill.releasingDelegate = Attack;
+                    Global.hero.fightManager.SkillAttack(skill);
                 }
                 break;
             case SkillType.defense:
@@ -35,7 +36,43 @@ public class SkillImplementation
                 break;
             case SkillType.specialty:
                 {
-                    Global.hero.fightManager.skillAttack(skill);
+                    skill.releasingDelegate = Specialty;
+                    Global.hero.fightManager.SkillAttack(skill);
+                }
+                break;
+        }
+    }
+
+    public static void Attack(Skill skill)
+    {
+        for (int i = 0; i < Global.hero.charactersManager.boneTransforms.Count; i++)
+        {
+            if (Global.hero.charactersManager.boneTransforms[i].name == (CharactersManager.prefixBoneName + CharactersManager.left_point_name))
+            {
+                Transform point = Global.hero.charactersManager.boneTransforms[i];
+
+                SkillEffect skillEffect = SkillEffect.NewInstantiate(point.position, Global.hero.transform.rotation, skill);
+                skillEffect.onSkillEnterDelegate = Global.hero.skillManager.OnSkill;
+
+                break;
+            }
+        }
+    }
+
+    public static void Specialty(Skill skill)
+    {
+        SpecialtyAction action = EnumTool.GetEnum<SpecialtyAction>(skill.data["specialtyAction"]);
+
+        switch (action)
+        {
+            case SpecialtyAction.custom:
+                {
+
+                }
+                break;
+            case SpecialtyAction.telesport:
+                {
+                    SpecialtySkills.Telesport(skill);
                 }
                 break;
         }
@@ -47,7 +84,7 @@ public class SkillImplementation
         {
             case SkillType.attack:
                 {
-                    //Global.hero.fightManager.skillAttack(skill);
+                    
                 }
                 break;
             case SkillType.defense:
@@ -71,7 +108,7 @@ public class SkillImplementation
                 break;
             case SkillType.specialty:
                 {
-                    Global.hero.fightManager.skillAttack(skill);
+                    
                 }
                 break;
         }

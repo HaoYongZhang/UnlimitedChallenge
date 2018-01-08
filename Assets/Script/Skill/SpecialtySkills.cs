@@ -3,28 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SkillClass;
 
-public class SpecialtySkillImplement {
-
-    public static void Implemented(Skill skill)
-    {
-        SpecialtyAction action = EnumTool.GetEnum<SpecialtyAction>(skill.data["specialtyAction"]);
-
-        switch(action)
-        {
-            case SpecialtyAction.custom:
-                {
-                    
-                }
-                break;
-            case SpecialtyAction.telesport:
-                {
-                    Telesport(skill);
-                }
-                break;
-        }
-    }
-
-
+public class SpecialtySkills {
     /// <summary>
     /// 瞬移
     /// </summary>

@@ -175,8 +175,9 @@ namespace SkillClass
                     }
 
                     string descriptionName = PropertyTool.ReflectDescription(property, dict.Key);
-                    string s = "@" + i;
-                    originalDescription = originalDescription.Replace(s, "\n" + increateColor + descriptionName + "  " + increateStr + increateValue + "</color>");
+
+                    originalDescription += "\n" + increateColor + descriptionName + "  " + increateStr + increateValue + "</color>";
+
                     i++;
                 }
             }

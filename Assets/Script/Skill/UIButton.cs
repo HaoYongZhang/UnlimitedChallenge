@@ -8,6 +8,7 @@ namespace SkillClass
     public class UIButton : MonoBehaviour
     {
         public Skill skill;
+        public Image background;
         public Image skillImage;
         public Image cooldownImage;
         public Text cooldownText;
@@ -19,6 +20,7 @@ namespace SkillClass
         {
             UIButton skillButton = Instantiate((GameObject)Resources.Load("UI/SkillButton")).GetComponent<UIButton>();
             skillButton.defaultSprite = skillButton.skillImage.sprite;
+            skillButton.background.color = ColorTool.getColor(63, 63, 63);
             skillButton.mouseDelegate = skillButton.gameObject.GetComponent<UIMouseDelegate>();
 
             return skillButton;
@@ -48,6 +50,7 @@ namespace SkillClass
             //当技能移除时
             if (skill == null)
             {
+                background.color = ColorTool.getColor(63, 63, 63);
                 skillImage.sprite = defaultSprite;
                 cooldownImage.fillAmount = 0;
                 cooldownText.text = "";
@@ -77,10 +80,12 @@ namespace SkillClass
             if(_skill != null)
             {
                 skillImage.sprite = _skill.imageSprite;
+                background.color = ColorTool.GetSkillColor(_skill.rank);
             }
             else
             {
                 skillImage.sprite = defaultSprite;
+                background.color = ColorTool.getColor(63, 63, 63);
             }
         }
     }

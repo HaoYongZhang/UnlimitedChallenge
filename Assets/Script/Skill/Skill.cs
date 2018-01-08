@@ -5,12 +5,16 @@ using System;
 
 namespace SkillClass
 {
+    public delegate void ReleasingDelegate(Skill skill);
+
     public class Skill
     {
         //技能id
         public string id;
         //名字
         public string name;
+        //释放时回调
+        public ReleasingDelegate releasingDelegate;
         //是否主动技能
         public bool isActive;
         //技能图片
@@ -23,10 +27,13 @@ namespace SkillClass
         public SkillEffectRange effectRange;
         //技能释放状态
         public SkillReleaseState releaseState;
+
+        public SkillRank rank;
         //技能描述
         public string description
         {
-            get{
+            get
+            {
                 return Description.GetDescription(this);
             }
         }
@@ -57,7 +64,9 @@ namespace SkillClass
             imageSprite = Resources.Load("Image/Skill/skill_" + id, typeof(Sprite)) as Sprite;
             isActive = (data["isActive"] == "1");
 
-            if(data.ContainsKey("duration"))
+            rank = EnumTool.GetEnum<SkillRank>(data["rank"]);
+
+            if (data.ContainsKey("duration"))
             {
                 duration = float.Parse(data["duration"]);
             }
@@ -67,7 +76,7 @@ namespace SkillClass
 
         void InitTypePropert()
         {
-            switch(type)
+            switch (type)
             {
                 case SkillType.attack:
                     {
@@ -105,3 +114,4 @@ namespace SkillClass
         }
     }
 }
+

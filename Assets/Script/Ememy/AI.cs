@@ -74,7 +74,7 @@ namespace EnemyClass
         /// </summary>
         void think()
         {
-            if (GetComponent<Enemy>().property.hp < 0)
+            if (GetComponent<Enemy>().propertyManager.Hp < 0)
             {
                 actionState = Action.death;
             }
@@ -154,7 +154,7 @@ namespace EnemyClass
 
         void move()
         {
-            _rigidbody.MovePosition(_rigidbody.position + transform.forward * _enemy.property.moveSpeed * Time.deltaTime);
+            _rigidbody.MovePosition(_rigidbody.position + transform.forward * _enemy.propertyManager.MoveSpeed * Time.deltaTime);
         }
 
         void attack()
@@ -189,7 +189,7 @@ namespace EnemyClass
             {
                 DamageType damageType = EnumTool.GetEnum<DamageType>(_enemy.data["damageType"]);
 
-                DamageManager.CommonAttack<Enemy, Hero>(gameObject, Global.hero.gameObject, damageType);
+                DamageManager.CommonAttack(gameObject, Global.hero.gameObject, damageType);
             }
             else
             {

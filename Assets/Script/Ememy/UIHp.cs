@@ -19,7 +19,7 @@ namespace EnemyClass
             hpSlider = GetComponent<Slider>();
             rectTransform = GetComponent<RectTransform>();
 
-            hpSlider.value = tager.property.hp / tager.property.hpMax;
+            hpSlider.value = tager.propertyManager.Hp / tager.propertyManager.HpMax;
         }
 
         // Update is called once per frame
@@ -34,7 +34,7 @@ namespace EnemyClass
 
             rectTransform.DOMove(offset + worldPosition, 0.3f);
 
-            hpSlider.value = tager.property.hp / tager.property.hpMax;
+            hpSlider.value = tager.propertyManager.Hp / tager.propertyManager.HpMax;
         }
     }
 

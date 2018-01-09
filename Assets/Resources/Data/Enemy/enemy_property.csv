@@ -1,2 +1,2 @@
-id,basHpMax,basMpMax,basHpRegeneration,basMpRegeneration,basStrength,basAgility,basIntellect,basArmor,basMoveSpeed,basAttack,basAttackTime,basAttackSpeed,basPhysicalReduction,basMagicReduction
+id,HpMax,MpMax,HpRegeneration,MpRegeneration,Strength,Agility,Intellect,Armor,MoveSpeed,Attack,AttackSpeed,PhysicalResistance,MagicResistance,PhysicalDamageBlock,MagicDamageBlock
 zombie,500,100,5,,20,,,2,25,100,,,,

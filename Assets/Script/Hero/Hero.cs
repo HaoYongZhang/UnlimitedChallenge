@@ -15,7 +15,7 @@ public class Hero : MonoBehaviour {
 
     public ParticleSystem particle;
 
-    public Property property;
+    public PropertyManager propertyManager;
     public Rigidbody rigid;
     public Animator animator;
     public HeroController heroController;
@@ -57,7 +57,7 @@ public class Hero : MonoBehaviour {
                 _instance.animator = gameObject.GetComponent<Animator>();
                 _instance.rangeManager = gameObject.GetComponent<RangeManager>();
                 _instance.particle = gameObject.GetComponent<ParticleSystem>();
-                _instance.property = gameObject.GetComponent<Property>();
+                _instance.propertyManager = gameObject.GetComponent<PropertyManager>();
             }
             return _instance;
         }
@@ -72,6 +72,17 @@ public class Hero : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         knowledge = normal.knowledge;
+
+        propertyManager.basicProperty.Strength = 10;
+        propertyManager.basicProperty.Agility = 10;
+        propertyManager.basicProperty.Intellect = 50;
+        propertyManager.basicProperty.MoveSpeed = 20;
+        propertyManager.basicProperty.Attack = 200;
+
+        propertyManager.basicProperty.MpRegeneration = 50;
+
+        propertyManager.Hp = propertyManager.basicProperty.HpMax;
+        propertyManager.Mp = propertyManager.basicProperty.MpMax;
 
         Global.skills.Add(new Skill("60103"));
         Global.skills.Add(new Skill("40002"));
@@ -95,18 +106,6 @@ public class Hero : MonoBehaviour {
         UIScene.Instance.setHotKey(1, SkillClass.Manager.GetOneSkillByID("10030"));
         UIScene.Instance.setHotKey(2, SkillClass.Manager.GetOneSkillByID("10105"));
         UIScene.Instance.setHotKey(3, SkillClass.Manager.GetOneSkillByID("40102"));
-
-        InvokeRepeating("RegenerationPerSecond", 0, 1f);   
-
-        property.basStrength = 10;
-        property.basAgility = 10;
-        property.basIntellect = 10;
-
-        property.hp = property.hpMax;
-        property.mp = property.mpMax;
-        property.basMoveSpeed = 20;
-
-        property.basAttack = 200;
 	}
 	
 	// Update is called once per frame
@@ -123,46 +122,11 @@ public class Hero : MonoBehaviour {
             hasLoadController = true;
         }
 
-        if(property.hp <= 0)
+        if(propertyManager.Hp <= 0)
         {
             animator.SetBool("death", true);
             isDeath = true;
         }
 	}
-
-    /// <summary>
-    /// 每秒恢复生命值和能量
-    /// </summary>
-    void RegenerationPerSecond()
-    {
-        //当生命值不是最大值时
-        if (property.hp <= property.hpMax)
-        {
-            float afterRegeneration = MathTool.Round(property.hp + property.hpRegeneration, 1);
-            //当回复生命值后将会溢出最大值时
-            if (afterRegeneration > property.hpMax)
-            {
-                property.hp = property.hpMax;
-            }
-            else
-            {
-                property.hp = MathTool.Round(property.hp + property.hpRegeneration, 1);
-            }
-        }
-
-        //当能量值不是最大值时
-        if (property.mp <= property.mpMax)
-        {
-            //当回复能量值后将会溢出最大值时
-            if (MathTool.Round(property.mp + property.mpRegeneration, 1) > property.mpMax)
-            {
-                property.mp = property.mpMax;
-            }
-            else
-            {
-                property.mp = MathTool.Round(property.mp + property.mpRegeneration, 1);
-            }
-        }
-    }
 
 }

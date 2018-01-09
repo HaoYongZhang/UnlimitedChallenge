@@ -78,7 +78,7 @@ public class SkillDatas
                 for (int j = 0; j < propertysData.dataList[i].Count; j++)
                 {
                     //因为上表已经存在id字段了，字典key值不能重复
-                    if(propertysData.head[j] != "id")
+                    if(propertysData.head[j] != "id" && propertysData.head[j] != "mName")
                     {
                         //筛选空的属性，减少使用时的历遍
                         if(propertysData.dataList[i][j] != "" && propertysData.dataList[i][j] != "0")

@@ -121,7 +121,7 @@ public class SkillImplementation
     /// <param name="skill">Skill.</param>
     public static void Treatment(GameObject obj, Skill skill)
     {
-        Property property = obj.GetComponent<Property>();
+        PropertyManager propertyManager = obj.GetComponent<PropertyManager>();
 
         string increateHp = skill.data["increateHp"];
 
@@ -130,7 +130,7 @@ public class SkillImplementation
             //截取字符串，获得属性增加的值
             float createValue = float.Parse(increateHp);
             //使用治疗技能后，加上的血量
-            property.hp += createValue;
+            propertyManager.Hp += createValue;
         }
 
         if(skill.duration > 0)
@@ -141,7 +141,7 @@ public class SkillImplementation
             //开始技能的持续时间
             skill.isInDuration = true;
 
-            PropertIncrease(property, skill);
+            PropertIncrease(propertyManager, skill);
         }
 
         SkillClass.Manager skillManager = obj.GetComponent<SkillClass.Manager>();
@@ -157,9 +157,9 @@ public class SkillImplementation
         //结束技能的持续时间
         skill.isInDuration = false;
         //获取Hero的属性
-        Property property = obj.GetComponent<Property>();
+        PropertyManager propertyManager = obj.GetComponent<PropertyManager>();
 
-        PropertReduction(property, skill);
+        PropertReduction(propertyManager, skill);
     }
 
     /// <summary>
@@ -173,9 +173,9 @@ public class SkillImplementation
         //开始技能的持续时间
         skill.isInDuration = true;
         //获取HeroManager的属性
-        Property property = obj.GetComponent<Property>();
+        PropertyManager propertyManager = obj.GetComponent<PropertyManager>();
 
-        PropertIncrease(property, skill);
+        PropertIncrease(propertyManager, skill);
 
         SkillClass.Manager skillManager = obj.GetComponent<SkillClass.Manager>();
 
@@ -193,28 +193,44 @@ public class SkillImplementation
         //结束技能的持续时间
         skill.isInDuration = false;
         //获取Hero的属性
-        Property property = obj.GetComponent<Property>();
+        PropertyManager propertyManager = obj.GetComponent<PropertyManager>();
 
-        PropertReduction(property, skill);
+        PropertReduction(propertyManager, skill);
     }
 
     /// <summary>
     /// 属性的增强
     /// </summary>
-    /// <param name="property">Property.</param>
+    /// <param name="propertyManager">Property.</param>
     /// <param name="skill">Skill.</param>
-    public static void PropertIncrease(Property property, Skill skill)
+    public static void PropertIncrease(PropertyManager propertyManager, Skill skill)
     {
         foreach (KeyValuePair<string, string> dict in skill.data)
         {
-            if (PropertyTool.isExist(property, dict.Key))
+            if (PropertyTool.isExist(propertyManager.basicProperty, dict.Key))
             {
-                //截取字符串，获得属性增加的值
-                float createValue = float.Parse(dict.Value);
-                //动态获取当前的属性值
-                float propertyValue = float.Parse(PropertyTool.ReflectGetter(property, dict.Key).ToString());
-                //使用强化技能时间结束后，应该减去强化属性
-                PropertyTool.ReflectSetter(property, dict.Key, propertyValue + createValue);
+                //是否百分比的值
+                bool isRate = dict.Value.EndsWith("%");
+
+                if(isRate)
+                {
+                    //截取百分号
+                    float value = float.Parse(dict.Value.Substring(0, dict.Value.Length - 1));
+                    //动态获取当前的属性值
+                    float propertyValue = float.Parse(PropertyTool.ReflectGetter(propertyManager.rateProperty, dict.Key).ToString());
+                    //使用强化技能时间结束后，应该减去强化属性
+                    PropertyTool.ReflectSetter(propertyManager.rateProperty, dict.Key, propertyValue + value/100);
+                }
+                else
+                {
+                    //截取字符串，获得属性增加的值
+                    float createValue = float.Parse(dict.Value);
+                    //动态获取当前的属性值
+                    float propertyValue = float.Parse(PropertyTool.ReflectGetter(propertyManager.basicProperty, dict.Key).ToString());
+                    //使用强化技能时间结束后，应该减去强化属性
+                    PropertyTool.ReflectSetter(propertyManager.basicProperty, dict.Key, propertyValue + createValue);
+                }
+
             }
         }
     }
@@ -225,18 +241,33 @@ public class SkillImplementation
     /// </summary>
     /// <param name="property">Property.</param>
     /// <param name="skill">Skill.</param>
-    public static void PropertReduction(Property property, Skill skill)
+    public static void PropertReduction(PropertyManager propertyManager, Skill skill)
     {
         foreach (KeyValuePair<string, string> dict in skill.data)
         {
-            if (PropertyTool.isExist(property, dict.Key))
+            if (PropertyTool.isExist(propertyManager.basicProperty, dict.Key))
             {
-                //截取字符串，获得属性增加的值
-                float createValue = float.Parse(dict.Value);
-                //动态获取当前的属性值
-                float propertyValue = float.Parse(PropertyTool.ReflectGetter(property, dict.Key).ToString());
-                //使用强化技能时间结束后，应该减去强化属性
-                PropertyTool.ReflectSetter(property, dict.Key, propertyValue - createValue);
+                //是否百分比的值
+                bool isRate = dict.Value.EndsWith("%");
+
+                if (isRate)
+                {
+                    //截取百分号
+                    float value = float.Parse(dict.Value.Substring(0, dict.Value.Length - 1));
+                    //动态获取当前的属性值
+                    float propertyValue = float.Parse(PropertyTool.ReflectGetter(propertyManager.rateProperty, dict.Key).ToString());
+                    //使用强化技能时间结束后，应该减去强化属性
+                    PropertyTool.ReflectSetter(propertyManager.rateProperty, dict.Key, propertyValue - value / 100);
+                }
+                else
+                {
+                    //截取字符串，获得属性增加的值
+                    float value = float.Parse(dict.Value);
+                    //动态获取当前的属性值
+                    float propertyValue = float.Parse(PropertyTool.ReflectGetter(propertyManager.basicProperty, dict.Key).ToString());
+                    //使用强化技能时间结束后，应该减去强化属性
+                    PropertyTool.ReflectSetter(propertyManager.basicProperty, dict.Key, propertyValue - value);
+                }
             }
         }
     }

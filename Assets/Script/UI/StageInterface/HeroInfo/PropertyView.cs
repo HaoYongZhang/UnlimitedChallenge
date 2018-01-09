@@ -35,38 +35,44 @@ namespace UIHeroInfo
 
         void FixedUpdate()
         {
-            Property property = Global.hero.property;
+            float hp = Global.hero.propertyManager.Hp;
+            float hpMax = Global.hero.propertyManager.HpMax;
+            float hpRegeneration = Global.hero.propertyManager.HpRegeneration;
+            float mp = Global.hero.propertyManager.Mp;
+            float mpMax = Global.hero.propertyManager.MpMax;
+            float mpRegeneration = Global.hero.propertyManager.MpRegeneration;
 
-            hpBar.value = property.hp / property.hpMax;
-            mpBar.value = property.mp / property.mpMax;
-            hpText.text = property.hp + "/" + property.hpMax;
-            mpText.text = property.mp + "/" + property.mpMax;
 
-            if (property.hpRegeneration > 0)
+            hpBar.value = hp / hpMax;
+            mpBar.value = mp / mpMax;
+            hpText.text = hp + "/" + hpMax;
+            mpText.text = mp + "/" + mpMax;
+
+            if (hpRegeneration > 0)
             {
-                hpRegenerationText.text = "+" + MathTool.Round(property.hpRegeneration, 1);
+                hpRegenerationText.text = "+" + MathTool.Round(hpRegeneration, 1);
             }
             else
             {
-                hpRegenerationText.text = "-" + MathTool.Round(property.hpRegeneration, 1);
+                hpRegenerationText.text = "-" + MathTool.Round(hpRegeneration, 1);
             }
 
-            if (property.mpRegeneration > 0)
+            if (mpRegeneration > 0)
             {
-                mpRegenerationText.text = "+" + MathTool.Round(property.mpRegeneration, 1);
+                mpRegenerationText.text = "+" + MathTool.Round(mpRegeneration, 1);
             }
             else
             {
-                mpRegenerationText.text = "-" + MathTool.Round(property.mpRegeneration, 1);
+                mpRegenerationText.text = "-" + MathTool.Round(mpRegeneration, 1);
             }
 
-            strengthText.text = "力量：" + "<color=#98FF67>" + property.strength.ToString() + "</color>";
-            agilityText.text = "敏捷：" + "<color=#98FF67>" + property.agility.ToString() + "</color>";
-            intellectText.text = "能量：" + "<color=#98FF67>" + property.intellect.ToString() + "</color>";
+            strengthText.text = "力量：" + "<color=#98FF67>" + Global.hero.propertyManager.Strength.ToString() + "</color>";
+            agilityText.text = "敏捷：" + "<color=#98FF67>" + Global.hero.propertyManager.Agility.ToString() + "</color>";
+            intellectText.text = "能量：" + "<color=#98FF67>" + Global.hero.propertyManager.Intellect.ToString() + "</color>";
 
-            attackText.text = "攻击力：" + "<color=#98FF67>" + property.attack.ToString() + "</color>";
-            armorText.text = "护甲：" + "<color=#98FF67>" + property.armor.ToString() + "</color>";
-            moveSpeedText.text = "移动速度：" + "<color=#98FF67>" + property.moveSpeed.ToString() + "</color>";
+            attackText.text = "攻击力：" + "<color=#98FF67>" + Global.hero.propertyManager.Attack.ToString() + "</color>";
+            armorText.text = "护甲：" + "<color=#98FF67>" + Global.hero.propertyManager.Armor.ToString() + "</color>";
+            moveSpeedText.text = "移动速度：" + "<color=#98FF67>" + Global.hero.propertyManager.MoveSpeed.ToString() + "</color>";
 
 
         }

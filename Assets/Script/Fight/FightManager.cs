@@ -49,7 +49,6 @@ public class FightManager : MonoBehaviour {
     /// </summary>
     void startAttack()
     {
-        Debug.Log("开始");
         if (Global.hero.animationManager.isAttacking)
         {
             Global.faceToMousePosition(gameObject);

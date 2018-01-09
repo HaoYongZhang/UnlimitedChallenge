@@ -21,11 +21,11 @@ public class DamageManager
     /// <typeparam name="V">The 2nd type parameter.</typeparam>
     public static void CommonAttack(GameObject attacker, GameObject victim, DamageType damageType)
     {   
-        Property attackerProperty = attacker.GetComponent<Property>();
-        Property victimProperty = victim.GetComponent<Property>();
+        PropertyManager attackerProperty = attacker.GetComponent<PropertyManager>();
+        PropertyManager victimProperty = victim.GetComponent<PropertyManager>();
 
         //攻击伤害
-        float damage = attackerProperty.attack;
+        float damage = attackerProperty.Attack;
         //抗性减免
         float damageReduction = GetDamageReduction(victimProperty, damageType);
         //伤害比率
@@ -34,22 +34,21 @@ public class DamageManager
         //伤害波动范围为80% ~ 120%
         float damageRange = RandomTool.RandomNumber(damageRangeMin, damageRangeMax);
 
-        victimProperty.hp -= MathTool.Round(damage * damageRate * damageRange, 1);
+        victimProperty.Hp -= MathTool.Round(damage * damageRate * damageRange, 1);
     }
 
 
     public static void SkillAttack(GameObject attacker, GameObject victim, Skill skill)
     {
-        Property attackerProperty = attacker.GetComponent<Property>();
-        Property victimProperty = victim.GetComponent<Property>();
-
+        PropertyManager attackerProperty = attacker.GetComponent<PropertyManager>();
+        PropertyManager victimProperty = victim.GetComponent<PropertyManager>();
 
         DamageType damageType = EnumTool.GetEnum<DamageType>(skill.data["damageType"]);
 
         float basicDamage = float.Parse(skill.data["basicDamage"]);
-        float strengthDamage = float.Parse(skill.data["strength"]) * attackerProperty.strength;
-        float agilityDamage = float.Parse(skill.data["agility"]) * attackerProperty.agility;
-        float intellectDamage = float.Parse(skill.data["intellect"]) * attackerProperty.intellect;
+        float strengthDamage = float.Parse(skill.data["strength"]) * attackerProperty.Strength;
+        float agilityDamage = float.Parse(skill.data["agility"]) * attackerProperty.Agility;
+        float intellectDamage = float.Parse(skill.data["intellect"]) * attackerProperty.Intellect;
 
         //攻击伤害
         float damage = basicDamage + strengthDamage + agilityDamage + intellectDamage;
@@ -60,10 +59,10 @@ public class DamageManager
         //伤害波动范围为80% ~ 120%
         float damageRange = RandomTool.RandomNumber(damageRangeMin, damageRangeMax);
 
-        victimProperty.hp -= MathTool.Round(damage * damageRate * damageRange, 1);
+        victimProperty.Hp -= MathTool.Round(damage * damageRate * damageRange, 1);
     }
 
-    static float GetDamageReduction(Property victimProperty, DamageType damageType)
+    static float GetDamageReduction(PropertyManager victimProperty, DamageType damageType)
     {
         float damageReduction = 0f;
 
@@ -72,13 +71,13 @@ public class DamageManager
             case DamageType.physics:
                 {
                     //物理抗性
-                    damageReduction = victimProperty.physicalReduction;
+                    damageReduction = victimProperty.PhysicalReduction;
                 }
                 break;
             case DamageType.magic:
                 {
                     //法术抗性
-                    damageReduction = victimProperty.magicReduction;
+                    damageReduction = victimProperty.MagicReduction;
                 }
                 break;
         }

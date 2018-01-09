@@ -81,7 +81,7 @@ namespace SkillClass
         {
             string originalDescription = skill.data["description"];
             int i = 0;
-            Property property = Global.hero.property;
+            Property property = new Property();
 
             foreach (KeyValuePair<string, string> dict in skill.data)
             {
@@ -148,7 +148,7 @@ namespace SkillClass
         /// <param name="skill">Skill.</param>
         static string getIntensifyDescription(Skill skill)
         {
-            Property property = Global.hero.property;
+            Property property = new Property();
             int i = 0;
             string originalDescription = skill.data["description"];
 
@@ -158,25 +158,13 @@ namespace SkillClass
                 {
                     //截取字符串，获得+/-符号
                     string symbol = dict.Value.Substring(0, 1);
-                    string increateStr = (symbol == "+" ? "+" : "-");
                     string increateColor = (symbol == "+" ? "<color=lime>" : "<color=red>");
-                    string increateValue;
-                    //加成
-                    if (dict.Key.StartsWith("addl"))
-                    {
-                        increateValue = dict.Value.Substring(1, dict.Value.Length - 1) + "点";
-                    }
-                    //比率
-                    else
-                    {
-                        float rate = float.Parse(dict.Value.Substring(1, dict.Value.Length - 1));
 
-                        increateValue = rate * 100 + "%";
-                    }
+                    string increateValue = dict.Value;
 
                     string descriptionName = PropertyTool.ReflectDescription(property, dict.Key);
 
-                    originalDescription += "\n" + increateColor + descriptionName + "  " + increateStr + increateValue + "</color>";
+                    originalDescription += "\n" + increateColor + descriptionName + "  " + increateValue + "</color>";
 
                     i++;
                 }

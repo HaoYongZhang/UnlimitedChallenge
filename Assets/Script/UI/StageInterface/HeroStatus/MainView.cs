@@ -25,27 +25,34 @@ namespace UIHeroStatus
         // Update is called once per frame
         void Update()
         {
-            hpBar.value = Global.hero.property.hp / Global.hero.property.hpMax;
-            mpBar.value = Global.hero.property.mp / Global.hero.property.mpMax;
-            hpText.text = Global.hero.property.hp + "/" + Global.hero.property.hpMax;
-            mpText.text = Global.hero.property.mp + "/" + Global.hero.property.mpMax;
+            float hp = Global.hero.propertyManager.Hp;
+            float hpMax = Global.hero.propertyManager.HpMax;
+            float hpRegeneration = Global.hero.propertyManager.HpRegeneration;
+            float mp = Global.hero.propertyManager.Mp;
+            float mpMax = Global.hero.propertyManager.MpMax;
+            float mpRegeneration = Global.hero.propertyManager.MpRegeneration;
 
-            if (Global.hero.property.hpRegeneration > 0)
+            hpBar.value = hp / hpMax;
+            mpBar.value = mp / mpMax;
+            hpText.text = hp + "/" + hpMax;
+            mpText.text = mp + "/" + mpMax;
+
+            if (hpRegeneration > 0)
             {
-                hpRegenerationText.text = "+" + MathTool.Round(Global.hero.property.hpRegeneration, 1);
+                hpRegenerationText.text = "+" + MathTool.Round(hpRegeneration, 1);
             }
             else
             {
-                hpRegenerationText.text = "-" + MathTool.Round(Global.hero.property.hpRegeneration, 1);
+                hpRegenerationText.text = "-" + MathTool.Round(hpRegeneration, 1);
             }
 
-            if (Global.hero.property.mpRegeneration > 0)
+            if (mpRegeneration > 0)
             {
-                mpRegenerationText.text = "+" + MathTool.Round(Global.hero.property.mpRegeneration, 1);
+                mpRegenerationText.text = "+" + MathTool.Round(mpRegeneration, 1);
             }
             else
             {
-                mpRegenerationText.text = "-" + MathTool.Round(Global.hero.property.mpRegeneration, 1);
+                mpRegenerationText.text = "-" + MathTool.Round(mpRegeneration, 1);
             }
         }
     }

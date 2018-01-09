@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 120111592291644454}
   - component: {fileID: 114457491673887658}
   - component: {fileID: 95680373695161830}
-  - component: {fileID: 114064234148038100}
+  - component: {fileID: 114747471834826912}
   m_Layer: 8
   m_Name: Hero
   m_TagString: Player
@@ -106,21 +106,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114064234148038100
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1960502911429452}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08fb458d798e8344fba18573aea97253, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hp: 0
-  mp: 0
-  physicalDamageBlock: 0
-  magicDamageBlock: 0
 --- !u!114 &114457491673887658
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -134,6 +119,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rendering: 0
   radius: 10
+--- !u!114 &114747471834826912
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1960502911429452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 536842c3674a941138e3dd61c9dc9561, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hp: 0
+  Mp: 0
+  physicalDamageBlock: 0
+  magicDamageBlock: 0
 --- !u!120 &120111592291644454
 LineRenderer:
   m_ObjectHideFlags: 1

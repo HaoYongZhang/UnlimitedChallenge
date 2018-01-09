@@ -135,7 +135,7 @@ public class HeroController : MonoBehaviour {
 	{
         float horizontal = Input.GetAxis("Horizontal"); //A D 左右
 		float vertical = Input.GetAxis("Vertical"); //W S 上 下
-        float speed = Global.hero.property == null ? 10 : Global.hero.property.moveSpeed;
+        float speed = Global.hero.propertyManager == null ? 10 : Global.hero.propertyManager.MoveSpeed;
 
         if(horizontal != 0f || vertical != 0f)
 		{

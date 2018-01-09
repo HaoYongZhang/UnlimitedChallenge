@@ -9,7 +9,7 @@ namespace EnemyClass
     {
         public string enemyId;
         public Dictionary<string, string> data;
-        public Property property { get; set; }
+        public PropertyManager propertyManager { get; set; }
         public UIHp hpSlider;
 
         void Start()
@@ -18,20 +18,20 @@ namespace EnemyClass
             data = DataManager.Instance.enemyDatas.getData(enemyId);
 
             //设置属性
-            property = GetComponent<Property>();
+            propertyManager = GetComponent<PropertyManager>();
 
             Dictionary<string, string> propertyData = DataManager.Instance.enemyDatas.getPropertyData(enemyId);
 
             foreach(KeyValuePair<string, string> pair in propertyData)
             {
-                if(PropertyTool.isExist(property, pair.Key))
+                if(PropertyTool.isExist(propertyManager.basicProperty, pair.Key))
                 {
-                    PropertyTool.ReflectSetter(property, pair.Key, float.Parse(pair.Value));
+                    PropertyTool.ReflectSetter(propertyManager.basicProperty, pair.Key, float.Parse(pair.Value));
                 }
             }
 
-            property.hp = property.hpMax;
-            property.mp = property.mpMax;
+            propertyManager.Hp = propertyManager.HpMax;
+            propertyManager.Mp = propertyManager.MpMax;
 
             //设置血条UI
             GameObject hpObj = (GameObject)Instantiate(Resources.Load("UI/EnemyHpSlider"));

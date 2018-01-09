@@ -40,4 +40,10 @@ public class Property {
 
     [Description("法术伤害减免")]
     public float MagicReduction{ get; set; }
+
+    public Property()
+    {
+        HpMax = 200f;
+        MpMax = 100f;
+    }
 }

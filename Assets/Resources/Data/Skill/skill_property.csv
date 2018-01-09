@@ -1,7 +1,6 @@
-id,addlHpMax,addlMpMax,addlHpRegeneration,addlMpRegeneration,addlStrength,addlAgility,addlIntellect,addlArmor,addlMoveSpeed,addlAttack,addlAttackSpeed,physicalResistance,magicResistance,physicalDamageBlock,magicDamageBlock,rateHpMax,rateMpMax,rateHpRegeneration,rateMpRegeneration,rateStrength,rateAgility,rateIntellect,rateArmor,rateMoveSpeed,rateAttack,rateAttackSpeed
-40002,,,,,+10,,,,,,,,,,,,,-0.1,,+0.2,,,,-0.1,,
-10030,,,,,,,,,,,,,,,,,,,,,,,,,,
-40001,,,,,,,,,+30,,,,,,,,,,,,,,,,,
-30001,,,+10,,,,,,,,,,,,,,,,,,,,,,,
-40102,,,,,,,,+20,,,,,,,,,,,,,,,,-0.3,,
-40104,,,,,,+10,,,+10,,,,,,,,,,,,+0.1,,,,,
+id,mName,HpMax,MpMax,HpRegeneration,MpRegeneration,Strength,Agility,Intellect,Armor,MoveSpeed,Attack,AttackSpeed,PhysicalResistance,MagicResistance,PhysicalDamageBlock,MagicDamageBlock
+40002,T病毒携带者,,,,,+10,,,,-20%,,,,,,
+40001,急速,,,,,,,,,+30,,,,,,
+30001,绷带,,,+10,,,,,,,,,,,,
+40102,铁块,,,,,,,,+20,,,,,,,
+40104,月步,,,,,,+10,,,+10%,,,,,,

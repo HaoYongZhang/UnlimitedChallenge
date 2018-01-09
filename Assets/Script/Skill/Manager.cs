@@ -94,7 +94,7 @@ namespace SkillClass
             }
 
             // 如果蓝量不足，返回
-            if (Global.hero.property.mp < float.Parse(skill.data["costEnergy"]))
+            if (Global.hero.propertyManager.Mp < float.Parse(skill.data["costEnergy"]))
             {
                 return false;
             }
@@ -175,7 +175,7 @@ namespace SkillClass
         /// <param name="skill">Skill.</param>
         public void OnImplemented(Skill skill)
         {
-            Global.hero.property.mp -= float.Parse(skill.data["costEnergy"]);
+            Global.hero.propertyManager.Mp -= float.Parse(skill.data["costEnergy"]);
 
             SkillImplementation.Implement(gameObject, skill, selectedPosition);
         }

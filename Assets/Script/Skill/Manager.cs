@@ -185,7 +185,7 @@ namespace SkillClass
             GameObject target = _collider.gameObject;
             if (target.layer == LayerMask.NameToLayer("Enemy"))
             {
-                DamageManager.SkillAttack<Hero, Enemy>(gameObject, target, skill);
+                DamageManager.SkillAttack(gameObject, target, skill);
             }
             else
             {

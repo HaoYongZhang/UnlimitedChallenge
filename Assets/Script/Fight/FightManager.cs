@@ -71,7 +71,7 @@ public class FightManager : MonoBehaviour {
 
             for (int i = 0; i < enemys.Count; i++)
             {
-                DamageManager.CommonAttack<Hero, Enemy>(gameObject, enemys[i], EnumTool.GetEnum<DamageType>(equipment.data["damageType"]));
+                DamageManager.CommonAttack(gameObject, enemys[i], EnumTool.GetEnum<DamageType>(equipment.data["damageType"]));
             }
         }
         else

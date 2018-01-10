@@ -5,14 +5,16 @@ using SkillClass;
 
 public enum RangeType
 {
-    
+    circle,
+    sector
 }
 
 public class RangeManager : MonoBehaviour
 {
-    //用于标识是否显示
     public bool rendering;
     public float radius = 10f;
+    public float angle = 60f;
+    public RangeType rangeType;
                                     
     void Start()
     {
@@ -28,14 +30,39 @@ public class RangeManager : MonoBehaviour
 
         if (rendering)
         {
-            DrawTool.DrawCircle(transform, transform.position, radius);
+            Vector3 center = new Vector3(transform.position.x, 3.2f, transform.position.z);
+            if(rangeType == RangeType.circle)
+            {
+                DrawTool.DrawCircle(transform, center, radius);
+            }
+            else if (rangeType == RangeType.sector)
+            {
+                DrawTool.DrawSector(transform, center, angle, radius);
+            }
+            else
+            {
+                Debug.Log("尚未设置范围类型");
+            }
         }
         else
         {
             DrawTool.clear(transform);
         }
+    }
 
+    public void SetCircleRange(float _radius)
+    {
+        rendering = true;
+        radius = _radius;
+        rangeType = RangeType.circle;
+    }
 
+    public void SetSectorRange(float _radius, float _angle)
+    {
+        rendering = true;
+        radius = _radius;
+        angle = _angle;
+        rangeType = RangeType.sector;
     }
 
     /// <summary>
@@ -53,7 +80,7 @@ public class RangeManager : MonoBehaviour
 
         for (int i = 0; i < colliders.Length; i++)
         {
-            if(IsInSector(startTran, colliders[i].transform, attackDistance, angle))
+            if(RangeTool.IsInSector(startTran, colliders[i].transform, attackDistance, angle))
             {
                 enemys.Add(colliders[i].gameObject);
             }
@@ -62,30 +89,5 @@ public class RangeManager : MonoBehaviour
         return enemys;
     }
 
-    public bool IsInSector(Transform startTran, Transform endTran, float distance, float angle)
-    {
-        Vector3 p_1 = new Vector3(startTran.position.x, 5, startTran.position.z);
-        Vector3 p_2 = new Vector3(endTran.position.x, 5, endTran.position.z);
 
-        //求出两点之间的距离
-        float pointsDistance = Vector3.Distance(p_1, p_2);
-        //start的正前方向量
-        Vector3 v_forward = startTran.rotation * Vector3.forward;
-        //p_1指向p_2的向量
-        Vector3 v_points = p_2 - p_1;
-        //计算两个向量间的夹角
-        float pointsAngle = Mathf.Acos(Vector3.Dot(v_forward.normalized, v_points.normalized)) * Mathf.Rad2Deg;
-        //当距离少于两点间距离时
-        if (pointsDistance <= distance)
-        {
-            //当两点的向量间的夹角少于角度时
-            if (pointsAngle <= angle * 0.5f)
-            {
-                Debug.Log("在扇形范围内");
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

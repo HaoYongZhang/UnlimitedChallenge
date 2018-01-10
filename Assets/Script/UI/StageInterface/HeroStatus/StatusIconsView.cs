@@ -45,14 +45,18 @@ namespace UIHeroStatus
         /// <param name="skill">Skill.</param>
         public void removeStatusIcon(Skill skill)
         {
+            int deleteIndex = 0;
             for (int i = 0; i < statusIconList.Count; i ++)
             {
                 if (statusIconList[i].id == skill.id)
                 {
-                    Destroy(statusIconList[i].gameObject);
+                    deleteIndex = i;
                     break;
                 }
             }
+
+            Destroy(statusIconList[deleteIndex].gameObject);
+            statusIconList.RemoveAt(deleteIndex);
         }
     }
 }

@@ -40,7 +40,7 @@ namespace SkillClass
                 //如果技能作用于自身时，直接释放
                 if (skill.actionRange == SkillActionRange.self)
                 {
-                    OnImplemented(skill);
+                    SkillImplementation.Implement(gameObject, skill);
                 }
                 //如果技能不是作用于自身时，选择释放地点
                 else
@@ -111,9 +111,18 @@ namespace SkillClass
             selectedSkill = skill;
             skill.releaseState = SkillReleaseState.selecting;
 
+            float distance = float.Parse(skill.data["distance"]);
 
-            Global.hero.rangeManager.radius = float.Parse(skill.data["distance"]);
-            Global.hero.rangeManager.rendering = true;
+            if (skill.actionRange == SkillActionRange.sector_small ||
+                skill.actionRange == SkillActionRange.sector_medium ||
+                skill.actionRange == SkillActionRange.sector_large)
+            {
+                Global.hero.rangeManager.SetSectorRange(distance, RangeTool.GetSectorAngle(skill.actionRange));
+            }
+            else
+            {
+                Global.hero.rangeManager.SetCircleRange(distance);
+            }
         }
 
         /// <summary>
@@ -150,17 +159,20 @@ namespace SkillClass
                 //人物到鼠标点击位置的实际直线距离
                 distance = (heroPosition - rayPosition).magnitude;
 
-                //点击位置大于施法距离
-                if (distance > skillDistance)
-                {
-                    return false;
-                }
-                //点击位置小于施法距离，成功施法
-                else
-                {
-                    selectedPosition = new Vector3(rayPosition.x, 2.5f, rayPosition.z);
-                    return true;
-                }
+                selectedPosition = new Vector3(rayPosition.x, 2.5f, rayPosition.z);
+                return true;
+
+                ////点击位置大于施法距离
+                //if (distance > skillDistance)
+                //{
+                //    return false;
+                //}
+                ////点击位置小于施法距离，成功施法
+                //else
+                //{
+                //    selectedPosition = new Vector3(rayPosition.x, 2.5f, rayPosition.z);
+                //    return true;
+                //}
 
             }
             else

@@ -71,18 +71,16 @@ public class FightManager : MonoBehaviour {
         {
             SkillClass.Manager skillManager = Global.hero.skillManager;
 
-            skillManager.OnFinished(skillManager.selectedSkill);
-
             SkillImplementation.Implement(gameObject, skillManager.selectedSkill);
 
-            SkillActionRange actionRange = EnumTool.GetEnum<SkillActionRange>(skillManager.selectedSkill.data["actionRange"]);
+            skillManager.OnFinished(skillManager.selectedSkill);
+
+            SkillActionRange actionRange = skillManager.selectedSkill.actionRange;
             if (actionRange == SkillActionRange.sector_small ||
                 actionRange == SkillActionRange.sector_medium ||
                 actionRange == SkillActionRange.sector_large)
             {
-                SectorAngle sectorAngle = EnumTool.GetEnum<SectorAngle>(actionRange.ToString());
-
-                float angle = (int)sectorAngle;
+                float angle = RangeTool.GetSectorAngle(actionRange);
 
                 float distance = float.Parse(skillManager.selectedSkill.data["distance"]);
 
@@ -93,6 +91,8 @@ public class FightManager : MonoBehaviour {
                     OnNormalAttack(enemys[i]);
                 }
             }
+
+
         }
     }
 

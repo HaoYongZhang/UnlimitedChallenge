@@ -113,7 +113,7 @@ public class DamageManager
     {
         float randomNumber = RandomTool.RandomNumber(0, 1);
 
-        if(victimProperty.Dodge < randomNumber)
+        if(victimProperty.Dodge > randomNumber)
         {
             return true;
         }
@@ -125,7 +125,7 @@ public class DamageManager
     {
         float randomNumber = RandomTool.RandomNumber(0, 1);
 
-        if (attackerProperty.CrticalStrike < randomNumber)
+        if (attackerProperty.CrticalStrike > randomNumber)
         {
             return true;
         }

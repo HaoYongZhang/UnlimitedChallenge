@@ -84,8 +84,10 @@ public class Hero : MonoBehaviour {
         propertyManager.Hp = propertyManager.basicProperty.HpMax;
         propertyManager.Mp = propertyManager.basicProperty.MpMax;
 
+        Global.skills.Add(new Skill("10101"));
         Global.skills.Add(new Skill("60103"));
         Global.skills.Add(new Skill("40002"));
+        Global.skills.Add(new Skill("40106"));
         Global.skills.Add(new Skill("10030"));
         Global.skills.Add(new Skill("10105"));
         Global.skills.Add(new Skill("40102"));
@@ -106,6 +108,7 @@ public class Hero : MonoBehaviour {
         UIScene.Instance.setHotKey(1, SkillClass.Manager.GetOneSkillByID("10030"));
         UIScene.Instance.setHotKey(2, SkillClass.Manager.GetOneSkillByID("10105"));
         UIScene.Instance.setHotKey(3, SkillClass.Manager.GetOneSkillByID("40102"));
+        UIScene.Instance.setHotKey(4, SkillClass.Manager.GetOneSkillByID("10101"));
 	}
 	
 	// Update is called once per frame

@@ -83,13 +83,6 @@ namespace SkillClass
         aoe
     }
 
-    public enum SectorAngle
-    {
-        sector_small = 60,
-        sector_medium = 90,
-        sector_large = 120
-    }
-
     public enum SpecialtyAction
     {
         [Description("自定义")]

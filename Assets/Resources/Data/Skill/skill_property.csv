@@ -1,7 +1,7 @@
 id,mName,HpMax,MpMax,HpRegeneration,MpRegeneration,Strength,Agility,Intellect,Armor,MoveSpeed,Attack,AttackSpeed,PhysicalResistance,MagicResistance,PhysicalDamageBlock,MagicDamageBlock,Dodge,CrticalStrike
-40002,T病毒携带者,,,,,+10,,,,-20%,,,,,,,,
+40002,T病毒携带者,+200,,+2,,+10,,,,-20%,,,,,,,,
 40001,急速,,,,,,,,,+30,,,,,,,,
 30001,绷带,,,+10,,,,,,,,,,,,,,
-40102,铁块,,,,,,,,+20,,,,,,,,,
-40104,月步,,,,,,+10,,,+10%,,,,,,,,
-40106,纸绘,,,,,,,,,,,,,,,,+15%,
+40102,铁块,,,,,,,,+20,-20%,,,,,,,,
+40104,月步,,,,,,+10,,,+10,,,,,,,,
+40106,纸绘,,,,,-5,+10,,,,,,,,,,+15%,

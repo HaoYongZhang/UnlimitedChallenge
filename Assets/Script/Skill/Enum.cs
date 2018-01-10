@@ -63,10 +63,16 @@ namespace SkillClass
     /// <summary>
     /// 技能释放影响范围
     /// </summary>
-    public enum SkillEffectRange
+    public enum SkillActionRange
     {
         [Description("自身")]
         self,
+        [Description("60度扇形")]
+        sector_small,
+        [Description("90度扇形")]
+        sector_medium,
+        [Description("120度扇形")]
+        sector_large,
         [Description("指向性")]
         pointing,
         [Description("直线")]
@@ -75,6 +81,13 @@ namespace SkillClass
         lineOne,
         [Description("范围性")]
         aoe
+    }
+
+    public enum SectorAngle
+    {
+        sector_small = 60,
+        sector_medium = 90,
+        sector_large = 120
     }
 
     public enum SpecialtyAction

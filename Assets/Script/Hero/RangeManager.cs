@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Collections;
 using SkillClass;
 
+public enum RangeType
+{
+    
+}
+
 public class RangeManager : MonoBehaviour
 {
     //用于标识是否显示
@@ -38,7 +43,7 @@ public class RangeManager : MonoBehaviour
     /// </summary>
     /// <returns>The attack range.</returns>
     /// <param name="attackDistance">攻击范围半径.</param>
-    public List<GameObject> SearchRangeEnemys(Transform startTran,float attackDistance)
+    public List<GameObject> SearchRangeEnemys(Transform startTran, float attackDistance, float angle)
     {
         LayerMask layerMask = 1 << LayerMask.NameToLayer("Enemy");
 
@@ -48,7 +53,7 @@ public class RangeManager : MonoBehaviour
 
         for (int i = 0; i < colliders.Length; i++)
         {
-            if(isInSector(startTran, colliders[i].transform, attackDistance, 60f))
+            if(IsInSector(startTran, colliders[i].transform, attackDistance, angle))
             {
                 enemys.Add(colliders[i].gameObject);
             }
@@ -57,7 +62,7 @@ public class RangeManager : MonoBehaviour
         return enemys;
     }
 
-    public bool isInSector(Transform startTran, Transform endTran, float distance, float angle)
+    public bool IsInSector(Transform startTran, Transform endTran, float distance, float angle)
     {
         Vector3 p_1 = new Vector3(startTran.position.x, 5, startTran.position.z);
         Vector3 p_2 = new Vector3(endTran.position.x, 5, endTran.position.z);

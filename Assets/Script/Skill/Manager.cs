@@ -38,7 +38,7 @@ namespace SkillClass
             if (CanRelease(skill))
             {
                 //如果技能作用于自身时，直接释放
-                if (skill.effectRange == SkillEffectRange.self)
+                if (skill.actionRange == SkillActionRange.self)
                 {
                     OnImplemented(skill);
                 }
@@ -110,7 +110,9 @@ namespace SkillClass
         {
             selectedSkill = skill;
             skill.releaseState = SkillReleaseState.selecting;
-            Global.hero.rangeManager.radius = float.Parse(skill.data["skillDistance"]);
+
+
+            Global.hero.rangeManager.radius = float.Parse(skill.data["distance"]);
             Global.hero.rangeManager.rendering = true;
         }
 
@@ -140,7 +142,7 @@ namespace SkillClass
             Ray cameraRay = Global.mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit rayHit;
             float distance;
-            float skillDistance = float.Parse(skill.data["skillDistance"]);
+            float skillDistance = float.Parse(skill.data["distance"]);
             if (Physics.Raycast(cameraRay, out rayHit))
             {
                 Vector3 heroPosition = new Vector3(transform.position.x, 2.5f, transform.position.z);
@@ -177,22 +179,13 @@ namespace SkillClass
         {
             Global.hero.propertyManager.Mp -= float.Parse(skill.data["costEnergy"]);
 
-            SkillImplementation.Implement(gameObject, skill, selectedPosition);
+            Global.hero.fightManager.SkillAttack(skill);
         }
 
-        public void OnSkill(Collider _collider, Skill skill)
-        {
-            GameObject target = _collider.gameObject;
-            if (target.layer == LayerMask.NameToLayer("Enemy"))
-            {
-                DamageManager.SkillAttack(gameObject, target, skill);
-            }
-            else
-            {
-                Debug.Log("不是敌人");
-            }
-        }
-
+        /// <summary>
+        /// 技能释放完成
+        /// </summary>
+        /// <param name="skill">Skill.</param>
         public void OnFinished(Skill skill)
         {
             skill.releaseState = SkillReleaseState.cooldown;
@@ -245,7 +238,7 @@ namespace SkillClass
                 //当技能是被动而且未开启时，开启被动技能
                 if (!skill.isActive && skill.isInDuration == false)
                 {
-                    SkillImplementation.Implement(gameObject, skill, Vector3.zero);
+                    SkillImplementation.Implement(gameObject, skill);
                 }
             }
         }

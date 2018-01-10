@@ -24,17 +24,33 @@ public class DamageManager
         PropertyManager attackerProperty = attacker.GetComponent<PropertyManager>();
         PropertyManager victimProperty = victim.GetComponent<PropertyManager>();
 
-        //攻击伤害
-        float damage = attackerProperty.Attack;
-        //抗性减免
-        float damageReduction = GetDamageReduction(victimProperty, damageType);
-        //伤害比率
-        float damageRate = 1 - damageReduction;
+        //判断是否闪避了
+        if(IsDodge(victimProperty))
+        {
+            Debug.Log("闪避了");
+        }
+        else
+        {
+            //抗性减免
+            float damageReduction = GetDamageReduction(victimProperty, damageType);
+            //伤害比率
+            float damageRate = 1 - damageReduction;
 
-        //伤害波动范围为80% ~ 120%
-        float damageRange = RandomTool.RandomNumber(damageRangeMin, damageRangeMax);
+            //伤害波动范围为80% ~ 120%
+            float damageRange = RandomTool.RandomNumber(damageRangeMin, damageRangeMax);
 
-        victimProperty.Hp -= MathTool.Round(damage * damageRate * damageRange, 1);
+            //攻击伤害
+            float damage = attackerProperty.Attack * damageRate * damageRange;
+
+            //如果暴击了，伤害增加1.5f
+            if (IsCrticalStrike(attackerProperty))
+            {
+                damage = damage * 1.5f;
+            }
+
+            victimProperty.Hp -= MathTool.Round(damage, 1);
+        }
+
     }
 
 
@@ -43,23 +59,31 @@ public class DamageManager
         PropertyManager attackerProperty = attacker.GetComponent<PropertyManager>();
         PropertyManager victimProperty = victim.GetComponent<PropertyManager>();
 
-        DamageType damageType = EnumTool.GetEnum<DamageType>(skill.data["damageType"]);
+        //判断是否闪避了
+        if (IsDodge(victimProperty))
+        {
+            Debug.Log("闪避了");
+        }
+        else
+        {
+            DamageType damageType = EnumTool.GetEnum<DamageType>(skill.data["damageType"]);
 
-        float basicDamage = float.Parse(skill.data["basicDamage"]);
-        float strengthDamage = float.Parse(skill.data["strength"]) * attackerProperty.Strength;
-        float agilityDamage = float.Parse(skill.data["agility"]) * attackerProperty.Agility;
-        float intellectDamage = float.Parse(skill.data["intellect"]) * attackerProperty.Intellect;
+            float basicDamage = float.Parse(skill.data["basicDamage"]);
+            float strengthDamage = float.Parse(skill.data["strength"]) * attackerProperty.Strength;
+            float agilityDamage = float.Parse(skill.data["agility"]) * attackerProperty.Agility;
+            float intellectDamage = float.Parse(skill.data["intellect"]) * attackerProperty.Intellect;
 
-        //攻击伤害
-        float damage = basicDamage + strengthDamage + agilityDamage + intellectDamage;
-        //抗性减免
-        float damageReduction = GetDamageReduction(victimProperty, damageType);
-        //伤害比率
-        float damageRate = 1 - damageReduction;
-        //伤害波动范围为80% ~ 120%
-        float damageRange = RandomTool.RandomNumber(damageRangeMin, damageRangeMax);
+            //攻击伤害
+            float damage = basicDamage + strengthDamage + agilityDamage + intellectDamage;
+            //抗性减免
+            float damageReduction = GetDamageReduction(victimProperty, damageType);
+            //伤害比率
+            float damageRate = 1 - damageReduction;
+            //伤害波动范围为80% ~ 120%
+            float damageRange = RandomTool.RandomNumber(damageRangeMin, damageRangeMax);
 
-        victimProperty.Hp -= MathTool.Round(damage * damageRate * damageRange, 1);
+            victimProperty.Hp -= MathTool.Round(damage * damageRate * damageRange, 1);
+        }
     }
 
     static float GetDamageReduction(PropertyManager victimProperty, DamageType damageType)
@@ -83,6 +107,30 @@ public class DamageManager
         }
 
         return damageReduction;
+    }
+
+    static bool IsDodge(PropertyManager victimProperty)
+    {
+        float randomNumber = RandomTool.RandomNumber(0, 1);
+
+        if(victimProperty.Dodge < randomNumber)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    static bool IsCrticalStrike(PropertyManager attackerProperty)
+    {
+        float randomNumber = RandomTool.RandomNumber(0, 1);
+
+        if (attackerProperty.CrticalStrike < randomNumber)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
 

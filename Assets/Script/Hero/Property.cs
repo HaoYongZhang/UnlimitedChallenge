@@ -41,6 +41,13 @@ public class Property {
     [Description("法术伤害减免")]
     public float MagicReduction{ get; set; }
 
+    [Description("闪避率")]
+    public float Dodge{ get; set; }
+
+    [Description("暴击率")]
+    public float CrticalStrike { get; set; }
+
+
     public Property()
     {
         HpMax = 200f;

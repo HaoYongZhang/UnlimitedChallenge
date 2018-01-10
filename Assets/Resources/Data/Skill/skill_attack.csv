@@ -1,3 +1,4 @@
-id,mName,rank,description,isActive,damageType,skillEffectRange,duration,cooldown,costEnergy,skillDistance,skillAnimation,skillPrefab,knowledgePromote,weaponPromote,basicDamage,strength,agility,intellect
-10030,一阳指,C,把强大的内力聚于手指，以此射击远方的敌人.,1,magic,line,0,10,50,80,skill_3,Bullets/VulcanBullet,shot,,100,1.2,1,0.5
-10105,岚脚,C,海军六式之一：脚部肌肉，急速收缩伸展，制造动能，然后急速出腿，超越音速后使腿部前发生空气压缩，卷起“真空”发出锐利的斩击波。,1,physics,line,0,12,30,50,kick_2,Bullets/Wave_Blue,,,100,8,2,0
+id,mName,rank,description,isActive,damageType,actionRange,distance,duration,cooldown,costEnergy,animation,prefab,knowledgePromote,weaponPromote,basicDamage,strength,agility,intellect
+10030,一阳指,C,把强大的内力聚于手指，以此射击远方的敌人.,1,magic,line,80,0,10,50,skill_3,Bullets/VulcanBullet,shot,,100,1.2,1,0.5
+10101,指枪,C,海军六式之一：号称有枪击威力的技法。将全身力量聚集在食指上，以硬化的手指电光火石间放出一击。指尖有着子弹般的攻击力，可以轻松贯穿人体甚至钢铁。,1,physics,sector_small,15,0,8,30,skill_3,Bullets/VulcanBullet,,,50,2,5,0
+10105,岚脚,C,海军六式之一：脚部肌肉，急速收缩伸展，制造动能，然后急速出腿，超越音速后使腿部前发生空气压缩，卷起“真空”发出锐利的斩击波。,1,physics,line,50,0,12,30,kick_2,Bullets/Wave_Blue,,,100,8,2,0

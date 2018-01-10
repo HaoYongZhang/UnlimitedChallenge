@@ -2,29 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SkillClass;
-public delegate void OnSkillEnterDelegate(Collider _collider, Skill skill);
+public delegate void OnSkillEnterDelegate(GameObject obj, Skill skill);
 
 public class SkillEffect : MonoBehaviour {
     public OnSkillEnterDelegate onSkillEnterDelegate;
     public GameObject explosion;
     public Skill skill;
+
     public float moveSpeed = 10f;
     public float height;
 
-    static string path = "Material/Effects/";
-
     float distance;
+    SkillActionRange actionRange;
     Vector3 startPosition;
+    bool canMove = true;
 
     public static SkillEffect NewInstantiate(Vector3 position, Quaternion rotation, Skill skill)
     {
-        GameObject obj = Resources.Load(path + skill.data["skillPrefab"]) as GameObject;
+        string path = "Material/Effects/";
+
+        GameObject obj = Resources.Load(path + skill.data["prefab"]) as GameObject;
         obj.transform.position = position;
         obj.transform.rotation = Quaternion.Euler(90, rotation.eulerAngles.y, 0);
 
         SkillEffect skillEffect = Instantiate(obj).GetComponent<SkillEffect>();
         skillEffect.skill = skill;
-        skillEffect.distance = float.Parse(skill.data["skillDistance"]);
+        skillEffect.distance = float.Parse(skill.data["distance"]);
+        skillEffect.actionRange = EnumTool.GetEnum<SkillActionRange>(skill.data["actionRange"]);
 
         return skillEffect;
     }
@@ -38,8 +42,20 @@ public class SkillEffect : MonoBehaviour {
         {
             skillEffectHeight = height;
         }
+
         transform.position = new Vector3(transform.position.x, skillEffectHeight, transform.position.z);
         startPosition = transform.position;
+
+        if (
+            actionRange == SkillActionRange.sector_small ||
+            actionRange == SkillActionRange.sector_medium ||
+            actionRange == SkillActionRange.sector_large
+        )
+        {
+            canMove = false;
+
+            Destroy(gameObject, 2);
+        }
 	}
 	
 	// Update is called once per frame
@@ -49,15 +65,18 @@ public class SkillEffect : MonoBehaviour {
 
     void FixedUpdate()
     {
-        transform.Translate(Vector3.up * Time.deltaTime * moveSpeed);
-
-        if(skill != null)
+        if(canMove)
         {
-            float currentDistance = (startPosition - transform.position).magnitude;
+            transform.Translate(Vector3.up * Time.deltaTime * moveSpeed);
 
-            if(currentDistance >= distance)
+            if (skill != null)
             {
-                Destroy(gameObject);
+                float currentDistance = (startPosition - transform.position).magnitude;
+
+                if (currentDistance >= distance)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }
@@ -72,8 +91,7 @@ public class SkillEffect : MonoBehaviour {
 
         if(onSkillEnterDelegate != null)
         {
-            onSkillEnterDelegate(_collider, skill);
+            onSkillEnterDelegate(_collider.gameObject, skill);
         }
-
     }
 }

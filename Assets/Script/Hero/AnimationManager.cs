@@ -53,6 +53,49 @@ public class AnimationManager : MonoBehaviour {
         animator.SetBool("death", true);
     }
    
+
+
+    /// <summary>
+    /// 开始攻击
+    /// </summary>
+    void startAttack()
+    {
+        if (isAttacking)
+        {
+            Global.faceToMousePosition(gameObject);
+        }
+    }
+
+    /// <summary>
+    /// 攻击时刻
+    /// </summary>
+    void inAttack()
+    {
+        Global.hero.fightManager.InAttack();
+    }
+
+    /// <summary>
+    /// 攻击结束
+    /// </summary>
+    void endAttack()
+    {
+        bool isLongPress = Global.hero.gameObject.GetComponent<HeroController>().isLongPress;
+        bool isNormalAttacking = Global.hero.fightManager.isNormalAttacking;
+
+        //当前攻击动画是普通攻击时才能长按持续动画
+        if (isNormalAttacking)
+        {
+            if (!isLongPress)
+            {
+                Global.hero.animationManager.StopAttack();
+            }
+        }
+        else
+        {
+            Global.hero.animationManager.StopAttack();
+        }
+    }
+
 }
 
 public enum AttackAnimation

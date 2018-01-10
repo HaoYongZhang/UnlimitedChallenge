@@ -41,7 +41,7 @@ public class HeroController : MonoBehaviour {
                 //当前没有触摸在UI上
                 if (!EventSystem.current.IsPointerOverGameObject())
                 {
-                    Global.hero.fightManager.normalAttack();
+                    Global.hero.fightManager.NormalAttack();
                 }
             }
         }

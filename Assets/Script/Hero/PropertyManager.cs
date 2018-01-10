@@ -30,6 +30,9 @@ public class PropertyManager : MonoBehaviour
         {
             item.SetValue(propertyRate, 1f, null);
         }
+
+        propertyRate.Dodge = 0;
+        propertyRate.CrticalStrike = 0;
     }
 
     /// <summary>
@@ -219,8 +222,48 @@ public class PropertyManager : MonoBehaviour
             return (1 - damageRate);
         }
     }
+
     //物理伤害格挡
     public float physicalDamageBlock;
     //魔法伤害格挡
     public float magicDamageBlock;
+
+    //闪避率
+    public float Dodge
+    {
+        get
+        {
+            //闪避率上限是25%
+            float threshold = 0.25f;
+            float dodgeRating = rateProperty.Dodge;
+
+            if(dodgeRating > threshold)
+            {
+                dodgeRating = threshold;
+            }
+
+            return dodgeRating;
+        }
+    }
+
+    //暴击率
+    public float CrticalStrike
+    {
+        get
+        {
+            //暴击率上限是35%
+            float threshold = 0.35f;
+            float crticalStrike = rateProperty.CrticalStrike;
+
+            if (crticalStrike > threshold)
+            {
+                crticalStrike = threshold;
+            }
+
+            return crticalStrike;
+        }
+    }
+
+
+
 }

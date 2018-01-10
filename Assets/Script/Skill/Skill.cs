@@ -5,16 +5,12 @@ using System;
 
 namespace SkillClass
 {
-    public delegate void ReleasingDelegate(Skill skill);
-
     public class Skill
     {
         //技能id
         public string id;
         //名字
         public string name;
-        //释放时回调
-        public ReleasingDelegate releasingDelegate;
         //是否主动技能
         public bool isActive;
         //技能图片
@@ -24,7 +20,7 @@ namespace SkillClass
         //技能类型
         public SkillType type;
         //技能影响范围
-        public SkillEffectRange effectRange;
+        public SkillActionRange actionRange;
         //技能释放状态
         public SkillReleaseState releaseState;
 
@@ -39,7 +35,6 @@ namespace SkillClass
         }
         //技能数据
         public Dictionary<string, string> data = new Dictionary<string, string>();
-
         //技能当前的冷却时间
         public float currentCoolDown;
         //技能是否在持续中
@@ -80,23 +75,23 @@ namespace SkillClass
             {
                 case SkillType.attack:
                     {
-                        effectRange = EnumTool.GetEnum<SkillEffectRange>(data["skillEffectRange"]);
-                        attackAnimation = EnumTool.GetEnum<AttackAnimation>(data["skillAnimation"]);
+                        actionRange = EnumTool.GetEnum<SkillActionRange>(data["actionRange"]);
+                        attackAnimation = EnumTool.GetEnum<AttackAnimation>(data["animation"]);
                     }
                     break;
                 case SkillType.defense:
                     {
-                        effectRange = SkillEffectRange.self;
+                        actionRange = SkillActionRange.self;
                     }
                     break;
                 case SkillType.treatment:
                     {
-                        effectRange = SkillEffectRange.self;
+                        actionRange = SkillActionRange.self;
                     }
                     break;
                 case SkillType.intensify:
                     {
-                        effectRange = SkillEffectRange.self;
+                        actionRange = SkillActionRange.self;
                     }
                     break;
                 case SkillType.complex:
@@ -106,8 +101,8 @@ namespace SkillClass
                     break;
                 case SkillType.specialty:
                     {
-                        effectRange = SkillEffectRange.line;
-                        attackAnimation = EnumTool.GetEnum<AttackAnimation>(data["skillAnimation"]);
+                        actionRange = SkillActionRange.line;
+                        attackAnimation = EnumTool.GetEnum<AttackAnimation>(data["animation"]);
                     }
                     break;
             }

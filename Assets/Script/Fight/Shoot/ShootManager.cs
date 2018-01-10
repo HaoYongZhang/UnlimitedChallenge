@@ -27,7 +27,7 @@ public class ShootManager : MonoBehaviour
             //人物到鼠标点击位置的实际直线距离
             distance = (transform.position - rayHit.point).magnitude;
             //点击位置大于施法距离
-            if (distance > float.Parse(skill.data["skillDistance"]))
+            if (distance > float.Parse(skill.data["distance"]))
             {
                 Debug.Log("点击位置大于施法距离");
                 return false;
@@ -41,7 +41,7 @@ public class ShootManager : MonoBehaviour
                 transform.LookAt(rayPoint);
 
                 GameObject skillPoint = GameObject.Find("ShootPoint");
-                GameObject bullet = (GameObject)Resources.Load("Skill/" + skill.data["skillPrefab"]);
+                GameObject bullet = (GameObject)Resources.Load("Skill/" + skill.data["prefab"]);
                 bullet = Instantiate(bullet, skillPoint.transform.position, skillPoint.transform.rotation);
                 bullet.GetComponent<Shoot>().fire();
                 bullet.GetComponent<CollisionEvent>().collisionEventDelegate =

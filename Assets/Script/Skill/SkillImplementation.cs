@@ -5,14 +5,13 @@ using SkillClass;
 
 public class SkillImplementation
 {
-    public static void Implement(GameObject obj, Skill skill, Vector3 selectedPosition)
+    public static void Implement(GameObject obj, Skill skill)
     {
         switch (skill.type)
         {
             case SkillType.attack:
                 {
-                    skill.releasingDelegate = Attack;
-                    Global.hero.fightManager.SkillAttack(skill);
+                    Attack(obj, skill);
                 }
                 break;
             case SkillType.defense:
@@ -36,14 +35,13 @@ public class SkillImplementation
                 break;
             case SkillType.specialty:
                 {
-                    skill.releasingDelegate = Specialty;
-                    Global.hero.fightManager.SkillAttack(skill);
+                    Specialty(obj, skill);
                 }
                 break;
         }
     }
 
-    public static void Attack(Skill skill)
+    public static void Attack(GameObject obj, Skill skill)
     {
         for (int i = 0; i < Global.hero.charactersManager.boneTransforms.Count; i++)
         {
@@ -52,14 +50,14 @@ public class SkillImplementation
                 Transform point = Global.hero.charactersManager.boneTransforms[i];
 
                 SkillEffect skillEffect = SkillEffect.NewInstantiate(point.position, Global.hero.transform.rotation, skill);
-                skillEffect.onSkillEnterDelegate = Global.hero.skillManager.OnSkill;
+                skillEffect.onSkillEnterDelegate = Global.hero.fightManager.OnSkillAttack;
 
                 break;
             }
         }
     }
 
-    public static void Specialty(Skill skill)
+    public static void Specialty(GameObject obj, Skill skill)
     {
         SpecialtyAction action = EnumTool.GetEnum<SpecialtyAction>(skill.data["specialtyAction"]);
 
@@ -84,7 +82,7 @@ public class SkillImplementation
         {
             case SkillType.attack:
                 {
-                    
+
                 }
                 break;
             case SkillType.defense:
@@ -108,7 +106,7 @@ public class SkillImplementation
                 break;
             case SkillType.specialty:
                 {
-                    
+
                 }
                 break;
         }
@@ -125,7 +123,7 @@ public class SkillImplementation
 
         string increateHp = skill.data["increateHp"];
 
-        if (increateHp != null && increateHp != "")
+        if (!string.IsNullOrEmpty(increateHp))
         {
             //截取字符串，获得属性增加的值
             float createValue = float.Parse(increateHp);
@@ -133,7 +131,7 @@ public class SkillImplementation
             propertyManager.Hp += createValue;
         }
 
-        if(skill.duration > 0)
+        if (skill.duration > 0)
         {
             //添加强化的小图标
             UIScene.Instance.addStatusIcon(skill);
@@ -212,14 +210,14 @@ public class SkillImplementation
                 //是否百分比的值
                 bool isRate = dict.Value.EndsWith("%");
 
-                if(isRate)
+                if (isRate)
                 {
                     //截取百分号
                     float value = float.Parse(dict.Value.Substring(0, dict.Value.Length - 1));
                     //动态获取当前的属性值
                     float propertyValue = float.Parse(PropertyTool.ReflectGetter(propertyManager.rateProperty, dict.Key).ToString());
                     //使用强化技能时间结束后，应该减去强化属性
-                    PropertyTool.ReflectSetter(propertyManager.rateProperty, dict.Key, propertyValue + value/100);
+                    PropertyTool.ReflectSetter(propertyManager.rateProperty, dict.Key, propertyValue + value / 100);
                 }
                 else
                 {

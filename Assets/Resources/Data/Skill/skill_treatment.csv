@@ -1,2 +1,2 @@
 id,mName,rank,description,isActive,duration,cooldown,costEnergy,increateHp,increateMp
-30001,绷带,D,法老王发明的最佳疗伤物品.@0@1,1,5,30,0,+100,0
+30001,绷带,D,法老王发明的最佳疗伤物品.,1,5,30,0,+100,0

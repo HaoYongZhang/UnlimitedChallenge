@@ -1,3 +1,3 @@
-id,HpMax,MpMax,HpRegeneration,MpRegeneration,Strength,Agility,Intellect,Armor,MoveSpeed,Attack,AttackSpeed,PhysicalResistance,MagicResistance,PhysicalDamageBlock,MagicDamageBlock
+id,HpMax,MpMax,HpRegeneration,MpRegeneration,Strength,Agility,Intellect,Armor,MoveSpeed,Attack,AttackSpeed,PhysicalResistance,MagicResistance,PhysicalDamageBlock,MagicDamageBlock,Dodge,CrticalStrike
 10001,,,,,,,,,,,,,,,
 10010,,,,,,,,,,,,,,,

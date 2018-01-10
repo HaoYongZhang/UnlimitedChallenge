@@ -1,2 +1,2 @@
-id,HpMax,MpMax,HpRegeneration,MpRegeneration,Strength,Agility,Intellect,Armor,MoveSpeed,Attack,AttackSpeed,PhysicalResistance,MagicResistance,PhysicalDamageBlock,MagicDamageBlock
+id,HpMax,MpMax,HpRegeneration,MpRegeneration,Strength,Agility,Intellect,Armor,MoveSpeed,Attack,AttackSpeed,PhysicalResistance,MagicResistance,PhysicalDamageBlock,MagicDamageBlock,Dodge,CrticalStrike
 zombie,500,100,5,,20,,,2,25,100,,,,

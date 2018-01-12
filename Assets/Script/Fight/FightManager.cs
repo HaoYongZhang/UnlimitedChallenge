@@ -76,9 +76,7 @@ public class FightManager : MonoBehaviour {
             skillManager.OnFinished(skillManager.selectedSkill);
 
             SkillActionRange actionRange = skillManager.selectedSkill.actionRange;
-            if (actionRange == SkillActionRange.sector_small ||
-                actionRange == SkillActionRange.sector_medium ||
-                actionRange == SkillActionRange.sector_large)
+            if (RangeTool.IsSectorActionRange(actionRange))
             {
                 float angle = RangeTool.GetSectorAngle(actionRange);
 

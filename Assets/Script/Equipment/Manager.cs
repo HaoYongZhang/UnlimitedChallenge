@@ -35,11 +35,6 @@ namespace EquipmentClass
 
         public Dictionary<string, EquipmentClass.UIButton> equipmentDict = new Dictionary<string, EquipmentClass.UIButton>();
 
-        //拖动物品时的临时创建对象
-        GameObject dragTempObject;
-        //判断能否执行拖拽方法
-        bool canDrag;
-
         void Awake()
         {
             //默认武器
@@ -76,8 +71,8 @@ namespace EquipmentClass
         // Use this for initialization
         void Start()
         {
-            takeOnEquipment(body, GetEquipmentButton("30001"));
-            takeOnEquipment(legs, GetEquipmentButton("40001"));
+            //takeOnEquipment(body, GetEquipmentButton("30001"));
+            //takeOnEquipment(legs, GetEquipmentButton("40001"));
 
             UIScene.Instance.heroInfoView.itemsView.setItemsSet();
         }
@@ -106,7 +101,7 @@ namespace EquipmentClass
         /// 更换装备外观
         /// </summary>
         /// <param name="equipment">Equipment.</param>
-        public void replaceEquipmentPart(Equipment equipment)
+        public void ReplaceEquipmentPart(Equipment equipment)
         {
             switch(equipment.part)
             {
@@ -214,7 +209,7 @@ namespace EquipmentClass
         /// </summary>
         /// <param name="tagerEquiBtn">Tager equi button.</param>
         /// <param name="dropEquiBtn">Source equi button.</param>
-        public void takeOnEquipment(UIButton tagerEquiBtn, UIButton dropEquiBtn)
+        public void TakeOnEquipment(UIButton tagerEquiBtn, UIButton dropEquiBtn)
         {
             bool hasTakeOne = false;
             foreach (UIButton equipBtn in Global.equipmentButtons)
@@ -254,7 +249,7 @@ namespace EquipmentClass
         /// 脱下装备
         /// </summary>
         /// <param name="equipmentButton">Equipment button.</param>
-        public void takeOffEquipment(EquipmentClass.UIButton equipmentButton)
+        public void TakeOffEquipment(EquipmentClass.UIButton equipmentButton)
         {
             foreach(EquipmentClass.UIButton equipBtn in Global.equipmentButtons)
             {
@@ -299,90 +294,6 @@ namespace EquipmentClass
             }
 
             equipmentButton.setEquipment(null);
-        }
-
-        //双击装备
-        void onDoubleClick(GameObject obj, PointerEventData eventData)
-        {
-            takeOffEquipment(obj.GetComponent<UIButton>());
-            UIScene.Instance.heroInfoView.itemsView.GetComponent<ItemView>().setItemsSet();
-        }
-
-        //开始拖拽
-        void onBeginDrag(GameObject obj, PointerEventData eventData)
-        {
-            UIButton originalEquiBtn = obj.GetComponentInChildren<UIButton>();
-
-            canDrag = (originalEquiBtn.equipment != null);
-
-            if(!canDrag)
-            {
-                return;
-            }
-
-            //代替品实例化
-            dragTempObject = new GameObject("DragTempObject");
-            dragTempObject.transform.SetParent(UIScene.Instance.transform, false);
-            dragTempObject.AddComponent<RectTransform>();
-
-            EquipmentClass.UIButton temp = EquipmentClass.UIButton.NewInstantiate();
-            temp.transform.SetParent(dragTempObject.transform, false);
-            temp.setEquipment(originalEquiBtn.equipment);
-
-            //取消武器装备
-            takeOffEquipment(originalEquiBtn);
-
-            //防止拖拽结束时，代替品挡住了准备覆盖的对象而使得 OnDrop（） 无效
-            CanvasGroup group = dragTempObject.AddComponent<CanvasGroup>();
-            group.blocksRaycasts = false;
-        }
-
-        //拖拽中
-        void onDrag(GameObject obj, PointerEventData eventData)
-        {
-            if (!canDrag)
-            {
-                return;
-            }
-
-            //并将拖拽时的坐标给予被拖拽对象的代替品
-            Vector3 movePosition = new Vector3(Input.mousePosition.x + 20, Input.mousePosition.y - 20);
-
-            dragTempObject.transform.position = movePosition;
-        }
-
-        //结束拖拽
-        void onEndDrag(GameObject obj, PointerEventData eventData)
-        {
-            if (!canDrag)
-            {
-                return;
-            }
-
-            //拖拽结束，销毁代替品
-            if (dragTempObject)
-            {
-                Destroy(dragTempObject);
-            }
-
-            UIScene.Instance.heroInfoView.itemsView.GetComponent<ItemView>().setItemsSet();
-        }
-
-        //接收被拖拽的物品
-        void onDrop(GameObject tagerObj, PointerEventData eventData)
-        {
-            GameObject dropObj = eventData.pointerDrag;
-
-            UIButton dropEquipmentBtn = dropObj.GetComponent<UIButton>();
-            UIButton tagerEquipmentBtn = tagerObj.GetComponent<UIButton>();
-
-            //如果装备部位不同，则返回
-            if (dropEquipmentBtn.part != tagerEquipmentBtn.part)
-            {
-                return;
-            }
-
-            takeOnEquipment(tagerEquipmentBtn, dropEquipmentBtn);
         }
     }
 }

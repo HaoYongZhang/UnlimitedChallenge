@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 19900004}
   - component: {fileID: 114873799161210050}
   m_Layer: 0
-  m_Name: LaserImpact
+  m_Name: laserImpact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

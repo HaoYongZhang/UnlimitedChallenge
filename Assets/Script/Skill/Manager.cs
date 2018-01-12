@@ -113,9 +113,7 @@ namespace SkillClass
 
             float distance = float.Parse(skill.data["distance"]);
 
-            if (skill.actionRange == SkillActionRange.sector_small ||
-                skill.actionRange == SkillActionRange.sector_medium ||
-                skill.actionRange == SkillActionRange.sector_large)
+            if (RangeTool.IsSectorActionRange(skill.actionRange))
             {
                 Global.hero.rangeManager.SetSectorRange(distance, RangeTool.GetSectorAngle(skill.actionRange));
             }
@@ -160,20 +158,25 @@ namespace SkillClass
                 distance = (heroPosition - rayPosition).magnitude;
 
                 selectedPosition = new Vector3(rayPosition.x, 2.5f, rayPosition.z);
-                return true;
 
-                ////点击位置大于施法距离
-                //if (distance > skillDistance)
-                //{
-                //    return false;
-                //}
-                ////点击位置小于施法距离，成功施法
-                //else
-                //{
-                //    selectedPosition = new Vector3(rayPosition.x, 2.5f, rayPosition.z);
-                //    return true;
-                //}
-
+                if (RangeTool.IsSectorActionRange(skill.actionRange))
+                {
+                    return true;
+                }
+                else
+                {
+                    //点击位置大于施法距离
+                    if (distance > skillDistance)
+                    {
+                        return false;
+                    }
+                    //点击位置小于施法距离，成功施法
+                    else
+                    {
+                        selectedPosition = new Vector3(rayPosition.x, 2.5f, rayPosition.z);
+                        return true;
+                    }
+                }
             }
             else
             {

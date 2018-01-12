@@ -59,4 +59,18 @@ public class RangeTool {
             return 60f;
         }
     }
+
+    public static bool IsSectorActionRange(SkillActionRange actionRange)
+    {
+        if (actionRange == SkillActionRange.sector_small ||
+            actionRange == SkillActionRange.sector_medium ||
+            actionRange == SkillActionRange.sector_large)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
